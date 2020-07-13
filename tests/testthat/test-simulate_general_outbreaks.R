@@ -1,0 +1,146 @@
+## Tests for 'general' infection simulations
+## May 27, 2020
+
+test_that("draw_covariate_rows", {
+    df <- data.frame(dog = 4,
+                     cat = c("dog", "turtle"))
+    covariate_weights <- c(99, 1)
+
+    out <- draw_covariate_rows(n = 10,
+                               df = df,
+                               covariate_weights = covariate_weights)
+    expect_equal(nrow(out), 10)
+
+    ## no weights
+    out <- draw_covariate_rows(n = 10,
+                               df = df,
+                               covariate_weights = NULL)
+    expect_equal(nrow(out), 10)
+
+
+})
+
+test_that("simulate_general_outbreak", {
+    K <- 100
+    inf_params <- c(-1, .5)
+    sample_covariates_df <- data.frame(x = c(0, 1))
+    covariate_names <- "x"
+    max_size <- 30
+
+    out <- simulate_general_outbreak(K,
+                                     inf_params,
+                                     sample_covariates_df,
+                                     covariate_names,
+                                     max_size = max_size,
+                                     covariate_weights = NULL)
+    expect_equal(length(unique(out$cluster_id)), K)
+
+    ## now with weights
+    K <- 100
+    inf_params <- c(-1, .5)
+    sample_covariates_df <- data.frame(x = c(0, 1))
+    covariate_names <- "x"
+    covariate_weights <- c(1, 99)
+    max_size <- 30
+
+    out <- simulate_general_outbreak(K,
+                                     inf_params,
+                                     sample_covariates_df,
+                                     covariate_names,
+                                     covariate_weights,
+                                     max_size = max_size)
+    expect_equal(length(unique(out$cluster_id)), K)
+
+})
+
+
+test_that("simulate_general_outbreak_inner", {
+    cluster_id = 4
+    sample_covariates_df <- data.frame(x = c(0, 1),
+                                       prob_inf = c(1, 1))
+    max_size <- 10
+
+    out <- simulate_general_outbreak_inner(cluster_id,
+                                           sample_covariates_df,
+                                           max_size = max_size)
+    expect_equal(nrow(out), max_size)
+    ## #################
+    cluster_id = 4
+    sample_covariates_df <- data.frame(x = c(0, 1),
+                                       prob_inf = c(0, 0))
+    max_size <- 10
+
+    out <- simulate_general_outbreak_inner(cluster_id,
+                                           sample_covariates_df,
+                                           max_size = max_size)
+    expect_equal(nrow(out), 1)
+    ## ####################
+    cluster_id = 4
+    sample_covariates_df <- data.frame(x = c(0, 1),
+                                       prob_inf = c(.3, .1))
+    max_size <- 25
+
+    out <- simulate_general_outbreak_inner(cluster_id,
+                                           sample_covariates_df,
+                                           max_size = max_size)
+    expect_true(nrow(out) <= max_size)
+
+
+
+})
+
+
+test_that("draw_covariate_rows", {
+    n <- 10
+    df <- data.frame(x = c(1, 9, 11, 3),
+                     y = c("a", "d", "e", "f"))
+    out <- draw_covariate_rows(n, df)
+    expect_equal(nrow(out), n)
+})
+
+
+test_that("general_generation_infection", {
+    cluster_id <- 1
+    df <- data.frame(x = c(0, 1),
+                     prob_inf = c(0, 1))
+    gen <- 1
+    prev_gen <- data.frame(x = 0,
+                           person_id = "ME",
+                           prob_inf = 0)
+    cluster_size <- 1
+    max_size <- 30
+
+    out <- general_generation_infection(cluster_id,
+                                        df,
+                                        gen,
+                                        prev_gen,
+                                        cluster_size,
+                                        max_size = max_size,
+                                        covariate_weights = NULL)
+    expect_equal(out$new_cluster_size, 1)
+    expect_true(is.null(out$cur_gen))
+    expect_equal(out$n_inf, 0)
+    ###############
+    cluster_id <- 1
+    df <- data.frame(x = c(0, 1),
+                     prob_inf = c(0, 1))
+    gen <- 1
+    prev_gen <- data.frame(x = c(0,0),
+                           person_id = c("YOU", "ME"),
+                           prob_inf = .5)
+    cluster_size <- 1
+    max_size <- 30
+
+    out <- general_generation_infection(cluster_id,
+                                        df,
+                                        gen,
+                                        prev_gen,
+                                        cluster_size,
+                                        max_size,
+                                        covariate_weights = NULL)
+    expect_true(out$new_cluster_size >= 1) # this is a stupid test
+
+
+
+
+})
