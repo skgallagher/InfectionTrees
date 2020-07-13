@@ -1,0 +1,39 @@
+Package: InfectionTrees
+Title: Sample, Analyze, and Plot Infection Trees
+Version: 0.0.0.1
+Authors@R: 
+    person(given = "Shannon",
+           family = "Gallagher",
+           role = c("aut", "cre"),
+           email = "skgallagher19@gmail.com",
+           comment = c(ORCID = "0000-0003-1114-3851"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Depends: 
+    R (>= 2.10)
+Suggests: 
+    testthat,
+    knitr,
+    ggplot2,
+    rmarkdown
+LinkingTo: 
+    Rcpp
+Imports: 
+    Rcpp,
+    magrittr,
+    partitions,
+    dplyr,
+    tidyselect,
+    tidyr,
+    purrr,
+    data.table,
+    RcppAlgos,
+    rlang,
+    plyr,
+    Rdpack
+RdMacros:
+    Rdpack
