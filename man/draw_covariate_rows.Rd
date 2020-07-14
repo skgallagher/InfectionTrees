@@ -4,7 +4,7 @@
 \alias{draw_covariate_rows}
 \title{Randomly sample covariate rows}
 \usage{
-draw_covariate_rows(n, df, covariate_weights)
+draw_covariate_rows(n, df, covariate_weights = NULL)
 }
 \arguments{
 \item{n}{number rows to draw}

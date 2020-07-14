@@ -6,5 +6,5 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-paper_figs/
+^paper_figs/
 ^\.github$
