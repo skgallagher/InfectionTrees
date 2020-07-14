@@ -4,3 +4,4 @@
 
 # InfectionTrees
 Analyzing and plotting the spread of infectious diseases in moderately sized clusters
+https://skgallagher.github.io/EpiCompare/
