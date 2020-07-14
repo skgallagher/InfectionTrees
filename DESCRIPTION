@@ -37,3 +37,6 @@ Imports:
     Rdpack
 RdMacros:
     Rdpack
+    URL: https://github.com/skgallagher/InfectionTrees
+URL: https://github.com/skgallagher/InfectionTrees
+BugReports: https://github.com/skgallagher/InfectionTrees/issues

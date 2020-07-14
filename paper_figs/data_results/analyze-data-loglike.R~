@@ -1,0 +1,23 @@
+## SKG
+## June 18, 2020
+## Analyzing the loglike and best model
+
+devtools::load_all()
+library(knitr)
+library(tidyverse)
+library(kableExtra)
+
+files <- list.files()
+fn_rds <- grep("RDS", files, value = TRUE)
+fn <- fn_rds[2]
+
+data_list <- readRDS(fn)
+
+## loglike table
+
+loglike_df <- data_list$loglike_df
+
+loglike_df %>%
+    kable(format = "latex", digits = 2,
+          caption = "Reported log likelihood for the Maryland TB data for the four different models described in Eq. \eqref{eq:data-models}.",
+          label = "data-models")

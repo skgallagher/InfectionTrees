@@ -48,9 +48,14 @@ general_loglike <- function(inf_params,
                            my_prob_inf)
     }
 
+     ## Trying out data.table
+    if(!("data.table" %in% class(sampled_data))){
+        print("Converting 'sampled_data' to data.table format")
+        sampled_data <- data.table::as.data.table(sampled_data)
+    }
     sampled_data <- sampled_data[, prob_inf := my_prob_inf]
     cluster_id <- NULL
-    ## Trying out data.table
+
     like_df <- sampled_data[,
                             .(like = general_cluster_like.dt(prob_inf, n_inf)),
                             by = .(orig_id, cluster_id)]
