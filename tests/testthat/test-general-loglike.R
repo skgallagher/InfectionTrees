@@ -12,7 +12,7 @@ test_that("general_loglike", {
     B <- 1
     covariate_names <- "x"
 
-    sampled_data <- sample_permuted_cond_trees(observed_data,
+    sampled_data <- sample_mc_trees(observed_data,
                                       B = B,
                                       covariate_names = "x")
     inf_params <- c(-2, 1)
@@ -47,7 +47,7 @@ test_that("general_loglike", {
     B <- 1
     covariate_names <- "x"
 
-    sampled_data <- sample_permuted_cond_trees(observed_data,
+    sampled_data <- sample_mc_trees(observed_data,
                                       B = B,
                                       covariate_names = "x")
     inf_params <- c(-2, 1)
@@ -76,7 +76,7 @@ test_that("general_loglike", {
     B <- 10
     covariate_names <- c("x", "y")
 
-    sampled_data <- sample_permuted_cond_trees(observed_data,
+    sampled_data <- sample_mc_trees(observed_data,
                                       B = B,
                                       covariate_names = c("x", "y"))
     inf_params <- c(-2, .5, .5)

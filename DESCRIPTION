@@ -19,7 +19,9 @@ Suggests:
     testthat,
     knitr,
     ggplot2,
-    rmarkdown
+    rmarkdown,
+    devtools,
+    kableExtra
 LinkingTo: 
     Rcpp
 Imports: 
@@ -40,3 +42,4 @@ RdMacros:
     URL: https://github.com/skgallagher/InfectionTrees
 URL: https://github.com/skgallagher/InfectionTrees
 BugReports: https://github.com/skgallagher/InfectionTrees/issues
+VignetteBuilder: knitr

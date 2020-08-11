@@ -8,7 +8,7 @@ test_that("sample_permuted_cond_trees", {
     B <- 3
     covariate_names <- "x"
 
-    out <- sample_permuted_cond_trees(observed_data,
+    out <- sample_mc_trees(observed_data,
                                       B = B,
                                       covariate_names = "x")
     expect_equal(nrow(out), B * nrow(observed_data))
@@ -22,7 +22,7 @@ test_that("sample_permuted_cond_trees", {
     ## Check that each row is used once
     observed_data <- data.frame(cluster_id = rep(1, 8),
                                 x = 1:8)
-    sampled_data <- sample_permuted_cond_trees(observed_data,
+    sampled_data <- sample_mc_trees(observed_data,
                                       B = 10,
                                       covariate_names = "x")
     expect_true(all(table(sampled_data$x) == 10))
@@ -167,3 +167,4 @@ test_that("sample_trees_fixed_g", {
     expect_equal(sum(is.na(out$inf_id)), 3)
 
 })
+

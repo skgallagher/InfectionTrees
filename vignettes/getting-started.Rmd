@@ -1,0 +1,165 @@
+---
+title: "Getting started with `InfectionTrees`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{getting-started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "",
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+`InfectionTrees` is a software package used to sample and analyze branching processes that model the spread of infectious diseases.
+
+
+## Downloading the package
+
+Currently, `InfectionTrees` is available at [https://github.com/skgallagher/InfectionTrees](https://github.com/skgallagher/InfectionTrees), and can be installed in `R` via the following command,
+
+```{r eval = FALSE}
+devtools::install_github("skgallagher/InfectionTrees")
+
+```
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+devtools::load_all()
+library(knitr)
+library(kableExtra)
+library(tidyr)
+library(dplyr)
+library(data.table)
+```
+
+
+```{r setup, eval = FALSE}
+library(InfectionTrees)
+library(knitr)
+library(kableExtra)
+library(tidyr)
+library(dplyr)
+library(data.table)
+```
+
+## About
+
+Below, is a true quickstart to simulate data, sample Monte Carlo trees based on that data, and finally compute the log likelihood.
+
+The other vignettes cover:
+
+**The Model**
+
+1. [General overview](not-built-vignettes/model-overview.html)
+2. Accounting for under-reporting (Multiple outside transmission model)
+3. Sampling from $\mathcal{T}_n$
+
+
+**Simulations**
+
+1. [Simulations for the base model: binary covariates](not-built-vignettes/base-simulations.html)
+2. [Simulations for the base model: general covariates]()
+2. Simulations for the multiple outside transmission model
+3. Sampling enough MC trees
+
+**Tuberculosis in Maryland**
+
+1. The data
+2. Running our models on the data
+3. Visualizing the results
+
+## Simulating branching processes
+
+We can simulate from a branching process to form a data set of transmission trees or clusters (if we remove infector information from the transmission trees).  We simulate $K$ branching processes where the primary infector in each tree is the root of each transmission tree and the probability of infection of another individual is where $\bf{X}$ is a covariate matrix and $\beta$ is a vector of coefficients,
+$$
+p_i = logit^{-1} (\bf{X}_i\bf{\beta}).
+$$
+Then the number of *new* infectious individuals infected by individual $i$ is
+$$
+N_i \sim Geometric(p_i)
+$$
+
+It is possible to produce transmission trees that do not naturally terminate, so a maximal number of infections is used as an argument.  The output is a data frame with $M$ transmission trees which contains the cluster ID, the person ID within a cluster, the generation of the person (i.e. the length of the path from the primary infector to the person + 1), the infector ID (i.e. who infected this person), the number of infections caused directly by this person if any, the total cluster size, the covariates, and an indicator telling us whether the cluster was artificially terminated or not (i.e. `censored = TRUE`).
+
+
+```{r}
+set.seed(2020)
+## Generate possible covariates 
+sample_covariates_df <- data.frame(x = c(1,0))
+
+beta0 <- -2
+beta1 <- 1.5
+M <- 100
+data <- simulate_general_outbreak(K = M,
+                                  inf_params = c(beta0, beta1),
+                                  sample_covariates_df = sample_covariates_df,
+                                  covariate_names = "x",
+                                  max_size = 50)
+
+data %>% head(., 10) %>%
+  kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+  
+```
+
+## Estimate the maximum likelihood
+
+Although our data above are true transmission trees (i.e. we can trace a direct path of infections), generally the infector ID is unknown and hence the data is a group of individuals where the transmission tree is not known.
+
+We estimate the parameters $\beta_0$ and $\beta_1$ by summing over all possible transmission trees for each cluster, which includes the number of individuals in each cluster and their covariates.
+
+The likelihood for a given transmission tree $T$ with $n$ individuals is
+
+$$
+L(\beta; T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}
+$$
+and the total likelihood of a single cluster over all trees of size $n$ is
+$$
+\mathcal{L}( \beta; C) = \sum_{T \in \mathcal{T}_n} L(\beta;T).
+$$
+
+We instead maximize the **approximate** likelihood, which is obtained from sampling transmission trees from $\mathcal{T}_n$.  That is, we approximate $\frac{\mathcal{L}(C, \beta)}{|\mathcal{T}_n|}$ averaging the likelihood from Monte Carlo sampled trees $T_1, \dots, T_K$,
+
+$$
+\hat{\mathcal{L}}_K(\beta; C) = \frac{1}{K} \sum_{i=1}^K L(\beta, T_i).
+$$
+
+The estimates for the parameters are then found by maximizing the likelihood over the approximate likelihood over all clusters $C_1, \dots, C_M$
+$$
+\left (\hat{\beta} \right)^{(MC)} = \arg \max_{\beta} \prod_{m=1}^M \hat{\mathcal{L}}_K(\beta; C_m).
+$$
+
+
+### How to get Monte Carlo (MC) sampled transmission trees
+
+If we want to sample $B$ MC transmission trees for each cluster in our data, we use the function `sample_mc_trees`.  Here, `B` is the number of MC samples.  Typically this number is $>5000$, but we use 10 below for demonstrative purposes.
+
+
+```{r}
+mc_trees <- sample_mc_trees(observed_data = data, B = 10,
+                            covariate_names = "x")
+
+mc_trees %>% head(., 4) %>%
+  kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+The MC samples are linked to the original cluster by the variable `orig_id`.
+
+## Compute the log likelihood
+
+Once the MC trees are sampled, it is possible to compute the log likelihood using the function `general_loglike()`
+
+```{r}
+loglike <- general_loglike(inf_params = c(-2, 1),
+                            observed_data = data,
+                           sampled_data = mc_trees,
+                           return_neg = FALSE,
+                           cov_names = "x")
+                           
+print(loglike)
+```

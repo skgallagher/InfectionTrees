@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate the estimated general loglikelihood — general_loglike • InfectionTrees</title>
+<title>Articles • InfectionTrees</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,7 @@
 
 
 
-<meta property="og:title" content="Calculate the estimated general loglikelihood — general_loglike" />
-<meta property="og:description" content="Calculate the estimated general loglikelihood" />
+<meta property="og:title" content="Articles" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,85 +122,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate the estimated general loglikelihood</h1>
-    <small class="dont-index">Source: <a href='https://github.com/skgallagher/InfectionTrees/blob/master/R/general-loglike.R'><code>R/general-loglike.R</code></a></small>
-    <div class="hidden name"><code>general_loglike.Rd</code></div>
+      <h1>Articles</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Calculate the estimated general loglikelihood</p>
+    <div class="section ">
+      <h3>All vignettes</h3>
+      <p class="section-desc"></p>
+
+      <dl>
+        <dt><a href="getting-started.html">Getting started with `InfectionTrees`</a></dt>
+        <dd></dt>
+        <dt><a href="not-built-vignettes/model-overview.html">The model</a></dt>
+        <dd></dt>
+      </dl>
     </div>
-
-    <pre class="usage"><span class='fu'>general_loglike</span>(
-  <span class='no'>inf_params</span>,
-  <span class='no'>observed_data</span>,
-  <span class='no'>sampled_data</span>,
-  <span class='kw'>return_neg</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cov_mat</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cov_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>use_outsider_prob</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_clust_loglikes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>inf_params</th>
-      <td><p>vector of p parameters</p></td>
-    </tr>
-    <tr>
-      <th>observed_data</th>
-      <td><p>data frame with the following columns</p><dl'>
-<dt>cluster_id</dt><dd><p>unique cluster ID</p></dd>
-<dt>person_id</dt><dd><p>order of infection in the cluster</p></dd>
-<dt>gen</dt><dd><p>generation number (&gt;=0)</p></dd>
-<dt>inf_id</dt><dd><p>ID of the infector</p></dd>
-<dt>n_inf</dt><dd><p>number of people infected by person</p></dd>
-<dt>censored</dt><dd><p>whether the cluster end was censored or not</p></dd>
-<dt>cluster_size</dt><dd><p>size of the cluster</p></dd>
-<dt>covariates</dt><dd><p>covariates of the individuals</p></dd>
-
-</dl></td>
-    </tr>
-    <tr>
-      <th>sampled_data</th>
-      <td><p>data frame of samples that correspond to the data.  See details.  This is the output of <code>general_cond_tree_sims()</code>.</p></td>
-    </tr>
-    <tr>
-      <th>return_neg</th>
-      <td><p>default is TRUE.  Returns the negative loglike</p></td>
-    </tr>
-    <tr>
-      <th>cov_mat</th>
-      <td><p>optional matrix of covariates corresponding to the sampled_data</p></td>
-    </tr>
-    <tr>
-      <th>cov_names</th>
-      <td><p>covariate vector of length p which correspond in order to the betas</p></td>
-    </tr>
-    <tr>
-      <th>use_outsider_prob</th>
-      <td><p>a separate parameter for the outsider infections.  Default is FALSE</p></td>
-    </tr>
-    <tr>
-      <th>return_clust_loglikes</th>
-      <td><p>if TRUE, function returns the likelihood of every individual cluster</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>estimated average loglikelihood for the observed data</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This is a specialized log likelihood function where we first estimate the average log likelihood of trees conditioned by their total size through sampling.  This is very much dependent on the values of sampled_data.</p>
-
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <nav id="toc" data-toggle="toc" class="sticky-top">
-      <h2 data-toc-skip>Contents</h2>
-    </nav>
   </div>
 </div>
 

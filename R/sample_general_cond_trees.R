@@ -6,14 +6,14 @@
 #' Sample trees with same features as original but permuted through the trees
 #'
 #' @param observed_data data frame with the following columns
-#' @param B number of trees to sample
-#' @param covariate_names string names of covariates
 #' \describe{
 #' \item{cluster_id}{unique cluster ID}
 #' \item{covariates}{covariates of the individuals}
 #' }
+#' @param B number of trees to sample
+#' @param covariate_names string names of covariates
 #' @param B number of samples for each individual tree
-sample_permuted_cond_trees <- function(observed_data,
+sample_mc_trees <- function(observed_data,
                                        B = 100,
                                        covariate_names = "x"){
     if("id" %in% colnames(observed_data)){
