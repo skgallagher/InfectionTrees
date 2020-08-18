@@ -62,7 +62,7 @@ The other vignettes cover:
 
 **Simulations**
 
-1. [Simulations for the base model: binary covariates](not-built-vignettes/base-simulations.html)
+1. [Simulations for the base model: binary covariates](not-built-vignettes/base-binary-simulations.html)
 2. [Simulations for the base model: general covariates]()
 2. Simulations for the multiple outside transmission model
 3. Sampling enough MC trees

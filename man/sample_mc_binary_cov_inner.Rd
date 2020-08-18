@@ -18,7 +18,6 @@ sample_mc_binary_cov_inner(x_pos, x_neg, B, root_node = NULL)
 \value{
 a data frame with the following columns
 \describe{
-\item{freq}{frequency of the observed data}
 \item{cluster_size}{total size of the cluster}
 \item{x_pos}{number of individuals in the cluster with the feature of interest =1}
 \item{x_neg}{number of individuals in the cluster with the feature of interest  =0}

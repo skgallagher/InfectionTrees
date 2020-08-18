@@ -8,7 +8,8 @@ bp_loglike_binary_cov(
   inf_params,
   mc_samples_summary,
   return_neg = FALSE,
-  multiple_outsider_transmissions = FALSE
+  multiple_outside_transmissions = FALSE,
+  messages = FALSE
 )
 }
 \arguments{
@@ -20,7 +21,10 @@ outsider model.}
 
 \item{return_neg}{logical indicating whether to return the negative loglike.  Default is FALSE}
 
-\item{multiple_outsider_transmissions}{logical indicating whether to use the outsider model likelihood or not}
+\item{multiple_outside_transmissions}{logical indicating whether to use the outsider model li
+kelihood or not}
+
+\item{messages}{logical indicating whether we should print messages.  Default is FALSE.}
 }
 \value{
 the estimated log average likelihood over the observed clusters

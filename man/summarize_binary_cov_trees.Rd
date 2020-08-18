@@ -20,6 +20,7 @@ summarize_binary_cov_trees(trees, multiple_outside_transmissions = FALSE)
 \value{
 data frame with the following columns
 \describe{
+\item{mc_freq}{number of MC trees where this occurred}
 \item{cluster_size}{size of cluster}
 \item{x_pos}{number of positive x}
 \item{x_neg}{number of negative x}
