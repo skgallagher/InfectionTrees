@@ -95,7 +95,7 @@ sample_covariates_df <- data.frame(x = c(1,0))
 beta0 <- -2
 beta1 <- 1.5
 M <- 100
-data <- simulate_general_outbreak(K = M,
+data <- simulate_bp(K = M,
                                   inf_params = c(beta0, beta1),
                                   sample_covariates_df = sample_covariates_df,
                                   covariate_names = "x",

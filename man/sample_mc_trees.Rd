@@ -13,9 +13,12 @@ sample_mc_trees(observed_data, B = 100, covariate_names = "x")
 \item{covariates}{covariates of the individuals}
 }}
 
-\item{B}{number of samples for each individual tree}
+\item{B}{number of trees to sample}
 
 \item{covariate_names}{string names of covariates}
+}
+\value{
+data frame with the following columns
 }
 \description{
 Sample trees with same features as original but permuted through the trees

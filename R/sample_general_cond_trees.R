@@ -12,7 +12,7 @@
 #' }
 #' @param B number of trees to sample
 #' @param covariate_names string names of covariates
-#' @param B number of samples for each individual tree
+#' @return data frame with the following columns
 sample_mc_trees <- function(observed_data,
                                        B = 100,
                                        covariate_names = "x"){
@@ -211,10 +211,11 @@ draw_features <- function(tree_df,
                           feature_type,
                           params_list){
     n <- nrow(tree_df)
+    n_groups <- length(unique(tree_df$cluster_id))
 
     if(feature_type == "single_gauss"){
         tree_df$x <- stats::rnorm(n, mean = params_list$mean,
-                           sd = params_list$sd)
+                                  sd = params_list$sd)
 
     } else if(feature_type == "empirical"){
         if(is.null(params_list$replace)){
@@ -229,7 +230,7 @@ draw_features <- function(tree_df,
         if(do_permute){
             n_groups <- length(unique(tree_df$cluster_id))
             sampled_inds <- as.numeric(sapply(1:n_groups,
-                                   function(x) sample(1:nrow(cov_df))))
+                                              function(x) sample(1:nrow(cov_df))))
 
         } else if(is.null(weights)){ ## every row with equal prob
             sampled_inds <- sample(1:nrow(cov_df), size = n,
@@ -240,7 +241,33 @@ draw_features <- function(tree_df,
                                    prob = weights / sum(weights))
         }
         tree_df <- cbind(tree_df, cov_df[sampled_inds,, drop = FALSE])
+    }
 
+    else if(feature_type == "binary_cov"){
+        x_pos <- params_list$x_pos
+        x_neg <- params_list$x_neg
+        if((n / n_groups) == 1){
+            tree_df$x <- x_pos
+        }
+        tree_df$x <- as.numeric(sapply(1:n_groups,
+                                       function(x){
+                                           sample(c(rep(0, x_neg),
+                                                    rep(1, x_pos)))
+                                           }))
+        
+    } else if(feature_type == "binary_cov_out"){
+        x_pos <- params_list$x_pos
+        x_neg <- params_list$x_neg
+        root_node <- params_list$root_node
+        if((n / n_groups) == 2){
+            tree_df$x <- rep(c(root_node, x_pos), n_groups)
+        }
+        tree_df$x <- as.numeric(sapply(1:n_groups,
+                                       function(x){
+                                           c(root_node, sample(c(rep(0, x_neg),
+                                                    rep(1, x_pos))))
+                                           }))
+                                
     } else{
         stop("No other options than 'single_gauss' and 'empirical' are supported")
     }
@@ -248,4 +275,5 @@ draw_features <- function(tree_df,
     return(tree_df)
 
 }
+
 

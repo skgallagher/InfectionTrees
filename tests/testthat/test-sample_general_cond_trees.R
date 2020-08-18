@@ -39,6 +39,133 @@ test_that("draw_features", {
                          feature_type,
                          params_list)
     expect_equal(nrow(out), 5)
+
+    ##########################################3
+    ## draw features
+    ## "binary_cov"
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov"
+    params_list <- list(x_pos = 3,
+                        x_neg = 0,
+                        root_node = NULL)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_equal(out$x, rep(1, nrow(tree_df)))
+    expect_equal(nrow(out), nrow(tree_df))
+    ##
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov"
+    params_list <- list(x_pos = 2,
+                        x_neg = 1,
+                        root_node = NULL)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_equal(sum(out$x), params_list$x_pos * 4)
+    expect_equal(nrow(out), nrow(tree_df))
+     ##
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov"
+    params_list <- list(x_pos = 1,
+                        x_neg = 2,
+                        root_node = NULL)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_equal(sum(out$x), params_list$x_pos * 4)
+    expect_equal(nrow(out), nrow(tree_df))
+                                        #
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov"
+    params_list <- list(x_pos = 0,
+                        x_neg = 3,
+                        root_node = NULL)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_equal(sum(out$x), params_list$x_pos * 4)
+    expect_equal(nrow(out), nrow(tree_df))
+    ##
+    ## binary_cov_out
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov_out"
+    params_list <- list(x_pos = 2,
+                        x_neg = 0,
+                        root_node = 1)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_true(all(out$x[c(1, 4, 7, 10)] == 1))
+    expect_equal(nrow(out), nrow(tree_df))
+    ##
+    tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov_out"
+    params_list <- list(x_pos = 1,
+                        x_neg = 1,
+                        root_node = 1)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_true(all(out$x[c(1, 4, 7, 10)] == 1))
+    expect_equal(nrow(out), nrow(tree_df))
+    ##
+       tree_df <- data.frame(cluster_id = c(1, 1, 1,
+                                         2, 2, 2,
+                                         3, 3, 3,
+                                         4, 4, 4))
+    feature_type <- "binary_cov_out"
+    params_list <- list(x_pos = 0,
+                        x_neg = 2,
+                        root_node = 1)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_true(all(out$x[c(1, 4, 7, 10)] == 1))
+    expect_equal(nrow(out), nrow(tree_df))
+    ##
+    tree_df <- data.frame(cluster_id = c(1, 1, 
+                                         2, 2, 
+                                         3, 3)) 
+    feature_type <- "binary_cov_out"
+    params_list <- list(x_pos = 1,
+                        x_neg = 0,
+                        root_node = 1)
+
+    out <- draw_features(tree_df,
+                         feature_type,
+                         params_list)
+    expect_true(all(out$x[c(1, 3, 5)] == 1))
+    expect_equal(nrow(out), nrow(tree_df))
+    
+    
+
+    
 })
 
 
