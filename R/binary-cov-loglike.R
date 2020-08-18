@@ -4,19 +4,23 @@
 
 
 #' Calculate the likelihood for binary covariate MC trees
-#' 
+#'
 #' @param inf_params vector of length 2, the beta0 and beta1 coefficients
 #' @param mc_samples_summary a data frame of sampled transmission trees
 #' with the following columns, where the last one is only needed for the multiple
 #' outsider model.
-#' 
+#'
 #' @param return_neg logical indicating whether to return the negative loglike.  Default is FALSE
-#' @param multiple_outsider_transmissions logical indicating whether to use the outsider model likelihood or not
+#' @param multiple_outside_transmissions logical indicating whether to use the outsider model li
+#' kelihood or not
+#' @param messages logical indicating whether we should print messages.  Default is FALSE.
 #' @return the estimated log average likelihood over the observed clusters
+#' @export
 bp_loglike_binary_cov <- function(inf_params,
                                   mc_samples_summary,
                                   return_neg = FALSE,
-                                  multiple_outsider_transmissions = FALSE){
+                                  multiple_outside_transmissions = FALSE,
+                                  messages = FALSE){
 
   total_p_pos <- sum(mc_samples_summary$freq *
                        mc_samples_summary$x_pos)
@@ -29,10 +33,12 @@ bp_loglike_binary_cov <- function(inf_params,
     prob_inf <- NULL
 
   if(!("data.table" %in% class(mc_samples_summary))){
-    print("Converting 'sampled_data' to data.table format")
+    if(messages){
+      print("Converting 'sampled_data' to data.table format")
+    }
     mc_samples_summary <- data.table::as.data.table(mc_samples_summary)
   }
-  if(!multiple_outsider_transmissions){
+  if(!multiple_outside_transmissions){
     my_prob_inf <- (1-p_pos)^mc_samples_summary$x_pos *
       (1-p_neg)^mc_samples_summary$x_neg *
       p_pos^mc_samples_summary$x_pos_trans *

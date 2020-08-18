@@ -28,6 +28,6 @@ test_that("bp_loglike_binary_cov", {
   out <- bp_loglike_binary_cov(inf_params = inf_params,
                                mc_samples_summary = mc_samples_summary,
                                return_neg = FALSE,
-                               multiple_outsider_transmission = FALSE)
+                               multiple_outside_transmission = FALSE)
   expect_equal(sum(c(10, 5, 6, 2) * log(avg_like)), out)
 })

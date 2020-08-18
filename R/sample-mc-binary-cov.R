@@ -28,6 +28,7 @@
 #'  \item{x_neg_trans}{number of transmissions from a negative individual in the tree}
 #'  \item{root_node_sign}{whether root node is pos or neg}
 #'  }
+#'  @export
 sample_mc_binary_cov <- function(B,
                                  observed_cluster_summaries,
                                  multiple_outside_transmissions = FALSE){
@@ -38,7 +39,7 @@ sample_mc_binary_cov <- function(B,
     total_x_neg <- sum(observed_cluster_summaries$x_neg *
                        observed_cluster_summaries$freq)
     empirical_p_pos <- total_x_pos / (total_x_neg + total_x_pos)
-    
+
     tree_summary_list <- vector(mode = "list",
                                 length = nrow(observed_cluster_summaries))
     for(ii in 1:nrow(observed_cluster_summaries)){
@@ -58,8 +59,8 @@ sample_mc_binary_cov <- function(B,
                                                     root_node = 0)
             trees <- rbind(trees_pos,
                                   trees_neg)
-            
-            
+
+
         } else{
             trees <- sample_mc_binary_cov_inner(x_pos,
                                                 x_neg,
@@ -69,15 +70,19 @@ sample_mc_binary_cov <- function(B,
                                                    multiple_outside_transmissions =
                                                        multiple_outside_transmissions)
         tree_summary$freq <- freq
-
         tree_summary_list[[ii]] <- tree_summary
     }
-    mc_summary <- dplyr::bind_rows(tree_summary_list)
+    mc_summary <- dplyr::bind_rows(tree_summary_list) %>%
+        dplyr::mutate(cluster_size = x_pos + x_neg) %>%
+        dplyr::select(.data$freq, .data$cluster_size,
+                      .data$x_pos, .data$x_neg,
+                      .data$mc_freq,
+                      .data$x_pos_trans, .data$x_neg_trans)
     return(mc_summary)
-    
+
 
 }
-                                 
+
 
 #' Innfer function to sample MC trees with binary covariates
 #'
@@ -87,7 +92,6 @@ sample_mc_binary_cov <- function(B,
 #' @param root_node if NULL, use the base model.  If 1, ensure that the root node is positive.  If 0, ensure that the root node is negative.
 #' @return a data frame with the following columns
 #' \describe{
-#' \item{freq}{frequency of the observed data}
 #' \item{cluster_size}{total size of the cluster}
 #' \item{x_pos}{number of individuals in the cluster with the feature of interest =1}
 #' \item{x_neg}{number of individuals in the cluster with the feature of interest  =0}
@@ -110,8 +114,8 @@ sample_mc_binary_cov_inner <- function(x_pos,
     params_list <- list(x_pos = x_pos,
                         x_neg = x_neg,
                         root_node = root_node)
-    
-    
+
+
 
     tree_df <- draw_features(tree_df = tree_df,
                              feature_type = type,
@@ -134,6 +138,7 @@ sample_mc_binary_cov_inner <- function(x_pos,
 #' @param multiple_outside_transmissions default is FALSE
 #' @return data frame with the following columns
 #' \describe{
+#' \item{mc_freq}{number of MC trees where this occurred}
 #' \item{cluster_size}{size of cluster}
 #' \item{x_pos}{number of positive x}
 #' \item{x_neg}{number of negative x}
@@ -160,7 +165,7 @@ summarize_binary_cov_trees <- function(trees,
                      .data$x_neg_trans) %>%
             dplyr::summarize(mc_freq = dplyr::n()) %>%
             dplyr::ungroup()
-                     
+
     }else{
         summary_trees <- summary_trees %>%
             dplyr::group_by(.data$x_pos,
@@ -172,6 +177,6 @@ summarize_binary_cov_trees <- function(trees,
             dplyr::ungroup()
     }
     return(summary_trees)
-                                           
+
 
 }

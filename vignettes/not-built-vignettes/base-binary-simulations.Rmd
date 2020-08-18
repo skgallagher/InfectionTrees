@@ -1,0 +1,294 @@
+---
+title: "Binary covariate model simulations"
+output:
+    html_document:
+      code_folding: hide
+vignette: >
+  %\VignetteIndexEntry{Model overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+devtools::load_all()
+library(InfectionTrees)
+library(tidyr)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+theme_set(theme_bw() + theme(axis.title = element_text()))
+```
+
+
+##  Overview
+
+In this vignette, we show to perform simulations to assess how well our base model is doing. 
+
+1. We briefly review how data is generated.
+
+2. Provide code (but do not run) for a large-scale simulation to check whether our model works.
+
+
+
+
+## Data simulation
+
+Specifically, we generate data under our branching process model described in [the modeling section](not-built-vignettes/model-overview.html) where the probability of onward transmission $p_i$ is a function of a single binary covariate $X_i \sim Binomial \left (\gamma \right )$  and 
+$$
+p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
+$$
+where $gamma$, $\beta_0$, and $\beta_1$ are fixed parameters.  Here, we are assuming we are working with the base model where all transmissions within a cluster can be directly traced back to an observed individual within the cluster.
+
+
+Below is how we simulate a single data set from the branching process.  We have summarized the clusters by size.
+
+```{r fig.align='center'}
+set.seed(2020)
+## Generate possible covariates 
+sample_covariates_df <- data.frame(x = c(1,0))
+
+beta0 <- -2
+beta1 <- 1
+M <- 1000
+data <- simulate_bp(K = M,
+                                  inf_params = c(beta0, beta1),
+                                  sample_covariates_df = sample_covariates_df,
+                                  covariate_names = "x",
+                                  max_size = 50)
+
+ data %>% group_by(cluster_id) %>%
+  summarize(cluster_size = n()) %>%
+  ungroup() %>%
+   group_by(cluster_size) %>%
+   summarize(freq = n()) %>%
+   ungroup() %>%
+  kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,
+                 position = "center")
+
+```
+
+
+
+The case where there is a single binary covariate is a special case for our model because the likelihood for a single transmission tree reduces to
+$$
+L(T;C)  = (1-p_+)^{n_+}(1-p_-)^{n_-}p_+^{N_+}p_-^{N_-},
+$$
+where $p_+ = logit^{-1}(\beta_0 + \beta_1)$, $p_- = logit^{-1}(\beta_0)$, $n_+$ is the number of positive $X_i$ individuals, $n_-$ is the number of negative $X_i$ individuals, $N_+$ is the number of transmissions from positive individuals and $N_-$ is the number of transmissions from negative individuals.  The consequence of this is that the observed clusters may be stored as the following table with the cluster size, number of positive individuals ($x_{pos})$, and number of negative individuals ($x_{neg}$), along with their frequency instead of a `r nrow(data)` row data frame, like the one we sampled.
+
+```{r}
+binary_cluster_summaries <- summarize_binary_clusters(data)
+binary_cluster_summaries %>%
+   kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                 position = "center", full_width = FALSE)
+  
+
+```
+The consequence of this also extends to Monte Carlo sampling of trees.  We do not have to store the individual trees, but only need a summary of them.
+
+We sample $B= 1000$ MC trees for each row in the summarized clusters data.  The MC trees for the cluster with 9 positive and 4 negatives are summarized with the following:
+
+```{r}
+B <- 1000
+mc_trees <- sample_mc_binary_cov(B = B,
+                                 observed_cluster_summaries = binary_cluster_summaries)
+
+mc_trees %>% filter(cluster_size == 13) %>%
+     kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                 position = "center", full_width = FALSE)
+
+```
+
+
+We can then estimate the MLE from the MC sampled trees with our specialized likelihood function `bp_loglike_binary_cov()` which is the specialized counterpart to `bp_loglike_general()`.
+
+```{r}
+inf_params_0 <- c(0,0)
+
+best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
+                      mc_samples_summary = mc_trees,
+                                  return_neg = TRUE,
+                     method = "L-BFGS-B",
+                     lower = c(-5, -5),
+                     upper = c(5, 5),
+                     hessian = TRUE)
+
+round(best_params$par, 2)
+```
+
+
+We can use likelihood profiling to get individual $(1-\alpha$)\% CIs for our estimates.
+
+```{r}
+lp_ests <- binary_likelihood_profs(best_pars = best_params$par,
+                                    max_loglike = -best_params$value,
+                                    mc_samples_summary = mc_trees,
+                                    alpha = .05,
+                                    multiple_outside_transmissions = FALSE)
+
+lp_ests %>% as.data.frame() %>%
+      kable(type = "html", digits = 2) %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                 position = "center", full_width = FALSE)
+
+```
+
+
+The CIs for these estimate do not include $\beta_0 = -2$ nor $\beta_1 = 1$, but this is not unexpected as we are looking at the MLE of a single data set.
+
+## Simulation code for branching process with a binary covariate
+
+To test whether our method works in general we simulate $M$ iid data sets from a single specified branching process with parameters $(\gamma, \beta_0, \beta_1)$.  To find the MLE, we sample $B$ MC transmissions trees for each row in the observed data and estimate $\hat{\beta}_0^{(m)}$ and $\hat{\beta}_1^{(m)}$ for $m=1 ,\dots, M$.  We then report the mean, median, 2.5 quantile, and 97.5% quantiles of the estimated  $\hat{\beta}$ values.  
+
+We then repeat this entire process for different configurations of $(\gamma, \beta_0, \beta_1)$.
+
+
+**WARNING** The below code will take many hours to run on a single laptop.
+
+```{r eval = FALSE}
+## Simulations to try
+M <- 100 # number of simulations for each parameter configuration
+B <- 5000 # number of MC samples
+K <- 1000 # number of clusters in a data set
+
+
+par_df1 <- data.frame(
+                     M = M,
+                     B = B,
+                     beta_0 = c(-2.5, -2.5, -2.5,
+                         -1.5, -1.5, -1.5),
+                     beta_1 = c(.5, 0, -.5,
+                                1, 0, -1),
+                     gamma = .5)
+
+par_df2 <- data.frame(
+                     M = M,
+                     B = B,
+                     beta_0 = c(-2.5, -2.5, -2.5,
+                         -1.5, -1.5, -1.5),
+                     beta_1 = c(.5, 0, -.5,
+                                .5, 0, -.5),
+                     gamma = .7)
+
+par_df3 <-  data.frame(
+                     M = M,
+                     B = B,
+                     beta_0 = c(-2.75, -2.75, -2.75),
+                     beta_1 = c(3, 0, -.25),
+                     gamma = .1)
+###########################################################################
+
+## data frame of simulation parameter configurations
+par_df <- dplyr::bind_rows(par_df1, par_df2, par_df3)
+
+out_list <- vector(mode = "list", length = nrow(par_df))
+
+#########################################################################
+## Run the simulations
+total_time <- proc.time()[3]
+for(zz in 1:nrow(par_df)){
+  t_params <- proc.time()[3]
+  beta_0 <- par_df$beta_0[zz]
+  beta_1 <- par_df$beta_1[zz]
+  gamma <- par_df$gamma[zz]
+  sprintf("Parameter set %d", zz)
+  sprintf("beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f",
+          beta_0, beta_1, gamma)
+  
+  
+  ## For a given set of parameters
+  best_params_mat <- matrix(0, nrow = M, ncol = 2)
+  max_cluster_sizes <- matrix(M)
+  for(mm in 1:M){
+    t_sims <- proc.time()[3]
+    sprintf("Simulation %d", mm)
+    ## Simulate a branching process data set
+    ## Distribution of xs
+    sample_covariates_df <- data.frame(x = c(rep(0, gamma * 10),
+                                             rep(1, (1-gamma) * 10)))
+    
+    M <- 1000
+    data <- simulate_bp(K = K ,
+                                      inf_params = c(beta_0, beta_1),
+                                      sample_covariates_df = sample_covariates_df,
+                                      covariate_names = "x",
+                                      max_size = 50)
+    ## Summarize the data set
+    binary_cluster_summaries <- summarize_binary_clusters(data)
+    max_cluster_sizes[mm] <- max(binary_cluster_summaries$cluster_size)
+    sprintf("max cluster size is %d", max_cluster_sizes[mm])
+    
+    
+    ####################################3
+    ## SAMPLE MC TREES
+    #######################################
+    mc_trees <- sample_mc_binary_cov(B = B,
+                                 observed_cluster_summaries = binary_cluster_summaries)
+    #######################################
+    ## OPTIMIZE
+    ######################################
+    inf_params_0 <- c(0,0)
+  
+    best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
+                        mc_samples_summary = mc_trees,
+                                    return_neg = TRUE,
+                       method = "L-BFGS-B",
+                       lower = c(-5, -5),
+                       upper = c(5, 5),
+                       hessian = TRUE)
+    best_params_mat[mm,] <- best_params$par
+    print("best params")
+    print(best_params$par)
+    
+
+    print("Data simulation time (hrs)")
+    print((proc.time()[3] - t_sims) / 3600, digits = 2)
+    
+    print("Cumulative time (hrs)")
+    print((proc.time()[3] - total_time) / 3600, digits = 2)
+    
+  }
+  
+  print("Params simulation time (hrs)")
+  print((proc.time()[3] - t_params) / 3600, digits = 2)
+  
+  
+  sprintf("beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f",
+          beta_0, beta_1, gamma)
+  print("Mean estimates")
+  colMeans(best_params_mat)
+   print("Median estimates")
+  apply(best_params_mat, 2, median)
+  print("2.5Q")
+  apply(best_params_mat, 2, quantile, probs = 2.5)
+   print("2.5Q")
+  apply(best_params_mat, 2, quantile, probs = 97.5)
+  
+  sims_list <- list(best_params_mat = best_params_mat,
+                      set = zz,
+                      max_cluster_sizes = max_cluster_sizes)
+    
+  out_list[[zz]] <- sims_list
+
+
+
+   
+                          
+}
+
+
+current_time <- Sys.time()
+current_time <- gsub(" ", "_", current_time)
+current_time <- gsub(":", ".", current_time)
+fn <- paste0("simulation_results_", current_time, ".RDS")
+
+
+saveRDS(out_list, fn)
+
+```

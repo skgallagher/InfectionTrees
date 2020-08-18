@@ -98,6 +98,9 @@
       <a href="../articles/getting-started.html">Getting started with `InfectionTrees`</a>
     </li>
     <li>
+      <a href="../articles/not-built-vignettes/base-binary-simulations.html">Binary covariate model simulations</a>
+    </li>
+    <li>
       <a href="../articles/not-built-vignettes/model-overview.html">The model</a>
     </li>
   </ul>
@@ -136,7 +139,8 @@
   <span class='no'>inf_params</span>,
   <span class='no'>mc_samples_summary</span>,
   <span class='kw'>return_neg</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>multiple_outsider_transmissions</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>multiple_outside_transmissions</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>messages</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,8 +161,13 @@ outsider model.</p></td>
       <td><p>logical indicating whether to return the negative loglike.  Default is FALSE</p></td>
     </tr>
     <tr>
-      <th>multiple_outsider_transmissions</th>
-      <td><p>logical indicating whether to use the outsider model likelihood or not</p></td>
+      <th>multiple_outside_transmissions</th>
+      <td><p>logical indicating whether to use the outsider model li
+kelihood or not</p></td>
+    </tr>
+    <tr>
+      <th>messages</th>
+      <td><p>logical indicating whether we should print messages.  Default is FALSE.</p></td>
     </tr>
     </table>
 
