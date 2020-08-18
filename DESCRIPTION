@@ -37,9 +37,7 @@ Imports:
     rlang,
     plyr,
     Rdpack
-RdMacros:
-    Rdpack
-    URL: https://github.com/skgallagher/InfectionTrees
+RdMacros: Rdpack
 URL: https://github.com/skgallagher/InfectionTrees
 BugReports: https://github.com/skgallagher/InfectionTrees/issues
 VignetteBuilder: knitr

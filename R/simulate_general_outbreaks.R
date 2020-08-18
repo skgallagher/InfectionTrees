@@ -10,7 +10,7 @@
 
 
 
-#' Simulate the process of flipping until failure for K clusters
+#' Simulate the branching process of flipping until failure for K clusters
 #'
 #' @param K number of total clusters to simulate
 #' @param inf_params vector with beta coefficients to use in logistic function for probability of transmission
@@ -29,11 +29,36 @@
 #' \item{cluster_size}{size of the cluster}
 #' \item{covariates}{covariates of the individuals}
 #' }
-#' @details breadth not depth.  Generate generation by generation as opposed to going up the branch til termination.
+#' @details Generate a branching process according to the following process.
+#' First a root infector is drawn covariates \eqn{X}
+#'  from some distribution $F$ (given by the set of covariates in \code{sample_covariates_df}) and has probability of
+#'   transmission according to a logit function.
+#'   The number of infections produced by the root node $N_{(1,1)}
+#'    is a geometric random variable with probability $p_{(1,1)}$
+#'   where the indexing represents $(g=$, generation, $i=$ index).
+#'    If $N_{(1,1)} > 0$, then the $N_{(1,1)}$ infections are added to
+#'     the cluster and assigned to generation $g=2$ with indices $i=1,
+#'      \dots, N_{(1,1)}$ and covariats are drawn for these new infections.
+#'      The infection process continues with individuals $(2, 1)$ through $(2, $N_{(1,1)})$
+#'       where new infections are added, in order to the subsequent generation.
+#'        The process terminates when either there are no new infections or the
+#'         maximum number of infections specified in \code{max_size} is reached.
+#' \deqn{X_{(g,i)} \sim F}
+#' \deqn{p_{(g,i)} = logit^{-1}\left ( X_{(g,i)} \beta\right )}
+#' \deqn{N_{(g,i)} \sim Geometric(p_{(g,i)})}
 #' @export
 #' @examples
-#' inf_params <- c("beta_0" = -2, "beta_1" = 1)
-simulate_general_outbreak <- function(K,
+#' set.seed(2020)
+#' inf_params <- c("beta_0" = -2, "beta_1" = 2)
+#' df <- data.frame(x= c(0, 1))
+#' branching_processes <- simulate_bp(K = 10,
+#' inf_params = inf_params,
+#' covariate_names = "x",
+#' sample_covariates_df = df)
+#' head(branching_processes)
+#' table(branching_processes$cluster_size) /
+#' sort(unique(branching_processes$cluster_size))
+simulate_bp <- function(K,
                               inf_params,
                               sample_covariates_df,
                               covariate_names,
@@ -222,7 +247,7 @@ general_generation_infection <- function(cluster_id,
 #' @return new df
 draw_covariate_rows <- function(n, df,
                                 covariate_weights = NULL){
-   
+
     if(is.null(covariate_weights)){
         row_inds <- sample(1:nrow(df), size = n, replace = TRUE)
         new_df <- df[row_inds,]

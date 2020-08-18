@@ -148,7 +148,7 @@ N_i \sim Geometric(p_i)
 <span class="no">beta0</span> <span class="kw">&lt;-</span> -<span class="fl">2</span>
 <span class="no">beta1</span> <span class="kw">&lt;-</span> <span class="fl">1.5</span>
 <span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">100</span>
-<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simulate_general_outbreak.html">simulate_general_outbreak</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
                                   <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta0</span>, <span class="no">beta1</span>),
                                   <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
                                   <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
@@ -470,7 +470,7 @@ L(\beta; T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}
 <h3 class="hasAnchor">
 <a href="#how-to-get-monte-carlo-mc-sampled-transmission-trees" class="anchor"></a>How to get Monte Carlo (MC) sampled transmission trees</h3>
 <p>If we want to sample <span class="math inline">\(B\)</span> MC transmission trees for each cluster in our data, we use the function <code>sample_mc_trees</code>. Here, <code>B</code> is the number of MC samples. Typically this number is <span class="math inline">\(&gt;5000\)</span>, but we use 10 below for demonstrative purposes.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu">sample_mc_trees</span>(<span class="kw">observed_data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">B</span> <span class="kw">=</span> <span class="fl">10</span>,
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sample_mc_trees.html">sample_mc_trees</a></span>(<span class="kw">observed_data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">B</span> <span class="kw">=</span> <span class="fl">10</span>,
                             <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>)
 
 <span class="no">mc_trees</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">.</span>, <span class="fl">4</span>) <span class="kw">%&gt;%</span>

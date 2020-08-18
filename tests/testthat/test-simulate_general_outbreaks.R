@@ -27,7 +27,7 @@ test_that("simulate_general_outbreak", {
     covariate_names <- "x"
     max_size <- 30
 
-    out <- simulate_general_outbreak(K,
+    out <- simulate_bp(K,
                                      inf_params,
                                      sample_covariates_df,
                                      covariate_names,
@@ -43,7 +43,7 @@ test_that("simulate_general_outbreak", {
     covariate_weights <- c(1, 99)
     max_size <- 30
 
-    out <- simulate_general_outbreak(K,
+    out <- simulate_bp(K,
                                      inf_params,
                                      sample_covariates_df,
                                      covariate_names,
