@@ -1,4 +1,26 @@
-test_that("sample_permuted_cond_trees", {
+test_that("sample_mc_tree", {
+## the outsider version
+
+  observed_data <- data.frame(cluster_id = c(1,
+                                             2, 2,
+                                             3, 3),
+                              x = c(1,
+                                    0, 1,
+                                    1, 1))
+  B <- 3
+  covariate_names <- "x"
+  multiple_outside_transmissions <- TRUE
+  out <- sample_mc_trees(observed_data,
+                         B = B,
+                         covariate_names = covariate_names,
+                         multiple_outside_transmissions = multiple_outside_transmissions)
+
+  expect_equal(nrow(out), 8 * B)
+
+
+})
+
+test_that("sample_mc_trees", {
     observed_data <- data.frame(cluster_id = c(1,
                                                2, 2,
                                                3, 3),
@@ -149,9 +171,9 @@ test_that("draw_features", {
     expect_true(all(out$x[c(1, 4, 7, 10)] == 1))
     expect_equal(nrow(out), nrow(tree_df))
     ##
-    tree_df <- data.frame(cluster_id = c(1, 1, 
-                                         2, 2, 
-                                         3, 3)) 
+    tree_df <- data.frame(cluster_id = c(1, 1,
+                                         2, 2,
+                                         3, 3))
     feature_type <- "binary_cov_out"
     params_list <- list(x_pos = 1,
                         x_neg = 0,
@@ -162,10 +184,10 @@ test_that("draw_features", {
                          params_list)
     expect_true(all(out$x[c(1, 3, 5)] == 1))
     expect_equal(nrow(out), nrow(tree_df))
-    
-    
 
-    
+
+
+
 })
 
 

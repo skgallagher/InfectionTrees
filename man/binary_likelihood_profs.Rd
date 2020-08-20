@@ -27,6 +27,7 @@ or multiple outside transmissions model.}
 \value{
 matrix of dimension (length of best_pars) x 3 where the columns are the best parameter estimate,
 the lower CI (\code{lower}) and upper CI (\code{upper})
+@export
 }
 \description{
 Return likelihood profiles for binary covariates special case

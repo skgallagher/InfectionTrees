@@ -8,7 +8,8 @@ sample_general_cond_trees(
   n_vec,
   B = 100,
   feature_type = "single_gauss",
-  params_list = list(mean = 0, sd = 0.5)
+  params_list = list(mean = 0, sd = 0.5),
+  multiple_outside_transmissions = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ sample_general_cond_trees(
 \item{feature_type}{method of how we sample covariates.  Currently only "single_gauss", "empirical" are supported}
 
 \item{params_list}{of additional parameters}
+
+\item{multiple_outside_transmissions}{logical indicating whether
+we allow multiple outside transmissions or not.  Default is FALSE}
 }
 \value{
 data frame of trees

@@ -19,7 +19,8 @@
 #' \item{x_neg}{number of individuals in the cluster with the feature of interest = 0}
 #' }
 #' @details Condense data from data frames about each individuals to the
-#' summary of the number of indivduals who have a particular covariate feature (1/0)
+#' summary of the number of indivduals who have a particular covariate feature (1/0).
+#' This assumes the trees are in order by generation.
 #' @export
 #' @examples
 #' example_cluster <- data.frame(cluster_id = c(1, 1, 1,
@@ -38,6 +39,8 @@ summarize_binary_clusters <- function(df,
   sub_df <- df[, c("cluster_id", covariate_name)]
   colnames(sub_df) <- c("cluster_id", "x")
   stopifnot(any(sub_df$x %in% c(0,1)))
+
+
   out_df <- sub_df %>%
     dplyr::group_by(.data$cluster_id) %>%
     dplyr::summarize(cluster_size = dplyr::n(),
@@ -49,6 +52,7 @@ summarize_binary_clusters <- function(df,
     dplyr::ungroup() %>%
       dplyr::select(.data$freq, .data$cluster_size,
                     .data$x_pos, .data$x_neg)
+
 
   ## Add a binary covariate class to help us out in sampling mc and likelihood
   class(out_df) <- c("binary_cov", class(out_df))

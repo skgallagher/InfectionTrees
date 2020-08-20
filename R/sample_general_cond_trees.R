@@ -12,10 +12,24 @@
 #' }
 #' @param B number of trees to sample
 #' @param covariate_names string names of covariates
+#' @param multiple_outside_transmissions logical indicating whether
+#' we allow multiple outside transmissions or not.  Default is FALSE
+#' @param replace_vars logical indicating whether we
+#' can re sample from the covariate df.  Default is FALSE
 #' @return data frame with the following columns
+#' @importFrom rlang .data
 sample_mc_trees <- function(observed_data,
                                        B = 100,
-                                       covariate_names = "x"){
+                                       covariate_names = "x",
+                            multiple_outside_transmissions = FALSE,
+                            replace_vars = FALSE
+                            ){
+
+    if("cluster_size" %in% colnames(observed_data)){
+      observed_data <- observed_data %>%
+        dplyr::select(-.data$cluster_size)
+    }
+
     if("id" %in% colnames(observed_data)){
         stop("Please rename the 'id' column")
     }
@@ -28,14 +42,27 @@ sample_mc_trees <- function(observed_data,
         observed_cluster <- observed_data %>%
             dplyr::filter(cluster_id == id) %>%
             dplyr::select(dplyr::contains(covariate_names))
+
         n <- nrow(observed_cluster)
         params_list <- list(covariate_df = observed_cluster,
                             weights = NULL,
-                            replace = FALSE)
+                            replace = replace_vars)
+        if(multiple_outside_transmissions){
+          params_list <- list(covariate_df = observed_cluster,
+                              weights = NULL,
+                              replace = replace_vars,
+                           full_data = observed_data %>%
+                             dplyr::select(dplyr::contains(covariate_names)))
+        }
         sampled_clusters <- sample_general_cond_trees(n_vec = n,
                                                       B = B,
                                                       feature_type = "empirical",
-                                                      params_list = params_list)
+                                                      params_list = params_list,
+                                                      multiple_outside_transmissions =
+                                                        multiple_outside_transmissions)
+
+
+
         sampled_clusters$orig_id <- id
         sampled_tree_list[[ii]] <- sampled_clusters
 
@@ -55,12 +82,15 @@ sample_mc_trees <- function(observed_data,
 #' @param B number of sampled trees for each size
 #' @param feature_type method of how we sample covariates.  Currently only "single_gauss", "empirical" are supported
 #' @param params_list of additional parameters
+#' @param multiple_outside_transmissions logical indicating whether
+#' we allow multiple outside transmissions or not.  Default is FALSE
 #' @return data frame of trees
 sample_general_cond_trees <- function(n_vec,
                                       B = 100,
                                       feature_type = "single_gauss",
                                       params_list = list(mean = 0,
-                                                         sd = .5)){
+                                                         sd = .5),
+                                      multiple_outside_transmissions = FALSE){
     stopifnot(feature_type == "single_gauss" |
               feature_type == "empirical" |
               feature_type == "permute")
@@ -70,13 +100,18 @@ sample_general_cond_trees <- function(n_vec,
         stopifnot(all(c("weights", "covariate_df") %in% names(params_list)))
     }
 
+  if(multiple_outside_transmissions){
+    n_vec <- n_vec + 1
+  }
+
     ## Get the uniform trees
     tree_df <- sample_unif_trees_no_features(n_vec, B)
 
     ## Randomly draw features for the nodes on the tree
     tree_df <- draw_features(tree_df,
                              feature_type,
-                             params_list)
+                             params_list,
+                             multiple_outside_transmissions)
     return(tree_df)
 
 }
@@ -206,10 +241,29 @@ sample_general_tree_perm <- function(gen_sizes){
 #' @param tree_df data frame where each row is an individual
 #' @param feature_type currently or supports "single_gauss" "empirical"
 #' @param params_list additional parameters to pass
+#' @param multiple_outside_transmissions logical indicating whether
+#' we allow multiple outside transmissions or not.  Default is FALSE
 #' @return updated data frame with covariate features
 draw_features <- function(tree_df,
                           feature_type,
-                          params_list){
+                          params_list,
+                          multiple_outside_transmissions = FALSE){
+
+
+    if(multiple_outside_transmissions){
+      gen_one <- tree_df %>% dplyr::filter(.data$gen == 1)
+      tree_df <- tree_df %>% dplyr::filter(.data$gen != 1)
+      ## randomly draw covariate INDICES for the gen one folks
+      gen_one_inds <- sample(1:nrow(params_list$full_data),
+                             replace = TRUE,
+                             size = nrow(gen_one)
+                             )
+      gen_one_cov <- params_list$full_data[gen_one_inds,, drop = FALSE]
+      gen_one <- cbind(gen_one, gen_one_cov)
+
+    }
+
+
     n <- nrow(tree_df)
     n_groups <- length(unique(tree_df$cluster_id))
 
@@ -254,7 +308,7 @@ draw_features <- function(tree_df,
                                            sample(c(rep(0, x_neg),
                                                     rep(1, x_pos)))
                                            }))
-        
+
     } else if(feature_type == "binary_cov_out"){
         x_pos <- params_list$x_pos
         x_neg <- params_list$x_neg
@@ -267,10 +321,23 @@ draw_features <- function(tree_df,
                                            c(root_node, sample(c(rep(0, x_neg),
                                                     rep(1, x_pos))))
                                            }))
-                                
+
     } else{
-        stop("No other options than 'single_gauss' and 'empirical' are supported")
+      stop("No other options than 'single_gauss' and 'empirical' are supported")
     }
+
+    if(multiple_outside_transmissions &
+       !(feature_type %in% c("binary_cov_out", "binary_cov"))){ ## the general case
+      ## Only the empirical case
+      tree_df <- dplyr::bind_rows(tree_df,
+                                  gen_one) %>%
+        dplyr::arrange(cluster_id)
+    }
+
+
+
+
+
     rownames(tree_df) <- NULL
     return(tree_df)
 

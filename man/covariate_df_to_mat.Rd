@@ -4,10 +4,10 @@
 \alias{covariate_df_to_mat}
 \title{Take data frame and turn it into matrix for logistic regression}
 \usage{
-covariate_df_to_mat(sampled_data, cov_names)
+covariate_df_to_mat(mc_trees, cov_names)
 }
 \arguments{
-\item{sampled_data}{data frame with cov_names}
+\item{mc_trees}{data frame with cov_names}
 
 \item{cov_names}{null or string of vector}
 }

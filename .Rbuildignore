@@ -7,5 +7,7 @@
 ^docs$
 ^pkgdown$
 ^paper_figs/
+^paper_results/
 ^\.github$
 vignettes/not-built-vignettes
+vignettes/.RData

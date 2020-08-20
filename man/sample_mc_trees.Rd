@@ -4,7 +4,13 @@
 \alias{sample_mc_trees}
 \title{Sample trees with same features as original but permuted through the trees}
 \usage{
-sample_mc_trees(observed_data, B = 100, covariate_names = "x")
+sample_mc_trees(
+  observed_data,
+  B = 100,
+  covariate_names = "x",
+  multiple_outside_transmissions = FALSE,
+  replace_vars = FALSE
+)
 }
 \arguments{
 \item{observed_data}{data frame with the following columns
@@ -16,6 +22,12 @@ sample_mc_trees(observed_data, B = 100, covariate_names = "x")
 \item{B}{number of trees to sample}
 
 \item{covariate_names}{string names of covariates}
+
+\item{multiple_outside_transmissions}{logical indicating whether
+we allow multiple outside transmissions or not.  Default is FALSE}
+
+\item{replace_vars}{logical indicating whether we
+can re sample from the covariate df.  Default is FALSE}
 }
 \value{
 data frame with the following columns

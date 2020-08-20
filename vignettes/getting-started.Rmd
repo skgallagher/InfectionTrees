@@ -63,7 +63,7 @@ The other vignettes cover:
 **Simulations**
 
 1. [Simulations for the base model: binary covariates](not-built-vignettes/base-binary-simulations.html)
-2. [Simulations for the base model: general covariates]()
+2. [Simulations for the base model: general covariates](not-built-vignettes/base-general-simulations.html)
 2. Simulations for the multiple outside transmission model
 3. Sampling enough MC trees
 
@@ -156,8 +156,7 @@ Once the MC trees are sampled, it is possible to compute the log likelihood usin
 
 ```{r}
 loglike <- general_loglike(inf_params = c(-2, 1),
-                            observed_data = data,
-                           sampled_data = mc_trees,
+                           mc_trees = mc_trees,
                            return_neg = FALSE,
                            cov_names = "x")
                            
