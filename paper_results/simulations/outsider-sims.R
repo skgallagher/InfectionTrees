@@ -66,9 +66,9 @@ for(par_index in 1:nrow(params_df)){
                                       rep(0, (1-gamma) * 10)
                                       ))
     covariate_names <- "x"
-    K <- 100 # number of clusters to simulate
-    n_sims <- 2 # total times to simulate
-    B <- 100 # number of MC draws per cluster
+    K <- 1000 # number of clusters to simulate
+    n_sims <- 100 # total times to simulate
+    B <- 10000 # number of MC draws per cluster
     ## Simulate an outbreak
     best_params_mat <- matrix(0, nrow = n_sims, ncol = length(inf_params))
     cluster_sizes_list <- vector(mode = "list", length = n_sims)
