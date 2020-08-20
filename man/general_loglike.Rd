@@ -6,19 +6,18 @@
 \usage{
 general_loglike(
   inf_params,
-  observed_data,
-  sampled_data,
+  mc_trees,
   return_neg = TRUE,
   cov_mat = NULL,
   cov_names = NULL,
+  multiple_outside_transmissions = FALSE,
   use_outsider_prob = FALSE,
-  return_clust_loglikes = FALSE
+  return_clust_loglikes = FALSE,
+  messages = FALSE
 )
 }
 \arguments{
-\item{inf_params}{vector of p parameters}
-
-\item{observed_data}{data frame with the following columns
+\item{inf_params}{vector of p parameters
 \describe{
 \item{cluster_id}{unique cluster ID}
 \item{person_id}{order of infection in the cluster}
@@ -30,17 +29,23 @@ general_loglike(
 \item{covariates}{covariates of the individuals}
 }}
 
-\item{sampled_data}{data frame of samples that correspond to the data.  See details.  This is the output of \code{general_cond_tree_sims()}.}
+\item{mc_trees}{data frame of samples that correspond to the data.  See details.
+This is the output of \code{general_cond_tree_sims()}.}
 
 \item{return_neg}{default is TRUE.  Returns the negative loglike}
 
-\item{cov_mat}{optional matrix of covariates corresponding to the sampled_data}
+\item{cov_mat}{optional matrix of covariates corresponding to the mc_trees}
 
 \item{cov_names}{covariate vector of length p which correspond in order to the betas}
 
+\item{multiple_outside_transmissions}{logical indicating whether to use multiple outside method to compute likelihood.}
+
 \item{use_outsider_prob}{a separate parameter for the outsider infections.  Default is FALSE}
 
-\item{return_clust_loglikes}{if TRUE, function returns the likelihood of every individual cluster}
+\item{return_clust_loglikes}{if TRUE, function returns the likelihood
+of every individual cluster}
+
+\item{messages}{Should we print messages.}
 }
 \value{
 estimated average loglikelihood for the observed data
@@ -49,5 +54,17 @@ estimated average loglikelihood for the observed data
 Calculate the estimated general loglikelihood
 }
 \details{
-This is a specialized log likelihood function where we first estimate the average log likelihood of trees conditioned by their total size through sampling.  This is very much dependent on the values of sampled_data.
+This is a specialized log likelihood function where we first estimate
+the average log likelihood of trees conditioned by their total size through sampling.
+This is very much dependent on the values of mc_trees.
+
+The base likelihood for a single tree is given by
+\deqn{L(T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}}
+where \eqn{p_i} is the probability of transmission for individual \eqn{i} and \eqn{N_i} is the number of individuals infected by individual \eqn{i}.  The approximate average likelihood for a given cluster $C_m$ is then
+\deqn{\bar{L}_K(C_m) = \frac{1}{K}\sum_{k=1}^K L(T_k)}
+where \eqn{K} is the number of Monte Carlo transmission tree samples \eqn{T_k} for cluster \eqn{C_m}.  Finally, the log likelihood is the sum of the log likelihoods for each cluster,
+\deqn{\ell(C_1, \dots, C_M) = \sum_{m=1}^M log(\bar{L}_K(C_m))}
+For the multiple outside transmissions model, the above likelihood calculation is changed only for a single tree (and the transmission trees are of a different form).  The likelihood \eqn{L_O(T)} is
+\deqn{L_O(T) = (1-p_1)p_1^{N_1-1}\prod_{i=2}(1-p_i)p_i^{N_i}}
+because we condition on the outsider having at least one successful infection.
 }

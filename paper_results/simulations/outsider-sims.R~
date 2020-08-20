@@ -1,0 +1,120 @@
+#!/usr/bin/env Rscript
+
+## SKG
+## Aug. 8, 2020
+## Now with the outsiders
+## Simulate outsider outbreaks
+## See if we can estimate the parameters
+
+
+
+
+
+
+## Load libraries and data
+devtools::load_all()
+library(tidyverse)
+
+
+my_seed <- 8152020
+set.seed(my_seed)
+
+t0 <- proc.time()[3]
+gamma <- .7
+inf_params <- c(-2.5, 1)
+covariates_df <- data.frame(x = c(rep(1, gamma * 10),
+                                  rep(0, (1-gamma) * 10)
+                                  ))
+covariate_names <- "x"
+K <- 1000
+n_sims <- 100
+## Simulate an outbreak
+best_params_mat <- matrix(0, nrow = n_sims, ncol = length(inf_params))
+t_init <- proc.time()[3]
+for(sim in 1:n_sims){
+
+    print("simulation number")
+    print(sim)
+
+
+    print("simulating data set")
+    df <- simulate_general_outbreak(K = K,
+                                    inf_params = inf_params,
+                                    sample_covariates_df = covariates_df,
+                                    covariate_names = covariate_names,
+                                    max_size = 70)
+
+    outsider_obs <- df %>%
+        filter(gen != 1) %>%
+        mutate(cluster_size = cluster_size - 1)
+
+    ## Number of 'observed' clusters
+    length(unique(outsider_obs$cluster_id))
+
+    print("sampling MC trees")
+    ## sample MC trees
+    B <- 5000
+    t0 <- proc.time()[3]
+    mc_trees <-  sample_permuted_cond_trees(outsider_obs,
+                                            B = B,
+                                            use_multiple_outsiders = TRUE)
+    print(proc.time()[3] - t0)
+
+    
+    ## Optimize
+    
+    print("Optimizing")
+    init_params <- rep(0, length(covariate_names) + 1)
+    bds <- rep(-5, length(covariate_names) + 1)
+    if(length(covariate_names) > 5){
+        bds <- rep(-4, length(covariate_names) + 1)
+    }
+    lower_bds <- bds
+    upper_bds <- -bds
+    cov_mat <- covariate_df_to_mat(mc_trees,
+                                   cov_names = covariate_names)
+    ## Now with data.table
+    t1 <- proc.time()[3]
+    best_params <- optim(par = init_params,
+                         fn = general_loglike,
+                         observed_data = outsider_obs,
+                         sampled_data = data.table::as.data.table(mc_trees),
+                         return_neg = TRUE,
+                         cov_mat = cov_mat,
+                         cov_names = covariate_names,
+                         use_outsider_prob = FALSE,
+                         condition_on_outsider = TRUE,
+                         method = "L-BFGS-B",
+                         lower = lower_bds,
+                         upper = upper_bds
+                         )
+    t2 <- proc.time()[3] - t1
+    print(paste("Optimization time:", round( t2 / 60, 3),
+                "min"))
+    print("best params:")
+    print(best_params$par)
+    best_params_mat[sim,] <- best_params$par
+    print(paste("Total time:", round( (proc.time()[3] - t_init)  / 3600, 3),
+                "hrs"))
+
+}
+
+print(colMeans(best_params_mat))
+print(apply(best_params_mat, 2, median))
+print(apply(best_params_mat, 2, sd))
+
+
+
+
+data_out <- list(best_params_mat = best_params_mat,
+                 seed = my_seed,
+                 init_params = inf_params,
+                 gamma = gamma)
+
+
+current_time <- Sys.time()
+current_time <- gsub(" ", "_", current_time)
+current_time <- gsub(":", ".", current_time)
+fn_base <- paste0("data_output_outsider_", current_time, ".RDS")
+
+saveRDS(data_out, fn_base)

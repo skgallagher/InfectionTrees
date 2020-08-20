@@ -29,7 +29,8 @@ Summarize binary covariate clusters
 }
 \details{
 Condense data from data frames about each individuals to the
-summary of the number of indivduals who have a particular covariate feature (1/0)
+summary of the number of indivduals who have a particular covariate feature (1/0).
+This assumes the trees are in order by generation.
 }
 \examples{
 example_cluster <- data.frame(cluster_id = c(1, 1, 1,

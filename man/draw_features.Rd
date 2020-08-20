@@ -4,7 +4,12 @@
 \alias{draw_features}
 \title{Draw the features for the tree people}
 \usage{
-draw_features(tree_df, feature_type, params_list)
+draw_features(
+  tree_df,
+  feature_type,
+  params_list,
+  multiple_outside_transmissions = FALSE
+)
 }
 \arguments{
 \item{tree_df}{data frame where each row is an individual}
@@ -12,6 +17,9 @@ draw_features(tree_df, feature_type, params_list)
 \item{feature_type}{currently or supports "single_gauss" "empirical"}
 
 \item{params_list}{additional parameters to pass}
+
+\item{multiple_outside_transmissions}{logical indicating whether
+we allow multiple outside transmissions or not.  Default is FALSE}
 }
 \value{
 updated data frame with covariate features

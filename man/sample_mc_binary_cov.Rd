@@ -38,6 +38,7 @@ outsider model)
 \item{x_neg_trans}{number of transmissions from a negative individual in the tree}
 \item{root_node_sign}{whether root node is pos or neg}
 }
+@export
 }
 \description{
 Sample binary covariate transmission trees
