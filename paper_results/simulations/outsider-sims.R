@@ -15,12 +15,12 @@ if(!require(InfectionTrees)){
 }
 library(tidyverse)
 
+## simulation parameters
+K <- 1000 # number of clusters to simulate
+n_sims <- 100 # total times to simulate per set of parameters
+B <- 10000 # number of MC draws per cluster
 
-
-## EACH LOOP TAKES >30 HOURS.  SWITCH TO DOPAR?
-
-
-
+## EACH OUTER LOOP TAKES >30 HOURS.
 
 params_df <- data.frame(beta0 = c(-2.5, -2.5,
                                   -2.75, -2.75,
@@ -50,6 +50,7 @@ params_df$set <- 1:nrow(params_df)
 
 simulation_output <- vector(mode = "list", length = nrow(params_df))
 
+
 for(par_index in 1:nrow(params_df)){
     my_seed <- 8152020 + par_index
     set.seed(my_seed)  # needs fixed?
@@ -59,16 +60,13 @@ for(par_index in 1:nrow(params_df)){
     beta0 <- params_df$beta0[par_index]
     beta1 <- params_df$beta1[par_index]
     gamma <- params_df$gamma[par_index]
-    sprintf("beta0 = %.2f, beta1 = %.2f, gamma = %.2f",
-            beta0, beta1, gamma)
+    print(sprintf("beta0 = %.2f, beta1 = %.2f, gamma = %.2f",
+            beta0, beta1, gamma))
     inf_params <- c(beta0, beta1)
     covariates_df <- data.frame(x = c(rep(1, gamma * 10),
                                       rep(0, (1-gamma) * 10)
                                       ))
     covariate_names <- "x"
-    K <- 1000 # number of clusters to simulate
-    n_sims <- 100 # total times to simulate
-    B <- 10000 # number of MC draws per cluster
     ## Simulate an outbreak
     best_params_mat <- matrix(0, nrow = n_sims, ncol = length(inf_params))
     cluster_sizes_list <- vector(mode = "list", length = n_sims)
@@ -157,6 +155,7 @@ for(par_index in 1:nrow(params_df)){
     cluster_med <- median(cluster_sizes_vec)
     cluster_max <- max(cluster_sizes_vec)
     cluster_90 <- quantile(cluster_sizes_vec, probs = .90)
+    names(cluster_90) <- NULL
 
 
 
@@ -177,8 +176,17 @@ for(par_index in 1:nrow(params_df)){
     current_time <- Sys.time()
     current_time <- gsub(" ", "_", current_time)
     current_time <- gsub(":", ".", current_time)
-    fn_base <- paste0("data_output_outsider_", current_time, ".RDS")
+    fn_base <- paste0("single_output_outsider_", "set_",
+                      par_index,
+                      current_time, ".RDS")
 
     saveRDS(data_out, fn_base)
 
 }
+
+
+current_time <- Sys.time()
+current_time <- gsub(" ", "_", current_time)
+current_time <- gsub(":", ".", current_time)
+fn_base <- paste0("all_output_outsider_", current_time, ".RDS")
+    saveRDS(simulation_output, fn_base)
