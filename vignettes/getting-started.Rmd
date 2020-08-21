@@ -56,7 +56,7 @@ The other vignettes cover:
 **The Model**
 
 1. [General overview](not-built-vignettes/model-overview.html)
-2. Accounting for under-reporting (Multiple outside transmission model)
+2. [Accounting for under-reporting (Multiple outside transmission model)](not-built-vignettes/multiple-outside-transmissions-model.html)
 3. Sampling from $\mathcal{T}_n$
 
 
