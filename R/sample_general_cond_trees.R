@@ -18,6 +18,7 @@
 #' can re sample from the covariate df.  Default is FALSE
 #' @return data frame with the following columns
 #' @importFrom rlang .data
+#' @export
 sample_mc_trees <- function(observed_data,
                                        B = 100,
                                        covariate_names = "x",
