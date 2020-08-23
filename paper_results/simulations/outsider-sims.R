@@ -16,9 +16,9 @@ if(!require(InfectionTrees)){
 library(tidyverse)
 
 ## simulation parameters
-K <- 1000 # number of clusters to simulate
-n_sims <- 100 # total times to simulate per set of parameters
-B <- 10000 # number of MC draws per cluster
+K <- 100 # number of clusters to simulate
+n_sims <- 2 # total times to simulate per set of parameters
+B <- 100 # number of MC draws per cluster
 
 ## EACH OUTER LOOP TAKES >30 HOURS.
 
