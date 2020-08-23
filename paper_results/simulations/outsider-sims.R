@@ -13,6 +13,7 @@
 if(!require(InfectionTrees)){
     devtools::install_github("skgallagher/InfectionTrees")
 }
+library(InfectionTrees)
 library(tidyverse)
 
 ## simulation parameters
