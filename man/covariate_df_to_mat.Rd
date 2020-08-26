@@ -17,3 +17,6 @@ matrix of dimension n x (p+1)
 \description{
 Take data frame and turn it into matrix for logistic regression
 }
+\details{
+if cov_names is \code{NA}, then we return a matrix of 1 column of 1s.  This is the case of having \eqn{beta_0} only.  Otherwise, we return the matrix with 1 column of 1s for the intercept and the rest of the variables.
+}

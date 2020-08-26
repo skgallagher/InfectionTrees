@@ -1,0 +1,71 @@
+PMID- 30560777
+OWN - NLM
+STAT- MEDLINE
+DCOM- 20190715
+LR  - 20200309
+IS  - 1080-6059 (Electronic)
+IS  - 1080-6040 (Print)
+IS  - 1080-6040 (Linking)
+VI  - 25
+IP  - 1
+DP  - 2019 Jan
+TI  - Complexity of the Basic Reproduction Number (R(0)).
+PG  - 1-4
+LID - 10.3201/eid2501.171901 [doi]
+AB  - The basic reproduction number (R(0)), also called the basic reproduction ratio or 
+      rate or the basic reproductive rate, is an epidemiologic metric used to describe the 
+      contagiousness or transmissibility of infectious agents. R(0) is affected by 
+      numerous biological, sociobehavioral, and environmental factors that govern pathogen 
+      transmission and, therefore, is usually estimated with various types of complex 
+      mathematical models, which make R(0) easily misrepresented, misinterpreted, and 
+      misapplied. R(0) is not a biological constant for a pathogen, a rate over time, or a 
+      measure of disease severity, and R(0) cannot be modified through vaccination 
+      campaigns. R(0) is rarely measured directly, and modeled R(0) values are dependent 
+      on model structures and assumptions. Some R(0) values reported in the scientific 
+      literature are likely obsolete. R(0) must be estimated, reported, and applied with 
+      great caution because this basic metric is far from simple.
+FAU - Delamater, Paul L
+AU  - Delamater PL
+FAU - Street, Erica J
+AU  - Street EJ
+FAU - Leslie, Timothy F
+AU  - Leslie TF
+FAU - Yang, Y Tony
+AU  - Yang YT
+FAU - Jacobsen, Kathryn H
+AU  - Jacobsen KH
+LA  - eng
+GR  - P2C HD050924/HD/NICHD NIH HHS/United States
+PT  - Journal Article
+PT  - Research Support, Non-U.S. Gov't
+TA  - Emerg Infect Dis
+JT  - Emerging infectious diseases
+JID - 9508155
+SB  - IM
+MH  - *Basic Reproduction Number
+MH  - *Disease Outbreaks
+MH  - *Disease Transmission, Infectious
+MH  - Humans
+MH  - Models, Theoretical
+PMC - PMC6302597
+OTO - NOTNLM
+OT  - *R0
+OT  - *basic reproduction number
+OT  - *basic reproduction rate
+OT  - *basic reproduction ratio
+OT  - *basic reproductive rate
+OT  - *disease outbreaks
+OT  - *infectious disease transmission
+OT  - *mathematical modeling
+OT  - *outbreaks
+OT  - *theoretical models
+EDAT- 2018/12/19 06:00
+MHDA- 2019/07/16 06:00
+CRDT- 2018/12/19 06:00
+PHST- 2018/12/19 06:00 [entrez]
+PHST- 2018/12/19 06:00 [pubmed]
+PHST- 2019/07/16 06:00 [medline]
+AID - 17-1901 [pii]
+AID - 10.3201/eid2501.171901 [doi]
+PST - ppublish
+SO  - Emerg Infect Dis. 2019 Jan;25(1):1-4. doi: 10.3201/eid2501.171901.
