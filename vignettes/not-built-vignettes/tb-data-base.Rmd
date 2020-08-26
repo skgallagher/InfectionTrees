@@ -238,9 +238,6 @@ for(jj in 1:length(covariate_list)){
     
 loglike_df <- loglike_df %>%
   mutate(aic = -loglike + 2 * n_params)
-
-
-
 ```
 
 
