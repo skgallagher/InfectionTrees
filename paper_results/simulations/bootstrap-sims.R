@@ -5,8 +5,6 @@
 ## Bootstrap simulations to estimate standard error for the data
 ## 5 different models
 
-covariate_list <- vector(mode = "list",
-                         length = 5)
 
 
 
@@ -62,7 +60,8 @@ orig_clusters <-  tb_clean %>%
            cluster_size)
 
 ## models
-covariate_list <- vector(mode = "list", length = 5)
+n_mods <- 4
+covariate_list <- vector(mode = "list", length = n_mods)
 covariate_list[[1]] <- NA
 covariate_list[[2]] <- "smear"
 covariate_list[[3]] <- c("smear",
@@ -70,18 +69,18 @@ covariate_list[[3]] <- c("smear",
 covariate_list[[4]] <- c("smear",
                          "hiv_neg_pos", "hiv_unk_pos",
                          "rel_time")
-covariate_list[[5]] <- c("smear",
-                         "hiv_neg_pos", "hiv_unk_pos",
-                         "rel_time",
-                         "race_asian_white",
-                         "race_black_white")
+## covariate_list[[5]] <- c("smear",
+##                          "hiv_neg_pos", "hiv_unk_pos",
+##                          "rel_time",
+##                          "race_asian_white",
+##                          "race_black_white")
 ## Set up beta matrices
 beta_mat1 <- matrix(0, ncol = 1,
                     nrow = n_boot)
 colnames(beta_mat1) <- c("Intercept")
-beta_list <- vector(mode = "list", length = 5)
+beta_list <- vector(mode = "list", length = n_mods)
 beta_list[[1]] <- beta_mat1
-for(ii in 2:5){
+for(ii in 2:n_mods){
     mat <- matrix(0, ncol = length(covariate_list[[ii]]) + 1,
                   nrow = n_boot)
     colnames(mat) <- c("Intercept", covariate_list[[ii]])
