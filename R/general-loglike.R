@@ -178,9 +178,10 @@ general_cluster_like.dt <- function(prob_inf, n_inf){
 #' @param mc_trees data frame with cov_names
 #' @param cov_names null or string of vector
 #' @return matrix of dimension n x (p+1)
+#' @details if cov_names is \code{NA}, then we return a matrix of 1 column of 1s.  This is the case of having \eqn{beta_0} only.  Otherwise, we return the matrix with 1 column of 1s for the intercept and the rest of the variables.
 #' @export
 covariate_df_to_mat <- function(mc_trees, cov_names){
-    if(!is.null(cov_names)){
+    if(!is.null(cov_names) & !any(is.na(cov_names))){
         stopifnot(length(cov_names) ==
                   sum(cov_names %in% colnames(mc_trees)))
         sample_covariates_df <- mc_trees %>%
@@ -189,9 +190,11 @@ covariate_df_to_mat <- function(mc_trees, cov_names){
         cov_mat <- cbind(rep(1, nrow(cov_mat)), cov_mat)
         colnames(cov_mat) <- NULL
         return(cov_mat)
+    } else if(any(is.na(cov_names))){
+        cov_mat <- matrix(1, ncol = 1, nrow = nrow(mc_trees))
+        return(cov_mat)
     } else{
-        stop("You must provide appropriate column names for mc_trees")
-
+        stop("Select the appropriate variables:  either named variables in the data or NA which corresponds to beta0 only")
     }
 
 }

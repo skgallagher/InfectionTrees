@@ -125,7 +125,7 @@ We can use likelihood profiling to get individual $(1-\alpha$)\% CIs for our est
 lp_ests <- likelihood_profs(best_pars = best_params$par,
                                     max_loglike = -best_params$value,
                                     mc_trees = mc_trees,
-                                    covariate_names <- c("x", "y", "z"),
+                                    covariate_names = c("x", "y", "z"),
                                     alpha = .05,
                                     multiple_outside_transmissions = FALSE)
 
