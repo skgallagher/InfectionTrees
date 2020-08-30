@@ -57,21 +57,23 @@ The other vignettes cover:
 
 1. [General overview](not-built-vignettes/model-overview.html)
 2. [Accounting for under-reporting (Multiple outside transmission model)](not-built-vignettes/multiple-outside-transmissions-model.html)
-3. Sampling from $\mathcal{T}_n$
+3. [Sampling from $\mathcal{T}_n$](not-built-vignettes/sampling-mc-trees.html)
+3. [Sampling enough MC trees](not-built-vignettes/sampling-enough-mc-trees.html)
 
 
 **Simulations**
 
 1. [Simulations for the base model: binary covariates](not-built-vignettes/base-binary-simulations.html)
 2. [Simulations for the base model: general covariates](not-built-vignettes/base-general-simulations.html)
-2. Simulations for the multiple outside transmission model
-3. Sampling enough MC trees
+2. [Simulations for the multiple outside transmission model](not-built-vignettes/multiple-outside-binary-simulations.html)
+3. [Simulations to assess whether we sampled enough MC trees](simulations-enough-mc-trees.html)
+
 
 **Tuberculosis in Maryland**
 
-1. The data
-2. Running our models on the data
-3. Visualizing the results
+1. [The data](not-built-vignettes/tb-eda.html)
+2. [Running our models on the data](not-built-vignettes/tb-data-base.html)
+3. [Visualizing the results](not-built-vignettes/tb-data-vis.html)
 
 ## Simulating branching processes
 

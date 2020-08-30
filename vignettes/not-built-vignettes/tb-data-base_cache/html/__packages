@@ -5,3 +5,5 @@ tidyr
 dplyr
 kableExtra
 ggplot2
+forcats
+readr

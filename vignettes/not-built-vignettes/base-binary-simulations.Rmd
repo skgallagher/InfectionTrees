@@ -37,7 +37,7 @@ In this vignette, we show to perform simulations to assess how well our base mod
 
 ## Data simulation
 
-Specifically, we generate data under our branching process model described in [the modeling section](not-built-vignettes/model-overview.html) where the probability of onward transmission $p_i$ is a function of a single binary covariate $X_i \sim Binomial \left (\gamma \right )$  and 
+Specifically, we generate data under our branching process model described in [the modeling section](model-overview.html) where the probability of onward transmission $p_i$ is a function of a single binary covariate $X_i \sim Binomial \left (\gamma \right )$  and 
 $$
 p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
 $$

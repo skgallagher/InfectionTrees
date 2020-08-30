@@ -1,0 +1,90 @@
+---
+title: "First look at the Tuberculosis datas"
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Model overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+devtools::load_all()
+library(InfectionTrees)
+library(tidyr)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+theme_set(theme_bw() + theme(axis.title = element_text()))
+```
+
+
+##  Overview
+
+In this vignette, we will explore the data set provided here in `data(tb_clean)`, which is a data set originally collected and analyzed in [Xie et al. (2018)](GETLINK-and-REF)
+
+
+## Exploratory Data Analysis
+
+
+```{r, eval = FALSE, echo = TRUE}
+library(InfectionTrees)
+library(tidyverse)
+library(kableExtra)
+
+```
+
+The data `tb_clean` has `r nrow(tb_clean)` rows and `r ncol(tb_clean)` columns, where each row in the data corresponds to an individual who has been diagnosed with Tuberculosis (TB).
+
+The columns include demographic characteristics about the patients as well as two diagnostic tests of the disease, including a AFB sputum smear test, which we analyze here.
+
+Of the `r nrow(tb_clean)` cases, `r sum(tb_clean$PCR.Cluster != "")` indivduals have been clustered together through PCR of the TB culture.
+
+```{r}
+tb_sub <- tb_clean %>%
+  filter(PCR.Cluster != "") %>%
+  mutate(cluster_id = PCR.Cluster) %>%
+  group_by(cluster_id) %>%
+        mutate(cluster_size = n()) %>%
+  ungroup()
+
+```
+
+
+This subset of data has `r length(unique(tb_sub$cluster_id))` clusters with the following distribution of cluster sizes:
+
+```{r}
+sizes <- tb_sub %>% group_by(cluster_id) %>%
+  summarize(cluster_size = n()) %>% 
+  ungroup() %>%
+  group_by(cluster_size) %>%
+  summarize(freq = n()) 
+  
+  
+sizes %>%
+  kable() %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+
+                    
+```
+
+
+This means that `r round(sizes$freq[sizes$cluster_size == 1] / sum(sizes$freq) * 100, 1)`% of the clusters are singletons and `r round(sum(sizes$freq[sizes$cluster_size %in% 1:3]) / sum(sizes$freq) * 100, 1)`% of the clusters have size at most 3.
+
+A single cluster of individuals looks like the following:
+
+```{r}
+tb_sub %>% filter(PCR.Cluster == "27") %>%
+  arrange(datecoll) %>%
+  select(cluster_id, datecoll, everything()) %>%
+   kable() %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+```
+
+
+In our data set of `r nrow(tb_sub)` individuals, `r sum(tb_sub$hivstatus == "Positive")` or `r round(sum(tb_sub$hivstatus == "Positive") / nrow(tb_sub) * 100)`% of individuals are HIV+.  In the clusters with more than 3 individuals, `r sum(tb_sub$hivstatus == "Positive" & tb_sub$cluster_size > 3)` of `r sum(tb_sub$cluster_size > 3)` or `r round(sum(tb_sub$hivstatus == "Positive" & tb_sub$cluster_size > 3) / sum(tb_sub$cluster_size > 3) * 100)`% of individuals are HIV+. 

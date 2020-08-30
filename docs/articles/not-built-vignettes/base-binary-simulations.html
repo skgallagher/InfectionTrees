@@ -71,6 +71,12 @@
     <li>
       <a href="../../articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
     </li>
+    <li>
+      <a href="../../articles/not-built-vignettes/sampling-mc-trees.html">The model</a>
+    </li>
+    <li>
+      <a href="../../articles/not-built-vignettes/tb-data-base.html">TB Data Results: base model</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -116,7 +122,7 @@
 <div id="data-simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-simulation" class="anchor"></a>Data simulation</h2>
-<p>Specifically, we generate data under our branching process model described in <a href="not-built-vignettes/model-overview.html">the modeling section</a> where the probability of onward transmission <span class="math inline">\(p_i\)</span> is a function of a single binary covariate <span class="math inline">\(X_i \sim Binomial \left (\gamma \right )\)</span> and <span class="math display">\[
+<p>Specifically, we generate data under our branching process model described in <a href="model-overview.html">the modeling section</a> where the probability of onward transmission <span class="math inline">\(p_i\)</span> is a function of a single binary covariate <span class="math inline">\(X_i \sim Binomial \left (\gamma \right )\)</span> and <span class="math display">\[
 p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
 \]</span> where <span class="math inline">\(gamma\)</span>, <span class="math inline">\(\beta_0\)</span>, and <span class="math inline">\(\beta_1\)</span> are fixed parameters. Here, we are assuming we are working with the base model where all transmissions within a cluster can be directly traced back to an observed individual within the cluster.</p>
 <p>Below is how we simulate a single data set from the branching process. We have summarized the clusters by size.</p>
@@ -127,7 +133,7 @@ p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
 <span class="no">beta0</span> <span class="kw">&lt;-</span> -<span class="fl">2</span>
 <span class="no">beta1</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
 <span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu">simulate_bp</span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
                                   <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta0</span>, <span class="no">beta1</span>),
                                   <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
                                   <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
@@ -221,7 +227,7 @@ freq
 <p>The case where there is a single binary covariate is a special case for our model because the likelihood for a single transmission tree reduces to <span class="math display">\[
 L(T;C)  = (1-p_+)^{n_+}(1-p_-)^{n_-}p_+^{N_+}p_-^{N_-},
 \]</span> where <span class="math inline">\(p_+ = logit^{-1}(\beta_0 + \beta_1)\)</span>, <span class="math inline">\(p_- = logit^{-1}(\beta_0)\)</span>, <span class="math inline">\(n_+\)</span> is the number of positive <span class="math inline">\(X_i\)</span> individuals, <span class="math inline">\(n_-\)</span> is the number of negative <span class="math inline">\(X_i\)</span> individuals, <span class="math inline">\(N_+\)</span> is the number of transmissions from positive individuals and <span class="math inline">\(N_-\)</span> is the number of transmissions from negative individuals. The consequence of this is that the observed clusters may be stored as the following table with the cluster size, number of positive individuals (<span class="math inline">\(x_{pos})\)</span>, and number of negative individuals (<span class="math inline">\(x_{neg}\)</span>), along with their frequency instead of a 1304 row data frame, like the one we sampled.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu">summarize_binary_clusters</span>(<span class="no">data</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/summarize_binary_clusters.html">summarize_binary_clusters</a></span>(<span class="no">data</span>)
 <span class="no">binary_cluster_summaries</span> <span class="kw">%&gt;%</span>
    <span class="fu">kable</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
    <span class="fu">kable_styling</span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),
@@ -555,7 +561,7 @@ x_neg
 <p>The consequence of this also extends to Monte Carlo sampling of trees. We do not have to store the individual trees, but only need a summary of them.</p>
 <p>We sample <span class="math inline">\(B= 1000\)</span> MC trees for each row in the summarized clusters data. The MC trees for the cluster with 9 positive and 4 negatives are summarized with the following:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">B</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu">sample_mc_binary_cov</span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
+<span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/sample_mc_binary_cov.html">sample_mc_binary_cov</a></span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
                                  <span class="kw">observed_cluster_summaries</span> <span class="kw">=</span> <span class="no">binary_cluster_summaries</span>)
 
 <span class="no">mc_trees</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">cluster_size</span> <span class="kw">==</span> <span class="fl">13</span>) <span class="kw">%&gt;%</span>
@@ -888,7 +894,7 @@ x_neg_trans
 </tr>
 </tbody>
 </table>
-<p>We can then estimate the MLE from the MC sampled trees with our specialized likelihood function <code>bp_loglike_binary_cov()</code> which is the specialized counterpart to <code>bp_loglike_general()</code>.</p>
+<p>We can then estimate the MLE from the MC sampled trees with our specialized likelihood function <code><a href="../../reference/bp_loglike_binary_cov.html">bp_loglike_binary_cov()</a></code> which is the specialized counterpart to <code>bp_loglike_general()</code>.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">inf_params_0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)
 
 <span class="no">best_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="no">inf_params_0</span>, <span class="kw">fn</span> <span class="kw">=</span> <span class="no">bp_loglike_binary_cov</span>,
@@ -902,7 +908,7 @@ x_neg_trans
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">best_params</span>$<span class="no">par</span>, <span class="fl">2</span>)</pre></body></html></div>
 <pre><code>## [1] -1.27  0.78</code></pre>
 <p>We can use likelihood profiling to get individual <span class="math inline">\((1-\alpha\)</span>)% CIs for our estimates.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">lp_ests</span> <span class="kw">&lt;-</span> <span class="fu">binary_likelihood_profs</span>(<span class="kw">best_pars</span> <span class="kw">=</span> <span class="no">best_params</span>$<span class="no">par</span>,
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">lp_ests</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/binary_likelihood_profs.html">binary_likelihood_profs</a></span>(<span class="kw">best_pars</span> <span class="kw">=</span> <span class="no">best_params</span>$<span class="no">par</span>,
                                     <span class="kw">max_loglike</span> <span class="kw">=</span> -<span class="no">best_params</span>$<span class="no">value</span>,
                                     <span class="kw">mc_samples_summary</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
                                     <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.05</span>,
@@ -1019,13 +1025,13 @@ upper
                                              <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>, (<span class="fl">1</span>-<span class="no">gamma</span>) * <span class="fl">10</span>)))
 
     <span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-    <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu">simulate_bp</span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">K</span> ,
+    <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">K</span> ,
                                       <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta_0</span>, <span class="no">beta_1</span>),
                                       <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
                                       <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
                                       <span class="kw">max_size</span> <span class="kw">=</span> <span class="fl">50</span>)
     <span class="co">## Summarize the data set</span>
-    <span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu">summarize_binary_clusters</span>(<span class="no">data</span>)
+    <span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/summarize_binary_clusters.html">summarize_binary_clusters</a></span>(<span class="no">data</span>)
     <span class="no">max_cluster_sizes</span>[<span class="no">mm</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">binary_cluster_summaries</span>$<span class="no">cluster_size</span>)
     <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"max cluster size is %d"</span>, <span class="no">max_cluster_sizes</span>[<span class="no">mm</span>])
 
@@ -1033,7 +1039,7 @@ upper
     <span class="co">####################################3</span>
     <span class="co">## SAMPLE MC TREES</span>
     <span class="co">#######################################</span>
-    <span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu">sample_mc_binary_cov</span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
+    <span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/sample_mc_binary_cov.html">sample_mc_binary_cov</a></span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
                                  <span class="kw">observed_cluster_summaries</span> <span class="kw">=</span> <span class="no">binary_cluster_summaries</span>)
     <span class="co">#######################################</span>
     <span class="co">## OPTIMIZE</span>
