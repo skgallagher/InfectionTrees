@@ -26,9 +26,9 @@ for(use_mot in c(FALSE, TRUE)){
     print(mod)
 
     ## simulation parameters
-    K <- 10000 # of MC trees to draw for each cluster
+    K <- 100 # of MC trees to draw for each cluster
     n_models <- 1
-    n_boot <- 100 # number of bootstrap simulations
+    n_boot <- 2 # number of bootstrap simulations
     my_seed <- 8262020 + ifelse(use_mot, 1000, 0)
     ## Each inner loop takes ~1 hr
 

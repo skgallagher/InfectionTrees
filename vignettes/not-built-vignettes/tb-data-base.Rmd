@@ -97,7 +97,7 @@ clusters <- tb_clean %>%
            cluster_size)
 ```
 
-## Model fitting
+## Model fitting {.tabset}
 
 We analyze the series of nested models:
 
@@ -118,9 +118,9 @@ We first fit our base model described in [the model overview](model-overview.htm
 
 We use the below code to fit each of the models where we use $K=1000$ MC samples for each cluster in the data.  We then report the log likelihood and AIC for each of the models.
 
-**Note** that for the full results, we use $K=10000$, which takes about ~1 hour to run on a PC.
+**Note** that for the full results, we use $K=10000$, which takes about ~3 hour to run on a PC.
 
-```{r}
+```{r results = 'hide'}
 K <- 1000
 my_seed <- 42
 set.seed(my_seed)
@@ -156,8 +156,13 @@ for(ii in 2:length(covariate_list)){
                 ncol = 4) 
   rownames(mat) <- c("Intercept", covariate_list[[ii]])
   colnames(mat) <- c("Est.", "lower", "upper", "SE")
+  beta_list[[ii]] <- mat
 }
 
+```
+
+```{r results = 'hide'}
+t_init <- proc.time()[3]
 
 ## Sample MC trees all at once
 
@@ -227,7 +232,7 @@ for(jj in 1:length(covariate_list)){
     beta_list[[jj]][,-4] <- lp_ests
     
     print("best params:")
-    print(best_list[[jj]])
+    print(beta_list[[jj]])
     loglike_df$loglike[jj] <- -best_params$val
     
     print(paste("Total time:", round( (proc.time()[3] - t_init)  / 3600, 3),
@@ -236,10 +241,211 @@ for(jj in 1:length(covariate_list)){
     
 }    
     
+```
+
+```{r}    
+    
 loglike_df <- loglike_df %>%
-  mutate(aic = -loglike + 2 * n_params)
+  mutate(aic = -loglike + 2 * n_params,
+         model = 1:5) %>%
+  select(model, everything()) 
+
+
+loglike_df %>% kable(digits = 2,
+                     col.names = c("Model", "# params.", "Log like.", "AIC")) %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+
 ```
 
 
 
+Note that log likelihood increases as the model number increases, which should be the case since the models are nested.  The best model according to AIC is model 4 which corresponds to the variables **`r covariate_list[[4]]`**.
+
+The estimated paramters for this model are
+
+```{r}
+beta_list[[4]] %>%
+  kable(digits = 2) %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+```
+
+where `lower` is the lower boundary for 95\% likelihood profiling CI and `upper` is the upper boundary.  The variable `SE` is the estimated standard error using the Hessian from the optimization process as an estimate for the Fisher Information.  Using these boundaries, we see that **HIV- compared to HIV+** and **relative time** are both significant at the $\alpha = .05$ level because 0 is not included in the likelihood profiling CI.
+
+
+### Multiple outside transmissions model
+
+Fitting the [multiple outside transmissions (MOT) model](multiple-outside-transmissions-model.html) is as easy as fitting with the base model, we only need to change one argument in two different functions.  We fit the above 5 models.  Here we use $K=1000$ MC samples but for our full results, we us $10000$.
+
+
+```{r results = 'hide'}
+K <- 1000
+my_seed <- 24
+set.seed(my_seed)
+
+## MODELS
+## models
+covariate_list <- vector(mode = "list", length = 5)
+covariate_list[[1]] <- NA
+covariate_list[[2]] <- "smear"
+covariate_list[[3]] <- c("smear",
+                         "hiv_neg_pos", "hiv_unk_pos")
+covariate_list[[4]] <- c("smear",
+                         "hiv_neg_pos", "hiv_unk_pos",
+                         "rel_time")
+covariate_list[[5]] <- c("smear",
+                         "hiv_neg_pos", "hiv_unk_pos",
+                         "rel_time",
+                         "race_asian_white",
+                         "race_black_white")
+
+## Set up outputs
+loglike_df <- data.frame(model = 1:length(covariate_list),
+                         n_params = c(1, 2, 4, 5, 7),
+                         loglike = 0,
+                         aic = 0)
+beta_mat1 <- matrix(0, nrow = 1, ncol = 4)
+rownames(beta_mat1) <- c("Intercept")
+colnames(beta_mat1) <- c("Est.", "lower", "upper", "SE")
+beta_list <- vector(mode = "list", length = length(covariate_list))
+beta_list[[1]] <- beta_mat1
+for(ii in 2:length(covariate_list)){
+  mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
+                ncol = 4) 
+  rownames(mat) <- c("Intercept", covariate_list[[ii]])
+  colnames(mat) <- c("Est.", "lower", "upper", "SE")
+  beta_list[[ii]] <- mat
+}
+
+```
+
+```{r results = 'hide'}
+t_init <- proc.time()[3]
+
+## Sample MC trees all at once
+
+    t0 <- proc.time()[3]
+    ## Sample all MC clusters at once for each of the 5 models
+    mc_trees <-  sample_mc_trees(clusters,
+                                 B = K,
+                                 multiple_outside_transmissions = TRUE,
+                                 covariate_names = covariate_list[[length(covariate_list)]])
+    print(proc.time()[3] - t0)
+    
+    
+## Fit each of the models
+    
+for(jj in 1:length(covariate_list)){
+        covariate_names <- covariate_list[[jj]]
+        print("Model:")
+        print(covariate_names)
+        if(is.na(covariate_names[1])){
+            init_params <- 0
+        } else{
+            init_params <- rep(0, length(covariate_names) + 1)
+        }
+        ## Optimize
+        
+        print("Optimizing")
+        bds <- rep(-5, length(init_params))
+        if(length(covariate_names) > 5){
+            bds <- rep(-4, length(init_params))
+        }
+        lower_bds <- bds
+        upper_bds <- -bds
+        cov_mat <- covariate_df_to_mat(mc_trees,
+                                       cov_names = covariate_names)
+ 
+    t1 <- proc.time()[3]
+    best_params <- optim(par = init_params,
+                         fn = general_loglike,
+                         mc_trees = data.table::as.data.table(mc_trees),
+                         return_neg = TRUE,
+                         cov_mat = cov_mat,
+                         cov_names = covariate_names,
+                         use_outsider_prob = FALSE,
+                         multiple_outside_transmissions = TRUE,
+                         method = "L-BFGS-B",
+                         lower = lower_bds,
+                         upper = upper_bds,
+                         hessian = TRUE
+                         )
+    t2 <- proc.time()[3] - t1
+    print(paste("Optimization time:", round( t2 / 60, 3),
+                "min"))
+
+
+
+    beta_list[[jj]][, 4] <- sqrt(diag(solve(best_params$hessian))) ## SE from Fisher info
+    
+    ## Likelihood Profile ests
+    print("Likelihood profiling")
+    lp_ests <- likelihood_profs(best_pars = best_params$par,
+                                    max_loglike = -best_params$value,
+                                    mc_trees = mc_trees,
+                                    covariate_names = covariate_names,
+                                    alpha = .05,
+                                    multiple_outside_transmissions = TRUE)
+    
+    beta_list[[jj]][,-4] <- lp_ests
+    
+    print("best params:")
+    print(beta_list[[jj]])
+    loglike_df$loglike[jj] <- -best_params$val
+    
+    print(paste("Total time:", round( (proc.time()[3] - t_init)  / 3600, 3),
+                "hrs"))
+
+    
+}    
+    
+```
+
+```{r}    
+    
+loglike_df <- loglike_df %>%
+  mutate(aic = -loglike + 2 * n_params,
+         model = 1:5) %>%
+  select(model, everything()) 
+
+
+loglike_df %>% kable(digits = 2,
+                     col.names = c("Model", "# params.", "Log like.", "AIC")) %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+
+```
+
+
+
+Note that log likelihood increases as the model number increases, which should be the case since the models are nested.  The best model according to AIC is model 4 which corresponds to the variables **`r covariate_list[[4]]`**.
+
+The estimated paramters for this model are
+
+```{r}
+beta_list[[4]] %>%
+  kable(digits = 2) %>%
+  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                full_width = FALSE, position = "center")
+```
+
+where `lower` is the lower boundary for 95\% likelihood profiling CI and `upper` is the upper boundary.  The variable `SE` is the estimated standard error using the Hessian from the optimization process as an estimate for the Fisher Information.  Using these boundaries, we see that **HIV- compared to HIV+**, **HIV unknown compared to HIV+**, and **relative time** are all significant at the $\alpha = .05$ level because 0 is not included in the likelihood profiling CI.  Here we see **smear** is significant, but this is lost when we use $K= 10000$ MC samples instead of $K=1000$ MC samples.
+
+
+
+## Analysis of standard error and CI
+
+
+We see that the standard errors  are large compared to the likelihood profiling CI widths.  If we multiplied the standard errors by $2 \times 1.96$, the width of a 95\% CI for a normal distributed variable, then this width is much larger than the likelihood profiling estimate.
+
+To see which estimate is closer to the truth, we can bootstrap our data to get a second standard error and third CI estimate.  We provide the function `bootstrap_clusters()` to resample clusters from our data.  The analysis can be repeated on these bootstrap data sets.  Below, we see that our new sampled data set contains the same amount of clusters as the original data but now has a different number of  individuals compared to the original 389.
+
+```{r}
+
+bootstrap_data <- bootstrap_clusters(clusters)
+
+dim(bootstrap_data)
+
+```
 

@@ -71,6 +71,12 @@
     <li>
       <a href="../../articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
     </li>
+    <li>
+      <a href="../../articles/not-built-vignettes/sampling-mc-trees.html">The model</a>
+    </li>
+    <li>
+      <a href="../../articles/not-built-vignettes/tb-data-base.html">TB Data Results: base model</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -116,7 +122,7 @@
 <div id="recall-the-base-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#recall-the-base-model" class="anchor"></a>Recall the base model</h2>
-<p>The base model is described in detail <a href="model-overview.Rmd">here</a>. The basic idea is that we sample transmission trees from the set of permissible transmission trees, <span class="math inline">\(\mathcal{T}_n\)</span> and use these samples to estimate the average likelihood over a cluster.</p>
+<p>The base model is described in detail <a href="model-overview.html">here</a>. The basic idea is that we sample transmission trees from the set of permissible transmission trees, <span class="math inline">\(\mathcal{T}_n\)</span> and use these samples to estimate the average likelihood over a cluster.</p>
 <p>However, <span class="math inline">\(\mathcal{T}_n\)</span> is a set that <strong>forces</strong> all individuals within a cluster to be connected via transmission paths directly to a primary root node, the primary infector of the cluster. In other words, we assume that all transmissions, besides a single infection from the outside to the primary infector, within the cluster are observed. Effectively, this means we assume, possibly dubiously so, that there is no underreporting of cases.</p>
 <p>For example, consider the below figure. The left shows the actual transmission tree, where individual <span class="math inline">\(A\)</span> is the true root node. Individuals <span class="math inline">\(A\)</span> and <span class="math inline">\(E\)</span> (blue squares) are both unobserved and so are the transmissions into and out of those nodes.</p>
 <p>Thus the best reconstruction of the original tree given only nodes <span class="math inline">\(B, C, D, F, G\)</span>, and <span class="math inline">\(H\)</span> is shown in the middle figure, which is made of four disconnected sub-trees, three singlestons (<span class="math inline">\(T_A\)</span>, <span class="math inline">\(T_D\)</span>, and <span class="math inline">\(T_G\)</span>) along with the subtree <span class="math inline">\(T_{CFH} = \{ C \to F \to H\}\)</span>. Unfortunately the forest <span class="math inline">\(F = (T_B, T_{CFH}, T_{D}, T_{G} )\)</span> is not a permissible transmisison tree in <span class="math inline">\(\mathcal{T}_6\)</span>.</p>

@@ -33,7 +33,7 @@ theme_set(theme_bw() + theme(axis.title = element_text()))
 
 ## Recall the base model
 
-The base model is described in detail [here](model-overview.Rmd).  The basic idea is that we sample transmission trees from the set of permissible transmission trees, $\mathcal{T}_n$ and use these samples to estimate the average likelihood over a cluster.
+The base model is described in detail [here](model-overview.html).  The basic idea is that we sample transmission trees from the set of permissible transmission trees, $\mathcal{T}_n$ and use these samples to estimate the average likelihood over a cluster.
 
 However, $\mathcal{T}_n$ is a set that **forces** all individuals within a cluster to be connected via transmission paths directly to a primary root node, the primary infector of the cluster.  In other words, we assume that all transmissions, besides a single infection from the outside to the primary infector, within the cluster are observed.  Effectively, this means we assume, possibly dubiously so, that there is no underreporting of cases.
 
