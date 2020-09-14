@@ -72,7 +72,7 @@
       <a href="../articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
     </li>
     <li>
-      <a href="../articles/not-built-vignettes/sampling-enough-mc-trees.html">Sampling transmission trees given a cluster </a>
+      <a href="../articles/not-built-vignettes/sampling-enough-mc-trees.html">Sampling enough MC trees</a>
     </li>
     <li>
       <a href="../articles/not-built-vignettes/sampling-mc-trees.html">Sampling transmission trees given a cluster </a>
@@ -82,6 +82,9 @@
     </li>
     <li>
       <a href="../articles/not-built-vignettes/tb-data-base.html">TB Data Results: base model</a>
+    </li>
+    <li>
+      <a href="../articles/not-built-vignettes/tb-eda.html">First look at the Tuberculosis datas</a>
     </li>
   </ul>
 </li>
@@ -138,8 +141,8 @@
 <p><strong>The Model</strong></p>
 <ol style="list-style-type: decimal">
 <li><a href="not-built-vignettes/model-overview.html">General overview</a></li>
-<li><a href="not-built-vignettes/multiple-outside-transmissions-model.html">Accounting for under-reporting (Multiple outside transmission model)</a></li>
-<li><a href="not-built-vignettes/sampling-mc-trees.html">Sampling from <span class="math inline">\(\mathcal{T}_n\)</span></a></li>
+<li><a href="not-built-vignettes/multiple-outside-transmissions-model.html">Accounting for under-reporting (Multiple outside transmissions model)</a></li>
+<li><a href="not-built-vignettes/sampling-mc-trees.html">Sampling from <span class="math inline">\(\mathcal{T}_C\)</span></a></li>
 <li><a href="not-built-vignettes/sampling-enough-mc-trees.html">Sampling enough MC trees</a></li>
 </ol>
 <p><strong>Simulations</strong></p>
@@ -480,10 +483,10 @@ FALSE
 <p>The likelihood for a given transmission tree <span class="math inline">\(T\)</span> with <span class="math inline">\(n\)</span> individuals is</p>
 <p><span class="math display">\[
 L(\beta; T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}
-\]</span> and the total likelihood of a single cluster over all trees of size <span class="math inline">\(n\)</span> is <span class="math display">\[
-\mathcal{L}( \beta; C) = \sum_{T \in \mathcal{T}_n} L(\beta;T).
+\]</span> and the total likelihood of a single cluster <span class="math inline">\(C\)</span> over all trees of size <span class="math inline">\(|C|=n\)</span> is <span class="math display">\[
+\mathcal{L}( \beta; C) = \sum_{T \in \mathcal{T}_C} L(\beta;T).
 \]</span></p>
-<p>We instead maximize the <strong>approximate</strong> likelihood, which is obtained from sampling transmission trees from <span class="math inline">\(\mathcal{T}_n\)</span>. That is, we approximate <span class="math inline">\(\frac{\mathcal{L}(C, \beta)}{|\mathcal{T}_n|}\)</span> averaging the likelihood from Monte Carlo sampled trees <span class="math inline">\(T_1, \dots, T_K\)</span>,</p>
+<p>We instead maximize the <strong>approximate</strong> likelihood, which is obtained from sampling transmission trees from <span class="math inline">\(\mathcal{T}_n\)</span>. That is, we approximate <span class="math inline">\(\frac{\mathcal{L}(C, \beta)}{|\mathcal{T}_C|}\)</span> averaging the likelihood from Monte Carlo sampled trees <span class="math inline">\(T_1, \dots, T_K\)</span>,</p>
 <p><span class="math display">\[
 \hat{\mathcal{L}}_K(\beta; C) = \frac{1}{K} \sum_{i=1}^K L(\beta, T_i).
 \]</span></p>

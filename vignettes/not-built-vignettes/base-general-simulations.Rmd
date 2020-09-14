@@ -100,7 +100,7 @@ mc_trees %>% head() %>%
 
 
 
-We can then estimate the MLE from the MC sampled trees with `bp_loglike_general()`.  This will take a minute or two to run.
+We can then estimate the MLE from the MC sampled trees with `general_loglike()`.  This will take a minute or two to run.
 
 ```{r}
 inf_params_0 <- c(0,0, 0, 0)

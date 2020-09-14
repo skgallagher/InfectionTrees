@@ -32,8 +32,8 @@ df <- do.call('rbind', lapply(output_list, function(ll){
                beta0_med = betas_med[1],
                beta1_med = betas_med[2],
                beta0_lower =  lower[1],
-               beta1_lower = lower[2],
-               beta0_upper = upper[1],
+               beta1_lower = upper[1],
+               beta0_upper = lower[2],
                beta1_upper = upper[2]
                )}))
 rownames(df) <- NULL
@@ -60,7 +60,7 @@ df %>% arrange(max) %>%
                            "2.5Q $\\hat{\\beta}_1$",
                            "97.5Q $\\hat{\\beta}_1$"
              ), escape = FALSE,
-             caption = "Results of simulations where we generate from the multiple outside transmissions model.",
-             label = "sim-results") %>%
+             caption = "Results of simulations where we generate from the multiple outside transmissions model.  For each row in the table, we generate 100 sets of outbreak data each with 1000 transmission trees.  To estimate the MLE of $\\bm{\\beta}$, To obtain the confidence interval, we take the 2.5 and 97.5 quantiles over the 100 estimates of $\\bm{\\beta}$.",
+             label = "sim-results-mot") %>%
   kableExtra::kable_styling(latex_options = c("scale_down",
                                               "striped"))

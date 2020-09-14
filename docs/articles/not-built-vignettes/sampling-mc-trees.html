@@ -72,10 +72,19 @@
       <a href="../../articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
     </li>
     <li>
+      <a href="../../articles/not-built-vignettes/sampling-enough-mc-trees.html">Sampling enough MC trees</a>
+    </li>
+    <li>
       <a href="../../articles/not-built-vignettes/sampling-mc-trees.html">Sampling transmission trees given a cluster </a>
     </li>
     <li>
+      <a href="../../articles/not-built-vignettes/simulations-enough-mc-trees.html.html">Binary covariate multiple outside transmissions model simulations</a>
+    </li>
+    <li>
       <a href="../../articles/not-built-vignettes/tb-data-base.html">TB Data Results: base model</a>
+    </li>
+    <li>
+      <a href="../../articles/not-built-vignettes/tb-eda.html">First look at the Tuberculosis datas</a>
     </li>
   </ul>
 </li>
@@ -121,9 +130,9 @@
 <li><p>Discuss the relationship between <span class="math inline">\(\mathcal{F}_C\)</span>, the sample space of permissible transmission trees in the multiple outside transmission model, and <span class="math inline">\(\mathcal{T}_C\)</span>.</p></li>
 </ol>
 </div>
-<div id="properties-of-mathcalt_n" class="section level2">
+<div id="properties-of-mathcalt_c" class="section level2">
 <h2 class="hasAnchor">
-<a href="#properties-of-mathcalt_n" class="anchor"></a>Properties of <span class="math inline">\(\mathcal{T}_n\)</span>
+<a href="#properties-of-mathcalt_c" class="anchor"></a>Properties of <span class="math inline">\(\mathcal{T}_C\)</span>
 </h2>
 <p><a href="model-overview.html">Recall</a> that <span class="math inline">\(\mathcal{T}_C\)</span> is the space of permissible transmission trees in the base model that result in the cluster <span class="math inline">\(C\)</span>. These are all the <strong>unique</strong> transmission trees that</p>
 <ol style="list-style-type: decimal">
@@ -141,12 +150,12 @@
 <div id="the-algorithm" class="section level2 tabset">
 <h2 class="hasAnchor">
 <a href="#the-algorithm" class="anchor"></a>The algorithm</h2>
-<p>We draw trees from $_C in the following manner</p>
+<p>We draw trees from <span class="math inline">\(\mathcal{T}_C\)</span> in the following manner</p>
 <ol style="list-style-type: decimal">
 <li><p>Draw the number of generations <span class="math inline">\(g\)</span></p></li>
 <li><p>Draw the generation sizes <span class="math inline">\(n_1, \dots, n_g\)</span> and index the nodes</p></li>
 <li><p>Draw the infector ID for each node</p></li>
-<li><p>Permute the covariate labels to the <span class="math inline">\(n\)</span> nodes.</p></li>
+<li><p>Draw a permutation of the covariate labels to the <span class="math inline">\(n\)</span> nodes.</p></li>
 </ol>
 <div id="draw-the-generations-g" class="section level3">
 <h3 class="hasAnchor">
@@ -155,12 +164,12 @@
 <p>The number of generations <span class="math inline">\(g\)</span> is (for <span class="math inline">\(|C|=n &gt; 1\)</span>) <span class="math display">\[
 Z ~ \sim Binomial(n-2, .5)\\
 g \sim 2 + Z
-\]</span> This variable <span class="math inline">\(g\)</span> comes from counting the number of ways to put <span class="math inline">\(n-1\)</span> <em>indistinguishable</em> individuals in <span class="math inline">\(g-1\)</span> parts, recalling that one individual is reserved for the first generation. There are <span class="math inline">\(n-2 \choose g-2)\)</span> ways to do this according to the classic <a href="https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)">Stars and Bars combinatorial problem</a>. So if we consider all the different ‘boxings’ for <span class="math inline">\(g=0, \dots, n-2\)</span>, then this is <span class="math inline">\(Z \sim Binomial(n-2, .5)\)</span></p>
+\]</span> This variable <span class="math inline">\(g\)</span> comes from counting the number of ways to put <span class="math inline">\(n-1\)</span> <em>indistinguishable</em> individuals in <span class="math inline">\(g-1\)</span> parts, recalling that one individual is reserved for the first generation. There are <span class="math inline">\(n-2 \choose g-2\)</span> ways to do this according to the classic <a href="https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)">Stars and Bars combinatorial problem</a>. So if we consider all the different ‘boxings’ for <span class="math inline">\(g=0, \dots, n-2\)</span>, then this is <span class="math inline">\(Z \sim Binomial(n-2, .5)\)</span></p>
 </div>
 <div id="draw-the-generation-sizes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#draw-the-generation-sizes" class="anchor"></a>Draw the generation sizes</h3>
-<p>Conditioned on the number of generations <span class="math inline">\(g\)</span>, we would like to uniformly draw a <span class="math inline">\(g-tuple\)</span> <span class="math inline">\((n_1, \dots, n_g)\)</span> such that <span class="math inline">\(n_1=1\)</span> and <span class="math inline">\(\sum_{i=1}^g = n\)</span>.</p>
+<p>Conditioned on the number of generations <span class="math inline">\(g\)</span>, we would like to uniformly draw a <span class="math inline">\(g-tuple\)</span> <span class="math inline">\((n_1, \dots, n_g)\)</span> such that <span class="math inline">\(n_1=1\)</span> and <span class="math inline">\(\sum_{i=1}^g n_i = n\)</span>.</p>
 <p>To do this, we rely on the <code>R</code> packages <code>partitions</code> and <code>RcppAlgos</code>. The package <code>partitions</code> allows us to uniformly draw <em>partitions</em> <span class="math inline">\(n_1 = 1 \le n_2 \le \dots \le n_g\)</span>. We then have to uniquely ‘permute’ the partitions into the allowable set of <span class="math inline">\(g\)</span>-tuples which require no such ordering. The package <code>RcppAlgos</code> allows us to ‘permute’ these partitions where we now consider the values of <span class="math inline">\(n_2, \dots n_g\)</span> as tokens.</p>
 <p>To help explain this better consider the following example with <span class="math inline">\(n= 7\)</span> and <span class="math inline">\(g=4\)</span>.</p>
 <p>The unique <em>partitions</em> are</p>
@@ -198,7 +207,7 @@ h = g^*-1.
 <a href="#relationship-between-mathcalt_c-and-mathcalf_c" class="anchor"></a>Relationship between <span class="math inline">\(\mathcal{T}_C\)</span> and <span class="math inline">\(\mathcal{F}_C\)</span>
 </h2>
 <p>The space of permissible trees, <span class="math inline">\(\mathcal{F}_C\)</span> for the multiple outside transmissions (MOT) model is described more fully <a href="multiple-outside-transmissions-model.html">here</a>. The MOT is formed by constructing a transmission tree of size <span class="math inline">\(|C|+1\)</span> where the root node is reserved for a latent outsider.</p>
-<p>This means for an observed cluster <span class="math inline">\(C\)</span> with <span class="math inline">\(n\)</span> individuals if we impute outside characteristics <span class="math inline">\(O\)</span>, then we have made a new cluster of size <span class="math inline">\(n+1\)</span>. We can then sample transmission trees from <span class="math inline">\(\mathcal{T}_{(O, C)}\)</span> with one simple modification: we enforce the first node to have charateristics <span class="math inline">\(O\)</span> and permute the observed characteristics to the remaining nodes.</p>
+<p>This means for an observed cluster <span class="math inline">\(C\)</span> with <span class="math inline">\(n\)</span> individuals if we impute outside characteristics <span class="math inline">\(O\)</span>, then we have made a new cluster of size <span class="math inline">\(n+1\)</span>. We can then sample transmission trees from <span class="math inline">\(\mathcal{T}_{\{O\cup C\}}\)</span> with one simple modification: we enforce the first node to have charateristics <span class="math inline">\(O\)</span> and permute the observed characteristics to the remaining nodes.</p>
 <p>The consequence is we can re-use much of the work in sampling from <span class="math inline">\(\mathcal{T}_C\)</span> to sample from <span class="math inline">\(\mathcal{F}_C\)</span>.</p>
 </div>
   </div>
