@@ -5,4 +5,12 @@
 # InfectionTrees
 Analyzing and plotting the spread of infectious diseases in moderately sized clusters
 
-[Get started!](https://skgallagher.github.io/InfectionTrees)
+[Get started!](https://skgallagher.github.io/InfectionTrees/articles/getting-started.html)
+
+
+## Download the package
+
+
+```
+devtools::install_github("skgallagher/InfectionTrees")
+```

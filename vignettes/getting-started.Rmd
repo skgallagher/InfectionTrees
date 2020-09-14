@@ -56,8 +56,8 @@ The other vignettes cover:
 **The Model**
 
 1. [General overview](not-built-vignettes/model-overview.html)
-2. [Accounting for under-reporting (Multiple outside transmission model)](not-built-vignettes/multiple-outside-transmissions-model.html)
-3. [Sampling from $\mathcal{T}_n$](not-built-vignettes/sampling-mc-trees.html)
+2. [Accounting for under-reporting (Multiple outside transmissions model)](not-built-vignettes/multiple-outside-transmissions-model.html)
+3. [Sampling from $\mathcal{T}_C$](not-built-vignettes/sampling-mc-trees.html)
 3. [Sampling enough MC trees](not-built-vignettes/sampling-enough-mc-trees.html)
 
 
@@ -120,12 +120,12 @@ The likelihood for a given transmission tree $T$ with $n$ individuals is
 $$
 L(\beta; T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}
 $$
-and the total likelihood of a single cluster over all trees of size $n$ is
+and the total likelihood of a single cluster $C$ over all trees of size $|C|=n$ is
 $$
-\mathcal{L}( \beta; C) = \sum_{T \in \mathcal{T}_n} L(\beta;T).
+\mathcal{L}( \beta; C) = \sum_{T \in \mathcal{T}_C} L(\beta;T).
 $$
 
-We instead maximize the **approximate** likelihood, which is obtained from sampling transmission trees from $\mathcal{T}_n$.  That is, we approximate $\frac{\mathcal{L}(C, \beta)}{|\mathcal{T}_n|}$ averaging the likelihood from Monte Carlo sampled trees $T_1, \dots, T_K$,
+We instead maximize the **approximate** likelihood, which is obtained from sampling transmission trees from $\mathcal{T}_n$.  That is, we approximate $\frac{\mathcal{L}(C, \beta)}{|\mathcal{T}_C|}$ averaging the likelihood from Monte Carlo sampled trees $T_1, \dots, T_K$,
 
 $$
 \hat{\mathcal{L}}_K(\beta; C) = \frac{1}{K} \sum_{i=1}^K L(\beta, T_i).

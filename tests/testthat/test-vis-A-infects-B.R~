@@ -1,0 +1,70 @@
+test_that("mc_trees_A_infects_B",{
+    cluster_id <- "A"
+    par_ests <- c("intercept" = -2,
+                  "x" = 1)
+    set.seed(42)
+    observed_data <- data.frame(cluster_id = c("A", "A", "A", "A"),
+                                x = c(1, 0, 0, 1))
+    mc_trees <- sample_mc_trees(observed_data = observed_data,
+                                B = 3,
+                                covariate_names = "x")
+
+    out <- mc_trees_to_A_infects_B(my_id = "A",
+                                   par_ests = par_ests,
+                                   mc_trees = mc_trees)
+
+
+})
+
+
+
+test_that("calculate_transmission_prob", {
+  df <- data.frame(x = c(1, 0, 1, 0),
+                     y = c(-3, -11, 2, 4))
+  inf_params <- c(-2, 1)
+  cov_names <- c("x")
+
+  out <- calculate_transmission_prob(data = df,
+                                     inf_params = inf_params,
+                                     covariate_names = cov_names)
+
+  exp_out <- 1 / (1 + exp(2 - c(1, 0, 1, 0)))
+  expect_equal(out, exp_out)
+###########################################3
+  ### using named inf_params
+  df <- data.frame(x = c(1, 0, 1, 0),
+                   y = c(-3, -11, 2, 4))
+  inf_params <- c("intercept" = -2, "x" = 1)
+
+  out <- calculate_transmission_prob(data = df,
+                                     inf_params = inf_params)
+
+  exp_out <- 1 / (1 + exp(2 - c(1, 0, 1, 0)))
+  expect_equal(out, exp_out)
+  ## ############################################################
+  ## the dumb  case where you only have the intercept
+  df <- data.frame(x = c(1, 0, 1, 0),
+                   y = c(-3, -11, 2, 4))
+  inf_params <- c("intercept" = -2)
+
+  out <- calculate_transmission_prob(data = df,
+                                     inf_params = inf_params)
+
+  exp_out <- 1 / (1 + exp(2 - c(0, 0, 0, 0)))
+  expect_equal(out, exp_out)
+
+  ## ###############################################3
+  ## x and y
+  df <- data.frame(x = c(1, 0, 1, 0),
+                   y = c(-3, -11, 2, 4))
+  inf_params <- c(-2, 1, -.1)
+  cov_names <- c("x", "y")
+
+  out <- calculate_transmission_prob(data = df,
+                                     inf_params = inf_params,
+                                     covariate_names = cov_names)
+
+  exp_out <- 1 / (1 + exp(2 - c(1, 0, 1, 0) +
+                            .1 * c(-3, -11, 2, 4)))
+  expect_equal(out, exp_out)
+})

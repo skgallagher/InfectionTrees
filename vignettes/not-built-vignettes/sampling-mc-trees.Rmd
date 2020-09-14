@@ -33,7 +33,7 @@ In this vignette we will
 3. Discuss the relationship between $\mathcal{F}_C$, the sample space of permissible transmission trees  in the multiple outside transmission model,  and $\mathcal{T}_C$.
 
 
-## Properties of $\mathcal{T}_n$
+## Properties of $\mathcal{T}_C$
 
 [Recall](model-overview.html) that $\mathcal{T}_C$ is the space of permissible transmission trees in the base model that result in the cluster $C$.  These are all the **unique** transmission trees that 
 
@@ -57,7 +57,7 @@ The only  *visual* difference between these two transmission trees is that indiv
 
 ## The algorithm {.tabset}
 
-We draw trees from $\mathcal{T}_C in the following manner
+We draw trees from $\mathcal{T}_C$ in the following manner
 
 1. Draw the number of generations $g$
 
@@ -65,7 +65,7 @@ We draw trees from $\mathcal{T}_C in the following manner
 
 3. Draw the infector ID for each node
 
-4. Permute the covariate labels to the $n$ nodes.
+4. Draw a permutation of  the covariate labels to the $n$ nodes.
 
 
 ### Draw the generations $g$
@@ -75,12 +75,12 @@ $$
 Z ~ \sim Binomial(n-2, .5)\\
 g \sim 2 + Z
 $$
-This variable $g$ comes from counting the number of ways to put $n-1$ *indistinguishable* individuals in $g-1$ parts, recalling that one individual is reserved for the first generation.  There are $n-2 \choose g-2)$ ways to do this according to the classic [Stars and Bars combinatorial problem](https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)).  So if we consider all the different 'boxings' for $g=0, \dots, n-2$, then this is $Z \sim Binomial(n-2, .5)$
+This variable $g$ comes from counting the number of ways to put $n-1$ *indistinguishable* individuals in $g-1$ parts, recalling that one individual is reserved for the first generation.  There are $n-2 \choose g-2$ ways to do this according to the classic [Stars and Bars combinatorial problem](https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)).  So if we consider all the different 'boxings' for $g=0, \dots, n-2$, then this is $Z \sim Binomial(n-2, .5)$
 
 
 ### Draw the generation sizes
 
-Conditioned on the number of generations $g$, we would like to uniformly draw a $g-tuple$ $(n_1, \dots, n_g)$ such that $n_1=1$ and $\sum_{i=1}^g = n$.
+Conditioned on the number of generations $g$, we would like to uniformly draw a $g-tuple$ $(n_1, \dots, n_g)$ such that $n_1=1$ and $\sum_{i=1}^g n_i = n$.
 
 To do this, we rely on the `R` packages `partitions` and `RcppAlgos`.  The package `partitions` allows us to uniformly draw *partitions* $n_1 = 1 \le n_2  \le \dots \le n_g$.  We then have to uniquely 'permute' the partitions into the allowable set of $g$-tuples which require no such ordering.  The package `RcppAlgos` allows us to 'permute' these partitions where we now consider the values of $n_2, \dots n_g$ as tokens.
 
@@ -127,6 +127,6 @@ We then randomly permute the covariates/labels from the $C individuals in the cl
 
 The space of permissible trees, $\mathcal{F}_C$ for the multiple outside transmissions (MOT) model is described more fully [here](multiple-outside-transmissions-model.html).  The MOT is formed by constructing a transmission tree of size $|C|+1$ where the root node is reserved for a latent outsider.
 
-This means for an observed cluster $C$ with $n$ individuals if we impute outside characteristics $O$, then we have made a new cluster of size $n+1$.  We can then sample transmission trees from $\mathcal{T}_{(O, C)}$ with one simple modification:  we enforce the first node to have charateristics $O$ and permute the observed characteristics to the remaining nodes.
+This means for an observed cluster $C$ with $n$ individuals if we impute outside characteristics $O$, then we have made a new cluster of size $n+1$.  We can then sample transmission trees from $\mathcal{T}_{\{O\cup C\}}$ with one simple modification:  we enforce the first node to have charateristics $O$ and permute the observed characteristics to the remaining nodes.
 
 The consequence is we can re-use much of the work in sampling from $\mathcal{T}_C$ to sample from $\mathcal{F}_C$.
