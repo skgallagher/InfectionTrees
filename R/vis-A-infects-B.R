@@ -44,7 +44,8 @@ mc_trees_to_A_infects_B <- function(my_id,
   sub_data$prob_trans <- calculate_transmission_prob(data = sub_data,
                                                 inf_params = par_ests,
                                                 covariate_names = covariate_names)
-  sub_data$feature_id <- factor(sort(sub_data$prob_trans))
+
+  sub_data$feature_id <- factor(sub_data$prob_trans)
 
   ## calculate like per cluster
   like_df <- general_loglike(inf_params = par_ests,
@@ -150,7 +151,7 @@ compute_A_infects_B <- function(df){
     index_id <- as.numeric(factor(df$feature_id[ii],
                        levels = levels(nms)))
     infector_index <- which(sub_df$id == df$inf_id[ii])
-    infector_id <- as.numeric(factor(df$feature_id[infector_index],
+    infector_id <- as.numeric(factor(sub_df$feature_id[infector_index],
                           levels = levels(nms)))
     like <- sub_df$like2[1]
 

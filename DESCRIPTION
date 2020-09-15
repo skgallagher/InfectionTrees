@@ -21,7 +21,9 @@ Suggests:
     ggplot2,
     rmarkdown,
     devtools,
-    kableExtra
+    kableExtra,
+    readr,
+    forcats
 LinkingTo: 
     Rcpp
 Imports: 

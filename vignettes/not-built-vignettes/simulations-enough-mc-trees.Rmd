@@ -1,0 +1,130 @@
+---
+title: "Binary covariate model simulations"
+output:
+    html_document:
+      code_folding: hide
+vignette: >
+  %\VignetteIndexEntry{Model overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+devtools::load_all()
+library(InfectionTrees)
+library(tidyr)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+theme_set(theme_bw() + theme(axis.title = element_text()))
+```
+
+
+## Overview
+
+In this vignette, we provide code to demonstrate the process to determine if we have sampled enough MC trees.
+
+## Background
+
+Since our model relies on approximating the likelihood of our data through Monte Carlos sampling of permissible transmission trees, we need to able to assess if we have sampled "enough" transmission trees.  In [this vignette](sampling-enough-mc-trees.html) we provide a process to determine exactly that.  Basically we refit our model using different sets of MC samples and determine how much our coefficient estimates vary.  If the standard errors of these coefficients are less than some threshold $\tau$, then we say we our samples are enough.  Otherwise we double the number of MC samples.
+
+## Simulation code
+
+We provide our code to determine if we have enough samples here.
+
+### Generate data
+
+We first generate data where the probability of infection is determined by a binary covariate (like in [this vignette](base-binary-simulations.html)).  This data consists of $M=100$ clusters.
+
+
+```{r}
+set.seed(2020)
+## Generate possible covariates 
+sample_covariates_df <- data.frame(x = c(1,0))
+
+beta0 <- -2
+beta1 <- 1.5
+M <- 1000
+data <- simulate_bp(K = M,
+                                  inf_params = c(beta0, beta1),
+                                  sample_covariates_df = sample_covariates_df,
+                                  covariate_names = "x",
+                                  max_size = 50)
+
+ data %>% group_by(cluster_id) %>%
+  summarize(cluster_size = n()) %>%
+  ungroup() %>%
+   group_by(cluster_size) %>%
+   summarize(freq = n()) %>%
+   ungroup() %>%
+  kable(type = "html") %>%
+   kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F,
+                 position = "center")
+
+
+```
+
+We then fit our model to the generated data using $B=5$ sets of MC samples and record the estimates for each where we sample $K= 5000$ for each set.
+
+```{r}
+## Summarize data set into a table
+binary_cluster_summaries <- summarize_binary_clusters(data)
+
+B <- 5
+K <- 5000
+
+beta_mat <- matrix(0, nrow = B, ncol = 2)
+var_mat <- matrix(0, nrow = B, ncol = 2)
+seed <- 9152020
+
+for(bb in 1:B){
+  
+    ## Get different seeds for MC sets
+  seed <- seed + bb * 10
+  set.seed(seed)
+  
+  ## Sample MC trees
+  mc_trees <- sample_mc_binary_cov(K,
+                                 observed_cluster_summaries = binary_cluster_summaries)
+
+  ## Fit model
+  inf_params_0 <- c(0,0)
+
+  best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
+                      mc_samples_summary = mc_trees,
+                                  return_neg = TRUE,
+                     method = "L-BFGS-B",
+                     lower = c(-5, -5),
+                     upper = c(5, 5),
+                     hessian = TRUE)
+  
+  beta_mat[bb,] <- best_params$par
+  var_mat[bb,] <- diag(solve(best_params$hessian))
+
+
+}
+
+```
+
+
+We can evaluate the Wald statistics, first using the Fisher information matrix estimate of the standard error and then the empirical standard error from the simulations.
+
+```{r}
+
+wald_scores_fisher <- beta_mat / sqrt(var_mat)
+wald_se_fisher <- apply(wald_scores_fisher, 2, sd)
+
+se_emp <- apply(beta_mat, 2, sd)
+
+
+wald_se_mat <- rbind(wald_se_fisher, se_emp)
+rownames(wald_se_mat) <- c("Fisher", "Emp.")
+
+kable(wald_se_mat, digits = 2) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
