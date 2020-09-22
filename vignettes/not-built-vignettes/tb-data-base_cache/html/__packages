@@ -1,9 +1,0 @@
-base
-testthat
-InfectionTrees
-tidyr
-dplyr
-kableExtra
-ggplot2
-forcats
-readr
