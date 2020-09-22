@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Sample, Analyze, and Plot Infection Trees">
-<meta property="og:description" content="What the package does (one paragraph).">
+<meta property="og:description" content="Simulate, analyze, and visualize branching processes in order to identify significant covariates among individuals for the spread of disease.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">InfectionTrees</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -56,20 +56,9 @@
 <li>
       <a href="articles/getting-started.html">Getting started with `InfectionTrees`</a>
     </li>
+    <li class="divider">
     <li>
-      <a href="articles/not-built-vignettes/base-binary-simulations.html">Binary covariate model simulations</a>
-    </li>
-    <li>
-      <a href="articles/not-built-vignettes/base-general-simulations.html">Multiple covariate model simulations</a>
-    </li>
-    <li>
-      <a href="articles/not-built-vignettes/model-overview.html">The model</a>
-    </li>
-    <li>
-      <a href="articles/not-built-vignettes/multiple-outside-binary-simulations.html">Binary covariate multiple outside transmissions model simulations</a>
-    </li>
-    <li>
-      <a href="articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
+      <a href="articles/index.html">More...</a>
     </li>
   </ul>
 </li>
@@ -99,7 +88,12 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#infectiontrees" class="anchor"></a>InfectionTrees</h1></div>
 <p>Analyzing and plotting the spread of infectious diseases in moderately sized clusters</p>
-<p><a href="https://skgallagher.github.io/InfectionTrees">Get started!</a></p>
+<p><a href="https://skgallagher.github.io/InfectionTrees/articles/getting-started.html">Get started!</a></p>
+<div id="download-the-package" class="section level2">
+<h2 class="hasAnchor">
+<a href="#download-the-package" class="anchor"></a>Download the package</h2>
+<pre><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("skgallagher/InfectionTrees")</a></code></pre>
+</div>
 </div>
 
   </div>
@@ -125,6 +119,7 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Shannon Gallagher <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-1114-3851" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Dean Follmann <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
@@ -139,7 +134,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Shannon Gallagher.</p>
+  <p>Developed by Shannon Gallagher, Dean Follmann.</p>
 </div>
 
 <div class="pkgdown">

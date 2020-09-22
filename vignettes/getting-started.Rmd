@@ -66,7 +66,7 @@ The other vignettes cover:
 1. [Simulations for the base model: binary covariates](not-built-vignettes/base-binary-simulations.html)
 2. [Simulations for the base model: general covariates](not-built-vignettes/base-general-simulations.html)
 2. [Simulations for the multiple outside transmission model](not-built-vignettes/multiple-outside-binary-simulations.html)
-3. [Simulations to assess whether we sampled enough MC trees](simulations-enough-mc-trees.html)
+3. [Simulations to assess whether we sampled enough MC trees](not-built-vignettes/simulations-enough-mc-trees.html)
 
 
 **Tuberculosis in Maryland**

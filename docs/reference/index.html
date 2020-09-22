@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">InfectionTrees</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
       </span>
     </div>
 
@@ -96,20 +96,9 @@
     <li>
       <a href="../articles/getting-started.html">Getting started with `InfectionTrees`</a>
     </li>
+    <li class="divider"></li>
     <li>
-      <a href="../articles/not-built-vignettes/base-binary-simulations.html">Binary covariate model simulations</a>
-    </li>
-    <li>
-      <a href="../articles/not-built-vignettes/base-general-simulations.html">Multiple covariate model simulations</a>
-    </li>
-    <li>
-      <a href="../articles/not-built-vignettes/model-overview.html">The model</a>
-    </li>
-    <li>
-      <a href="../articles/not-built-vignettes/multiple-outside-binary-simulations.html">Binary covariate multiple outside transmissions model simulations</a>
-    </li>
-    <li>
-      <a href="../articles/not-built-vignettes/multiple-outside-transmissions-model.html">The multiple outside transmissions extension to the model</a>
+      <a href="../articles/index.html">More...</a>
     </li>
   </ul>
 </li>
@@ -148,7 +137,39 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-infectiontrees" class="hasAnchor"><a href="#section-infectiontrees" class="anchor"></a>InfectionTrees</h2>
+          <p class="section-desc"><p>General package information</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <p class="section-desc"><p>Data included in package</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="tb_clean.html">tb_clean</a></code> </p>
+        </td>
+        <td><p>Subset of Tuberculosis data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-everything" class="hasAnchor"><a href="#section-everything" class="anchor"></a>everything</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -172,9 +193,27 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="bootstrap_clusters.html">bootstrap_clusters()</a></code> </p>
+        </td>
+        <td><p>Resample clusters from an observed data set</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="bp_loglike_binary_cov.html">bp_loglike_binary_cov()</a></code> </p>
         </td>
         <td><p>Calculate the likelihood for binary covariate MC trees</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="calculate_transmission_prob.html">calculate_transmission_prob()</a></code> </p>
+        </td>
+        <td><p>Get the probability of transmission given a set of covariates</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compute_A_infects_B.html">compute_A_infects_B()</a></code> </p>
+        </td>
+        <td><p>Compute probability from samples that person A infects person B</p></td>
       </tr><tr>
         
         <td>
@@ -241,6 +280,12 @@
           <p><code><a href="loglike_wrapper.html">loglike_wrapper()</a></code> </p>
         </td>
         <td><p>Wrapper to optimize over a single variable for likelihood profiling</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="mc_trees_to_A_infects_B.html">mc_trees_to_A_infects_B()</a></code> </p>
+        </td>
+        <td><p>Looks at most likely transmissions from A to B for a cluster</p></td>
       </tr><tr>
         
         <td>
@@ -352,7 +397,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Shannon Gallagher.</p>
+  <p>Developed by Shannon Gallagher, Dean Follmann.</p>
 </div>
 
 <div class="pkgdown">
