@@ -1,13 +1,17 @@
 Package: InfectionTrees
 Title: Sample, Analyze, and Plot Infection Trees
-Version: 0.0.0.1
+Version: 0.9.0
 Authors@R: 
-    person(given = "Shannon",
+    c(person(given = "Shannon",
            family = "Gallagher",
            role = c("aut", "cre"),
            email = "skgallagher19@gmail.com",
-           comment = c(ORCID = "0000-0003-1114-3851"))
-Description: What the package does (one paragraph).
+           comment = c(ORCID = "0000-0003-1114-3851")),
+           person(given = "Dean",
+                family = "Follmann",
+                role = "aut",
+                email = "dfollmann@niaid.nih.gov"))
+Description: Simulate, analyze, and visualize branching processes in order to identify significant covariates among individuals for the spread of disease.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

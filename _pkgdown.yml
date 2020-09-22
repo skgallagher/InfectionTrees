@@ -1,3 +1,52 @@
+destination: docs
 template:
   params:
     bootswatch: sandstone
+
+reference:
+- title: InfectionTrees
+  desc: General package information
+  contents:
+  - matches("InfectionTrees")
+- title: Data
+  desc: Data included in package
+  contents:
+  - starts_with("tb_clean")
+
+
+- title: everything
+  contents:
+  - matches(".*")
+
+
+articles:
+- title: Get started
+  desc: Get going
+  navbar: ~
+  contents: #this order
+  - 'getting-started'
+- title: The model
+  desc: Learn about our model
+  contents: #this order
+  - 'not-built-vignettes/model-overview'
+  - 'not-built-vignettes/multiple-outside-transmissions-model'
+  - 'not-built-vignettes/sampling-mc-trees'
+  - 'not-built-vignettes/sampling-enough-mc-trees'
+- title: Simulations
+  desc: Simulate data and fit the models
+  contents:
+  - 'not-built-vignettes/base-binary-simulations'
+  - 'not-built-vignettes/base-general-simulations'
+  - 'not-built-vignettes/multiple-outside-binary-simulations'
+  - 'not-built-vignettes/simulations-enough-mc-trees'
+- title: Tuberculosis in MD
+  desc: Use our model on real data
+  contents:
+  - 'not-built-vignettes/tb-eda'
+  - 'not-built-vignettes/tb-data-base'
+  - 'not-built-vignettes/tb-data-vis'
+- title: Everything
+  desc: All articles
+  contents:
+  - matches(".*")
+

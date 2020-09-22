@@ -1,5 +1,5 @@
 ---
-title: "Binary covariate multiple outside transmissions model simulations"
+title: "Simulations to determine whether we have enough MC samples"
 output:
     html_document:
       code_folding: hide

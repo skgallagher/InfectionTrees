@@ -41,7 +41,7 @@ Specifically, we generate data under our branching process model described in [t
 $$
 p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
 $$
-where $gamma$, $\beta_0$, and $\beta_1$ are fixed parameters.  Here, we are assuming we are working with the base model where all transmissions within a cluster can be directly traced back to an observed individual within the cluster.
+where $\gamma$, $\beta_0$, and $\beta_1$ are fixed parameters.  Here, we are assuming we are working with the base model where all transmissions within a cluster can be directly traced back to an observed individual within the cluster.
 
 
 Below is how we simulate a single data set from the branching process.  We have summarized the clusters by size.
