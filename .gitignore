@@ -6,4 +6,7 @@ inst/doc
 
 data-raw/
 
-*_cache*
+
+# knitr and R markdown default cache directories
+*_cache/
+/cache/
