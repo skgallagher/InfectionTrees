@@ -96,7 +96,11 @@
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview" class="anchor"></a>Overview</h2>
+<<<<<<< HEAD
 <p>In this vignette, we will explore the data set provided here in <code><a href="https://rdrr.io/r/utils/data.html">data(tb_clean)</a></code>, which is a data set originally collected and analyzed in <a href="https://academic.oup.com/cid/article-abstract/67/11/1653/4984625">Xie et al. (2018)</a></p>
+=======
+<p>In this vignette, we will explore the data set provided here in <code><a href="https://rdrr.io/r/utils/data.html">data(tb_clean)</a></code>, which is a data set originally collected and analyzed in <a href="GETLINK-and-REF">Xie et al. (2018)</a></p>
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </div>
 <div id="exploratory-data-analysis" class="section level2">
 <h2 class="hasAnchor">
@@ -104,6 +108,7 @@
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">InfectionTrees</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)</pre></body></html></div>
+<<<<<<< HEAD
 <p>The data <code>tb_clean</code> has 389 rows and 8 columns, where each row in the data corresponds to an individual with a detected case of Tuberculosis (TB).</p>
 <p>The columns include demographic characteristics about the patients as well as two diagnostic tests of the disease, including a AFB sputum smear test, which we analyze here.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">tb_sub</span> <span class="kw">&lt;-</span> <span class="no">tb_clean</span> <span class="kw">%&gt;%</span>
@@ -112,6 +117,18 @@
         <span class="fu">mutate</span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span>
   <span class="fu">ungroup</span>()</pre></body></html></div>
 <p>This data has 158 clusters with the following distribution of cluster sizes:</p>
+=======
+<p>The data <code>tb_clean</code> has 1137 rows and 10 columns, where each row in the data corresponds to an individual who has been diagnosed with Tuberculosis (TB).</p>
+<p>The columns include demographic characteristics about the patients as well as two diagnostic tests of the disease, including a AFB sputum smear test, which we analyze here.</p>
+<p>Of the 1137 cases, 389 indivduals have been clustered together through PCR of the TB culture.</p>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">tb_sub</span> <span class="kw">&lt;-</span> <span class="no">tb_clean</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">PCR.Cluster</span> <span class="kw">!=</span> <span class="st">""</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">mutate</span>(<span class="kw">cluster_id</span> <span class="kw">=</span> <span class="no">PCR.Cluster</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">group_by</span>(<span class="no">cluster_id</span>) <span class="kw">%&gt;%</span>
+        <span class="fu">mutate</span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span>
+  <span class="fu">ungroup</span>()</pre></body></html></div>
+<p>This subset of data has 158 clusters with the following distribution of cluster sizes:</p>
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">sizes</span> <span class="kw">&lt;-</span> <span class="no">tb_sub</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">cluster_id</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span>
   <span class="fu">ungroup</span>() <span class="kw">%&gt;%</span>
@@ -241,19 +258,32 @@ freq
 </table>
 <p>This means that 47.5% of the clusters are singletons and 86.1% of the clusters have size at most 3.</p>
 <p>A single cluster of individuals looks like the following:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">tb_sub</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">group</span> <span class="kw">==</span> <span class="st">"27"</span>) <span class="kw">%&gt;%</span>
   <span class="fu">arrange</span>(<span class="no">rel_time</span>) <span class="kw">%&gt;%</span>
   <span class="fu">select</span>(<span class="no">group</span>, <span class="no">rel_time</span>, <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
+=======
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">tb_sub</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">PCR.Cluster</span> <span class="kw">==</span> <span class="st">"27"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">arrange</span>(<span class="no">datecoll</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">select</span>(<span class="no">cluster_id</span>, <span class="no">datecoll</span>, <span class="fu">everything</span>()) <span class="kw">%&gt;%</span>
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
    <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">kable</a></span>() <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span>),
                 <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
 <table class="table table table-condensed table-hover table-striped table-responsive">
 <thead><tr>
 <th style="text-align:left;">
+<<<<<<< HEAD
 group
 </th>
 <th style="text-align:right;">
 rel_time
+=======
+cluster_id
+</th>
+<th style="text-align:left;">
+datecoll
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </th>
 <th style="text-align:left;">
 sex
@@ -262,6 +292,12 @@ sex
 county
 </th>
 <th style="text-align:left;">
+<<<<<<< HEAD
+=======
+ageatrept
+</th>
+<th style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 race
 </th>
 <th style="text-align:left;">
@@ -274,7 +310,14 @@ hivstatus
 homeless
 </th>
 <th style="text-align:left;">
+<<<<<<< HEAD
 cluster_id
+=======
+INIT_REGIMEN_START_DATE
+</th>
+<th style="text-align:left;">
+PCR.Cluster
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </th>
 <th style="text-align:right;">
 cluster_size
@@ -285,8 +328,13 @@ cluster_size
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 0
+=======
+<td style="text-align:left;">
+2004-06-29
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Male
@@ -295,18 +343,34 @@ Male
 MONTGOMERY
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+29
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2004-06-21
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -317,8 +381,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 442
+=======
+<td style="text-align:left;">
+2005-09-14
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Female
@@ -327,18 +396,34 @@ Female
 MONTGOMERY
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+27
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2005-09-29
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -349,8 +434,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 805
+=======
+<td style="text-align:left;">
+2006-09-12
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Female
@@ -359,18 +449,34 @@ Female
 MONTGOMERY
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+25
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2006-09-11
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -381,8 +487,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 834
+=======
+<td style="text-align:left;">
+2006-10-11
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Female
@@ -391,18 +502,34 @@ Female
 MONTGOMERY
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+37
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2006-10-13
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -413,8 +540,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 941
+=======
+<td style="text-align:left;">
+2007-01-26
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Male
@@ -423,18 +555,34 @@ Male
 PRINCE GEORGES
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+47
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2007-01-03
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -445,8 +593,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 1015
+=======
+<td style="text-align:left;">
+2007-04-10
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Male
@@ -455,18 +608,34 @@ Male
 PRINCE GEORGES
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+41
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 pos
+=======
+Positive
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2007-04-09
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -477,8 +646,13 @@ No
 <td style="text-align:left;">
 27
 </td>
+<<<<<<< HEAD
 <td style="text-align:right;">
 1167
+=======
+<td style="text-align:left;">
+2007-09-09
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 Male
@@ -487,18 +661,34 @@ Male
 PRINCE GEORGES
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+47
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 Black or African American
 </td>
 <td style="text-align:left;">
 Positive
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
 neg
+=======
+Negative
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </td>
 <td style="text-align:left;">
 No
 </td>
 <td style="text-align:left;">
+<<<<<<< HEAD
+=======
+2007-09-17
+</td>
+<td style="text-align:left;">
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 27
 </td>
 <td style="text-align:right;">
@@ -507,7 +697,11 @@ No
 </tr>
 </tbody>
 </table>
+<<<<<<< HEAD
 <p>In our data set of 389 individuals, 0 or 0% of individuals are HIV+. In the clusters with more than 3 individuals, 0 of 172 or 0% of individuals are HIV+.</p>
+=======
+<p>In our data set of 389 individuals, 56 or 14% of individuals are HIV+. In the clusters with more than 3 individuals, 37 of 172 or 22% of individuals are HIV+.</p>
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 </div>
   </div>
 

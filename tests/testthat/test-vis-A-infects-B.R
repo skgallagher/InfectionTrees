@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # test_that("real data with mc_trees_A_infects_B", {
 #
 #     data(tb_clean)
@@ -56,6 +57,72 @@
 #     expect_true(all(diag(adj_mat) == 0))
 #
 # })
+=======
+test_that("real data with mc_trees_A_infects_B", {
+
+    data(tb_clean)
+    clusters <- tb_clean %>%
+        dplyr::filter(PCR.Cluster != "") %>%
+        dplyr::mutate(smear = ifelse(spsmear == "Positive",
+                                     1, 0),
+                      cluster_id = PCR.Cluster,
+                      hiv_f = forcats::fct_collapse(hivstatus,
+                                           pos = c("Positive"),
+                                           neg = c("Negative"),
+                                           unk = c("Unknown", "Not offered",
+                                                   "Refused")),
+                      age = readr::parse_number(ageatrept)) %>%
+        dplyr::mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
+               hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
+        dplyr::group_by(cluster_id) %>%
+        dplyr::mutate(rel_time = as.numeric(datecoll - min(datecoll)) / 365) %>%
+        dplyr::mutate(cluster_size = dplyr::n()) %>%
+        dplyr::ungroup() %>%
+        dplyr::mutate(race_f = forcats::fct_collapse(race,
+                                     white = "White",
+                                     black = "Black or African American",
+                                     asian = "Asian")) %>%
+        dplyr::mutate(race_asian_white = ifelse(race_f == "asian", 1, 0),
+               race_black_white = ifelse(race_f == "black", 1, 0)) %>%
+        dplyr::select(cluster_id, smear,
+               hiv_neg_pos,
+               hiv_unk_pos,
+               rel_time,
+               race_asian_white,
+               race_black_white,
+               cluster_size)
+
+    par_ests <- c("Intercept" = -.72690792,
+              "smear" = -.09322607,
+              "hiv_neg_pos" = -0.36415841,
+              "hiv_unk_pos" = -0.56817810,
+              "rel_time" = .345552628)
+
+
+    set.seed(42)
+    mc_trees <-  sample_mc_trees(clusters %>%
+                                 dplyr::filter(cluster_id == 27),
+                                 B = 100,
+                                 multiple_outside_transmissions = FALSE,
+                                 covariate_names = names(par_ests))
+
+
+    plotting_df <- mc_trees_to_A_infects_B(my_id = 27,
+                                   par_ests = par_ests,
+                                   mc_trees = mc_trees,
+                                   output = "tidy")
+    expect_true(sum(plotting_df$prob == 0) <
+                sum(plotting_df$prob != 0))
+
+
+    adj_mat <- mc_trees_to_A_infects_B(my_id = 27,
+                                   par_ests = par_ests,
+                                   mc_trees = mc_trees,
+                                   output = "matrix")
+    expect_true(all(diag(adj_mat) == 0))
+
+})
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 
 test_that("mc_trees_A_infects_B",{
     cluster_id <- "A"
@@ -100,8 +167,13 @@ test_that("compute_A_infects_B", {
     exp_out[2, 1] <- .4 * like2[4]
     expect_equal(as.numeric(out),
                  as.numeric(exp_out))
+<<<<<<< HEAD
 
 
+=======
+    
+    
+>>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 
 })
 
