@@ -53,7 +53,7 @@ library(readr)
 
 ## The Data
 
-The data can be accessed using `data(tb_clean)`.  The clusters are uniquely ID'd with the variable `PCR.Cluster`
+The data can be accessed using `data(tb_clean)`.  The clusters are uniquely ID'd with the variable `group`
 
 The data consists of 159 clusters where each cluster contains between 1 and 25 individuals.  These individuals have covariates corresponding to their smear status (+/-/NA), HIV status (+/-/unknown), date of sputum collection, and race (Asian/Black/White).  Please see `?tb_clean` for more information.
 
@@ -66,22 +66,16 @@ We use the below code to format `tb_clean` to use in our model fitting.
 
 ```{r}
 clusters <- tb_clean %>%
-    filter(PCR.Cluster != "") %>%
-    mutate(smear = ifelse(spsmear == "Positive",
-                          1, 0),
-           cluster_id = PCR.Cluster,
-           hiv_f = fct_collapse(hivstatus,
-                              pos = c("Positive"),
-                              neg = c("Negative"),
-                              unk = c("Unknown", "Not offered",
-                                      "Refused")),
-           age = parse_number(ageatrept)) %>%
-    mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
-           hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
-    group_by(cluster_id) %>%
-    mutate(rel_time = as.numeric(datecoll - min(datecoll)) / 365) %>%
-    mutate(cluster_size = n()) %>%
-    ungroup() %>% 
+        dplyr::mutate(smear = ifelse(spsmear == "Positive",
+                                     1, 0),
+                      cluster_id = group,
+                      hiv_f = hivstatus) %>%
+        dplyr::mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
+               hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
+        dplyr::group_by(cluster_id) %>%
+        dplyr::mutate(rel_time = rel_time / 365) %>%
+        dplyr::mutate(cluster_size = dplyr::n()) %>%
+        dplyr::ungroup() %>%
     mutate(race_f = fct_collapse(race,
                                  white = "White",
                                  black = "Black or African American",

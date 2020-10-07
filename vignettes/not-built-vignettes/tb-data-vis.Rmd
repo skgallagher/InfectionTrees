@@ -62,20 +62,14 @@ We can approximate the probability that individual an individuals with probabili
 ```{r echo = FALSE}
 data(tb_clean)
     clusters <- tb_clean %>%
-        dplyr::filter(PCR.Cluster != "") %>%
         dplyr::mutate(smear = ifelse(spsmear == "Positive",
                                      1, 0),
-                      cluster_id = PCR.Cluster,
-                      hiv_f = forcats::fct_collapse(hivstatus,
-                                           pos = c("Positive"),
-                                           neg = c("Negative"),
-                                           unk = c("Unknown", "Not offered",
-                                                   "Refused")),
-                      age = readr::parse_number(ageatrept)) %>%
+                      cluster_id = group,
+                      hiv_f = hivstatus) %>%
         dplyr::mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
                hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
         dplyr::group_by(cluster_id) %>%
-        dplyr::mutate(rel_time = as.numeric(datecoll - min(datecoll)) / 365) %>%
+        dplyr::mutate(rel_time = rel_time / 365) %>%
         dplyr::mutate(cluster_size = dplyr::n()) %>%
         dplyr::ungroup() %>%
         dplyr::mutate(race_f = forcats::fct_collapse(race,

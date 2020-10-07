@@ -9,12 +9,13 @@
 #' @format The object is a data frame of dimension 1137x7.  Each row is a detected case of TB.
 #' \describe{
 #' \item{sex}{Sex of individual (F/M/Unknown)}
-#' \item{race}{race of individual (Asian/Black or African American/White)}
+#' \item{county}{County in Maryland of individual}
+#' \item{race}{Race of individual (Asian/Black or African American/White)}
 #' \item{spsmear}{Smear status of individual (positive/negative/unknown)}
 #' \item{hivstatus}{HIV status of individual (positive/negative/unknown)}
 #' \item{homeless}{Homelessness status of individual (yes/no)}
-#' \item{PCR.Cluster}{Cluster group (if any)}
-#' \item{datecoll}{Date sputum was collected}
+#' \item{groupr}{Cluster group}
+#' \item{rel_time}{detection time relative to first individual in cluster}
 #' }
 #' @examples
 #' head(tb_clean)
@@ -22,4 +23,4 @@
 #'
 #' @references
 #' \insertAllCited{}
-"tb_clean"
+## "tb_clean"
