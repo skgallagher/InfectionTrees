@@ -85,11 +85,8 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>TB Data Results: base model</h1>
             
-<<<<<<< HEAD
+
             <h4 class="date">2020-10-07</h4>
-=======
-            <h4 class="date">2020-09-21</h4>
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
       
       <small class="dont-index">Source: <a href="https://github.com/skgallagher/InfectionTrees/blob/master/vignettes/not-built-vignettes/tb-data-base.Rmd"><code>vignettes/not-built-vignettes/tb-data-base.Rmd</code></a></small>
       <div class="hidden name"><code>tb-data-base.Rmd</code></div>
@@ -122,17 +119,14 @@
 <div id="the-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-data" class="anchor"></a>The Data</h2>
-<<<<<<< HEAD
+
 <p>The data can be accessed using <code><a href="https://rdrr.io/r/utils/data.html">data(tb_clean)</a></code>. The clusters are uniquely ID’d with the variable <code>group</code></p>
-=======
-<p>The data can be accessed using <code><a href="https://rdrr.io/r/utils/data.html">data(tb_clean)</a></code>. The clusters are uniquely ID’d with the variable <code>PCR.Cluster</code></p>
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 <p>The data consists of 159 clusters where each cluster contains between 1 and 25 individuals. These individuals have covariates corresponding to their smear status (+/-/NA), HIV status (+/-/unknown), date of sputum collection, and race (Asian/Black/White). Please see <code><a href="../../reference/tb_clean.html">?tb_clean</a></code> for more information.</p>
 <p>There are only individuals who have smear status NA, and in this analysis we impute those to be smear -. We transform date of sputum collection into a variable we call relative time, which is the time in years between the reference sputum collection date and the first observed sputum within a cluster. Therefore, all relative time values of singleton clusters will have the value 0.</p>
 <p>We consider HIV status and race to be categorical variables and use “HIV+” and “White” as the reference groups, respectively.</p>
 <p>We use the below code to format <code>tb_clean</code> to use in our model fitting.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">clusters</span> <span class="kw">&lt;-</span> <span class="no">tb_clean</span> <span class="kw">%&gt;%</span>
-<<<<<<< HEAD
+
         <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">smear</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">spsmear</span> <span class="kw">==</span> <span class="st">"Positive"</span>,
                                      <span class="fl">1</span>, <span class="fl">0</span>),
                       <span class="kw">cluster_id</span> <span class="kw">=</span> <span class="no">group</span>,
@@ -143,24 +137,6 @@
         <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">rel_time</span> <span class="kw">=</span> <span class="no">rel_time</span> / <span class="fl">365</span>) <span class="kw">%&gt;%</span>
         <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span>()) <span class="kw">%&gt;%</span>
         <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>() <span class="kw">%&gt;%</span>
-=======
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">PCR.Cluster</span> <span class="kw">!=</span> <span class="st">""</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">smear</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">spsmear</span> <span class="kw">==</span> <span class="st">"Positive"</span>,
-                          <span class="fl">1</span>, <span class="fl">0</span>),
-           <span class="kw">cluster_id</span> <span class="kw">=</span> <span class="no">PCR.Cluster</span>,
-           <span class="kw">hiv_f</span> <span class="kw">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span>(<span class="no">hivstatus</span>,
-                              <span class="kw">pos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Positive"</span>),
-                              <span class="kw">neg</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Negative"</span>),
-                              <span class="kw">unk</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Unknown"</span>, <span class="st">"Not offered"</span>,
-                                      <span class="st">"Refused"</span>)),
-           <span class="kw">age</span> <span class="kw">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_number.html">parse_number</a></span>(<span class="no">ageatrept</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">hiv_neg_pos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">hiv_f</span> <span class="kw">==</span> <span class="st">"neg"</span>, <span class="fl">1</span>, <span class="fl">0</span>),
-           <span class="kw">hiv_unk_pos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">hiv_f</span> <span class="kw">==</span> <span class="st">"unk"</span>, <span class="fl">1</span>, <span class="fl">0</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">cluster_id</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">rel_time</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">datecoll</span> - <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(<span class="no">datecoll</span>)) / <span class="fl">365</span>) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span>()) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>() <span class="kw">%&gt;%</span>
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">race_f</span> <span class="kw">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span>(<span class="no">race</span>,
                                  <span class="kw">white</span> <span class="kw">=</span> <span class="st">"White"</span>,
                                  <span class="kw">black</span> <span class="kw">=</span> <span class="st">"Black or African American"</span>,

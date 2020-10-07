@@ -12,16 +12,8 @@ articles:
   sampling-mc-trees: not-built-vignettes/sampling-mc-trees.html
   simulations-enough-mc-trees: not-built-vignettes/simulations-enough-mc-trees.html
   simulations-enough-mc-trees.html: not-built-vignettes/simulations-enough-mc-trees.html.html
-<<<<<<< HEAD
   tb-data-base-pos-imputation: not-built-vignettes/tb-data-base-pos-imputation.html
   tb-data-base: not-built-vignettes/tb-data-base.html
   tb-data-vis: not-built-vignettes/tb-data-vis.html
   tb-eda: not-built-vignettes/tb-eda.html
 last_built: 2020-10-07T19:17Z
-=======
-  tb-data-base: not-built-vignettes/tb-data-base.html
-  tb-data-vis: not-built-vignettes/tb-data-vis.html
-  tb-eda: not-built-vignettes/tb-eda.html
-last_built: 2020-09-22T00:56Z
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
-

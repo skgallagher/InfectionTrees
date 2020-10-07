@@ -142,8 +142,7 @@ This is originally from (Xie et al. 2018)</p>
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-<<<<<<< HEAD
-    <p>The object is a data frame of dimension 1137x7.  Each row is a detected case of TB.</p><dl'>
+    <p>The object is a data frame of dimension 1137x7.  Each row is a detected case of TB.</p><dl>
 <dt>sex</dt><dd><p>Sex of individual (F/M/Unknown)</p></dd>
 <dt>county</dt><dd><p>County in Maryland of individual</p></dd>
 <dt>race</dt><dd><p>Race of individual (Asian/Black or African American/White)</p></dd>
@@ -152,19 +151,6 @@ This is originally from (Xie et al. 2018)</p>
 <dt>homeless</dt><dd><p>Homelessness status of individual (yes/no)</p></dd>
 <dt>groupr</dt><dd><p>Cluster group</p></dd>
 <dt>rel_time</dt><dd><p>detection time relative to first individual in cluster</p></dd>
-=======
-    <p>The object is a data frame of dimension 1137x10.  Each row is a detected case of TB.</p><dl'>
-<dt>sex</dt><dd><p>Sex of individual (F/M/Unknown)</p></dd>
-<dt>county</dt><dd><p>county in MD</p></dd>
-<dt>ageatrept</dt><dd><p>age of individual</p></dd>
-<dt>race</dt><dd><p>race of individual (Asian/Black or African American/White)</p></dd>
-<dt>spsmear</dt><dd><p>Smear status of individual (positive/negative/unknown)</p></dd>
-<dt>hivstatus</dt><dd><p>HIV status of individual (positive/negative/unknown)</p></dd>
-<dt>homeless</dt><dd><p>Homelessness status of individual (yes/no)</p></dd>
-<dt>INIT_REGIMEN_START_DATE</dt><dd><p>date of start of treatment</p></dd>
-<dt>PCR.Cluster</dt><dd><p>Cluster group (if any)</p></dd>
-<dt>datecoll</dt><dd><p>Date sputum was collected</p></dd>
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 
 </dl>
 
@@ -175,7 +161,7 @@ This is originally from (Xie et al. 2018)</p>
 <em>Clinical Infectious Diseases</em>, <b>67</b>(11), 1653--1659.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-<<<<<<< HEAD
+
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>tb_clean</span>)</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 6 x 8</span><span>
 #&gt; </span><span style='color: #949494;'># Groups:   group [1]</span><span>
 #&gt;   sex    county       race            spsmear  hivstatus homeless group rel_time
@@ -187,29 +173,12 @@ This is originally from (Xie et al. 2018)</p>
 #&gt; </span><span style='color: #BCBCBC;'>5</span><span> Female </span><span style='color: #949494;'>"</span><span>BALTIMORE … Black or Afric… </span><span style='color: #949494;'>"</span><span>Negati… neg       No       2         </span><span style='text-decoration: underline;'>1</span><span>385
 #&gt; </span><span style='color: #BCBCBC;'>6</span><span> Male   </span><span style='color: #949494;'>"</span><span>BALTIMORE … Black or Afric… </span><span style='color: #949494;'>"</span><span>Negati… pos       Yes      2         </span><span style='text-decoration: underline;'>1</span><span>029</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>tb_clean</span>)</div><div class='output co'>#&gt;      sex               county              race             spsmear         
 #&gt;  Length:389         Length:389         Length:389         Length:389        
-=======
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>tb_clean</span>)</div><div class='output co'>#&gt;      sex         county ageatrept                      race  spsmear hivstatus
-#&gt; 1   Male BALTIMORE CITY        35 Black or African American Negative  Positive
-#&gt; 2   Male BALTIMORE CITY        47 Black or African American Negative  Positive
-#&gt; 3   Male                          Black or African American            Unknown
-#&gt; 4   Male BALTIMORE CITY        50 Black or African American Positive  Positive
-#&gt; 5 Female BALTIMORE CITY        21 Black or African American Negative  Negative
-#&gt; 6   Male BALTIMORE CITY        50 Black or African American Negative  Positive
-#&gt;   homeless INIT_REGIMEN_START_DATE PCR.Cluster   datecoll
-#&gt; 1      Yes              2005-05-12           2 2005-05-15
-#&gt; 2      Yes              2007-06-28           2 2007-04-25
-#&gt; 3      Yes                    &lt;NA&gt;           2 2008-01-22
-#&gt; 4      Yes              2007-02-12           2 2007-02-01
-#&gt; 5       No              2008-02-27           2 2008-02-19
-#&gt; 6      Yes              2007-03-17           2 2007-02-28</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>tb_clean</span>)</div><div class='output co'>#&gt;      sex               county           ageatrept             race          
-#&gt;  Length:1137        Length:1137        Length:1137        Length:1137       
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
+
 #&gt;  Class :character   Class :character   Class :character   Class :character  
 #&gt;  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
 #&gt;                                                                             
 #&gt;                                                                             
 #&gt;                                                                             
-<<<<<<< HEAD
 #&gt;  hivstatus   homeless            group              rel_time     
 #&gt;  neg:272   Length:389         Length:389         Min.   :   0.0  
 #&gt;  unk: 61   Class :character   Class :character   1st Qu.:   0.0  
@@ -218,26 +187,7 @@ This is originally from (Xie et al. 2018)</p>
 #&gt;                                                  3rd Qu.: 885.0  
 #&gt;                                                  Max.   :1938.0  </div><div class='input'>
 </div></span></pre>
-=======
-#&gt;                                                                             
-#&gt;    spsmear           hivstatus           homeless        
-#&gt;  Length:1137        Length:1137        Length:1137       
-#&gt;  Class :character   Class :character   Class :character  
-#&gt;  Mode  :character   Mode  :character   Mode  :character  
-#&gt;                                                          
-#&gt;                                                          
-#&gt;                                                          
-#&gt;                                                          
-#&gt;  INIT_REGIMEN_START_DATE PCR.Cluster           datecoll         
-#&gt;  Min.   :2003-12-19      Length:1137        Min.   :2003-12-22  
-#&gt;  1st Qu.:2005-05-03      Class :character   1st Qu.:2005-04-19  
-#&gt;  Median :2006-10-11      Mode  :character   Median :2006-10-12  
-#&gt;  Mean   :2006-10-09                         Mean   :2006-10-06  
-#&gt;  3rd Qu.:2008-03-18                         3rd Qu.:2008-03-12  
-#&gt;  Max.   :2009-09-29                         Max.   :2009-08-28  
-#&gt;  NA's   :363                                NA's   :357         </div><div class='input'>
-</div></pre>
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
+
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

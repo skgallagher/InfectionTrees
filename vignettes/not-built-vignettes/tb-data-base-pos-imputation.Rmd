@@ -55,11 +55,7 @@ In this vignette, we repeat the prior analysis but impute the smear covariates t
 
 ## The Data
 
-<<<<<<< HEAD
 The data can be accessed using `data(tb_clean)`.  The clusters are uniquely ID'd with the variable `group`
-=======
-The data can be accessed using `data(tb_clean)`.  The clusters are uniquely ID'd with the variable `PCR.Cluster`
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
 
 The data consists of 159 clusters where each cluster contains between 1 and 25 individuals.  These individuals have covariates corresponding to their smear status (+/-/NA), HIV status (+/-/unknown), date of sputum collection, and race (Asian/Black/White).  Please see `?tb_clean` for more information.
 
@@ -71,7 +67,6 @@ We consider HIV status and race to be categorical variables and use "HIV+" and "
 We use the below code to format `tb_clean` to use in our model fitting.
 
 ```{r}
-<<<<<<< HEAD
  clusters <- tb_clean %>%
         dplyr::mutate(smear = ifelse(spsmear == "Positive",
                                      1, 0),
@@ -89,23 +84,6 @@ We use the below code to format `tb_clean` to use in our model fitting.
     mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
            hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
     group_by(cluster_id) %>%
-=======
-clusters <- tb_clean %>%
-    filter(PCR.Cluster != "") %>%
-    mutate(smear = ifelse(spsmear == "Negative",
-                          0, 1),
-           cluster_id = PCR.Cluster,
-           hiv_f = fct_collapse(hivstatus,
-                              pos = c("Positive"),
-                              neg = c("Negative"),
-                              unk = c("Unknown", "Not offered",
-                                      "Refused")),
-           age = parse_number(ageatrept)) %>%
-    mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
-           hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
-    group_by(cluster_id) %>%
-    mutate(rel_time = as.numeric(datecoll - min(datecoll)) / 365) %>%
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
     mutate(cluster_size = n()) %>%
     ungroup() %>% 
     mutate(race_f = fct_collapse(race,

@@ -24,11 +24,8 @@ theme_set(theme_bw() + theme(axis.title = element_text()))
 
 ##  Overview
 
-<<<<<<< HEAD
-In this vignette, we will explore the data set provided here in `data(tb_clean)`, which is a data set originally collected and analyzed in [Xie et al. (2018)](https://academic.oup.com/cid/article-abstract/67/11/1653/4984625)
-=======
-In this vignette, we will explore the data set provided here in `data(tb_clean)`, which is a data set originally collected and analyzed in [Xie et al. (2018)](GETLINK-and-REF)
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
+
+In this vignette, we will explore the data set provided here in `data(tb_clean)`, which is a data set originally collected and analyzed in [Xie et al. (2018)](https://academic.oup.com/cid/article-abstract/67/11/1653/4984625).
 
 
 ## Exploratory Data Analysis
@@ -41,7 +38,7 @@ library(kableExtra)
 
 ```
 
-<<<<<<< HEAD
+
 The data `tb_clean` has `r nrow(tb_clean)` rows and `r ncol(tb_clean)` columns, where each row in the data corresponds to an individual with a detected case of Tuberculosis (TB).
 
 The columns include demographic characteristics about the patients as well as two diagnostic tests of the disease, including a AFB sputum smear test, which we analyze here.
@@ -50,18 +47,6 @@ The columns include demographic characteristics about the patients as well as tw
 ```{r}
 tb_sub <- tb_clean %>%
   mutate(cluster_id = group) %>%
-=======
-The data `tb_clean` has `r nrow(tb_clean)` rows and `r ncol(tb_clean)` columns, where each row in the data corresponds to an individual who has been diagnosed with Tuberculosis (TB).
-
-The columns include demographic characteristics about the patients as well as two diagnostic tests of the disease, including a AFB sputum smear test, which we analyze here.
-
-Of the `r nrow(tb_clean)` cases, `r sum(tb_clean$PCR.Cluster != "")` indivduals have been clustered together through PCR of the TB culture.
-
-```{r}
-tb_sub <- tb_clean %>%
-  filter(PCR.Cluster != "") %>%
-  mutate(cluster_id = PCR.Cluster) %>%
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
   group_by(cluster_id) %>%
         mutate(cluster_size = n()) %>%
   ungroup()
@@ -69,11 +54,9 @@ tb_sub <- tb_clean %>%
 ```
 
 
-<<<<<<< HEAD
+
 This data has `r length(unique(tb_sub$cluster_id))` clusters with the following distribution of cluster sizes:
-=======
-This subset of data has `r length(unique(tb_sub$cluster_id))` clusters with the following distribution of cluster sizes:
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
+
 
 ```{r}
 sizes <- tb_sub %>% group_by(cluster_id) %>%
@@ -97,15 +80,9 @@ This means that `r round(sizes$freq[sizes$cluster_size == 1] / sum(sizes$freq) *
 A single cluster of individuals looks like the following:
 
 ```{r}
-<<<<<<< HEAD
 tb_sub %>% filter(group == "27") %>%
   arrange(rel_time) %>%
   select(group, rel_time, everything()) %>%
-=======
-tb_sub %>% filter(PCR.Cluster == "27") %>%
-  arrange(datecoll) %>%
-  select(cluster_id, datecoll, everything()) %>%
->>>>>>> fd400a1555a7a782265dd95dc3e8cb9f965adce0
    kable() %>%
   kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
                 full_width = FALSE, position = "center")
