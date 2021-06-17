@@ -13,7 +13,7 @@
 devtools::load_all()
 library(dplyr)
 
-set.seed(6152021)
+set.seed(6162021)
 
 ## Simulations to try
 M <- 100 # number of simulations for each parameter configuration
@@ -80,7 +80,9 @@ for(zz in 1:nrow(par_df)){
 
   ## For a given set of parameters
   best_params_mat <- matrix(0, nrow = M, ncol = 2)
-  coverage_mat <- matrix(0, nrow = M, ncol = 2)
+  coverage_mat <- matrix(0, nrow = M, ncol = 4)
+  colnames(coverage_mat) <- c("lp_beta0", "lp_beta1",
+                              "fi_beta0", "fi_beta1")
   max_cluster_sizes <- matrix(M)
   for(mm in 1:M){
     t_sims <- proc.time()[3]
@@ -132,8 +134,17 @@ for(zz in 1:nrow(par_df)){
                                     return_neg = TRUE,
                        lower = c(-5, -5),
                        upper = c(0, 5),
-                       method = "L-BFGS-B")
+                       method = "L-BFGS-B",
+                       hessian = TRUE)
     best_params_mat[mm,] <- best_params$par
+    ## Fisher information (approximately)
+    se <- sqrt(diag(solve(best_params$hessian)))
+    lower <- best_params$par - 1.96 * se
+    upper <- best_params$par + 1.96 * se
+    coverage_mat[mm, 3:4] <- ifelse(lower  < c(beta_0, beta_1) &
+                                 upper  > c(beta_0, beta_1),
+                                 1, 0)
+
     print("best params")
     print(best_params$par)
 
@@ -144,10 +155,13 @@ for(zz in 1:nrow(par_df)){
                                            binary_cluster_summaries,
                                        mc_samples_summary = mc_trees,
                                        alpha = .05)
-    print("CIs")
-    print(lp_ests)
 
-    coverage_mat[mm, ] <- ifelse(lp_ests[,2] < c(beta_0, beta_1) &
+    print("95% CI from LP")
+    print(lp_ests)
+    print("95% CI from FI")
+    print(cbind(lower, upper))
+
+    coverage_mat[mm, 1:2] <- ifelse(lp_ests[,2] < c(beta_0, beta_1) &
                                  lp_ests[,3] > c(beta_0, beta_1),
                                  1, 0)
 
