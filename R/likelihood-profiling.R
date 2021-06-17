@@ -35,7 +35,7 @@ likelihood_profs <- function(best_pars,
                             beta_index = jj,
                             mc_trees = mc_trees,
                             covariate_names = covariate_names,
-                            alpha = .05,
+                            alpha = alpha,
                             multiple_outside_transmissions = multiple_outside_transmissions)
     ##
     upper <- stats::uniroot(f = loglike_wrapper,
@@ -45,7 +45,7 @@ likelihood_profs <- function(best_pars,
                             beta_index = jj,
                             mc_trees = mc_trees,
                             covariate_names = covariate_names,
-                            alpha = .05,
+                            alpha = alpha,
                             multiple_outside_transmissions = multiple_outside_transmissions)
 
     ci_mat[jj, 1] <- lower$root
@@ -163,7 +163,7 @@ binary_likelihood_profs <- function(best_pars,
                          beta_index = jj,
                          obs_data_summary = obs_data_summary,
                          mc_samples_summary = mc_samples_summary,
-                         alpha = .05)
+                         alpha = alpha)
         ##
         upper <- stats::uniroot(f = binary_loglike_wrapper,
                                 c(best_pars[jj], best_pars[jj] + 4),
@@ -172,7 +172,7 @@ binary_likelihood_profs <- function(best_pars,
                          beta_index = jj,
                          obs_data_summary = obs_data_summary,
                          mc_samples_summary = mc_samples_summary,
-                         alpha = .05)
+                         alpha = alpha)
 
         ci_mat[jj, 1] <- lower$root
         ci_mat[jj, 2] <- upper$root
