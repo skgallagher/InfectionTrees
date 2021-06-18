@@ -25,6 +25,7 @@ tb_clean <- tb_clean %>%
          datecoll) %>%
     filter(PCR.Cluster != "") %>%
     group_by(PCR.Cluster) %>%
+  rename(group = PCR.Cluster) %>%
     mutate(rel_time = datecoll -
                min(datecoll, na.rm = TRUE))
 

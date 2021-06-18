@@ -13,7 +13,7 @@
 devtools::load_all()
 library(dplyr)
 
-set.seed(6162021)
+set.seed(6172021)
 
 ## Simulations to try
 M <- 100 # number of simulations for each parameter configuration
@@ -83,6 +83,8 @@ for(zz in 1:nrow(par_df)){
   coverage_mat <- matrix(0, nrow = M, ncol = 4)
   colnames(coverage_mat) <- c("lp_beta0", "lp_beta1",
                               "fi_beta0", "fi_beta1")
+  cluster_sizes <- numeric(K * M) # store all the cluster sizes from a simulated set of
+  ## observed data
   max_cluster_sizes <- matrix(M)
   for(mm in 1:M){
     t_sims <- proc.time()[3]
@@ -97,9 +99,12 @@ for(zz in 1:nrow(par_df)){
                                       inf_params = c(beta_0, beta_1),
                                       sample_covariates_df = sample_covariates_df,
                                       covariate_names = "x",
-                                      max_size = 70)
+                                      max_size = 55)
     ## Summarize the data set
     binary_cluster_summaries <- summarize_binary_clusters(data)
+    cluster_sizes[(mm-1) *K +  (1:K)] <- rep(binary_cluster_summaries$cluster_size,
+                                         times = binary_cluster_summaries$freq)
+    
     max_cluster_sizes[mm] <- max(binary_cluster_summaries$cluster_size)
     cat(sprintf("max cluster size is %d \n", max_cluster_sizes[mm]))
 
@@ -149,21 +154,21 @@ for(zz in 1:nrow(par_df)){
     print(best_params$par)
 
     ## Likelihood profiles
-    lp_ests <- binary_likelihood_profs(best_pars = best_params$par,
-                                       max_loglike = -best_params$value,
-                                       obs_data_summary =
-                                           binary_cluster_summaries,
-                                       mc_samples_summary = mc_trees,
-                                       alpha = .05)
+    ## lp_ests <- binary_likelihood_profs(best_pars = best_params$par,
+    ##                                    max_loglike = -best_params$value,
+    ##                                    obs_data_summary =
+    ##                                        binary_cluster_summaries,
+    ##                                    mc_samples_summary = mc_trees,
+    ##                                    alpha = .05)
 
-    print("95% CI from LP")
-    print(lp_ests)
+#    print("95% CI from LP")
+  #  print(lp_ests)
     print("95% CI from FI")
     print(cbind(lower, upper))
 
-    coverage_mat[mm, 1:2] <- ifelse(lp_ests[,2] < c(beta_0, beta_1) &
-                                 lp_ests[,3] > c(beta_0, beta_1),
-                                 1, 0)
+    ## coverage_mat[mm, 1:2] <- ifelse(lp_ests[,2] < c(beta_0, beta_1) &
+    ##                              lp_ests[,3] > c(beta_0, beta_1),
+    ##                              1, 0)
 
 
     print("Data simulation time (hrs)")
@@ -192,10 +197,15 @@ print(  apply(best_params_mat, 2, quantile, probs = .025))
   print("Coverage beta0, beta1")
   print(colMeans(coverage_mat))
 
+  print("Cluster sizes:")
+  cluster_size_summary <- quantile(cluster_sizes, probs = c(.5, .9, 1))
+  print(cluster_size_summary)
+
   sims_list <- list(best_params_mat = best_params_mat,
                       set = zz,
                     max_cluster_sizes = max_cluster_sizes,
-                    coverage = colMeans(coverage_mat))
+                    coverage = colMeans(coverage_mat),
+                    cluster_size_summary = cluster_size_summary)
 
   out_list[[zz]] <- sims_list
 

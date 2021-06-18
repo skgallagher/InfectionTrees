@@ -1,22 +1,5 @@
----
-title: "TB Data Results: base model"
-date: "`r Sys.Date()`"
-output:
-    html_document:
-      code_folding: hide
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+#!/usr/bin/env Rscript
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  echo = TRUE,
-                        cache = TRUE,
-                        warning = FALSE,
-                        message = FALSE
-)
 devtools::load_all()
 
 library(tidyr)
@@ -26,46 +9,11 @@ library(ggplot2)
 library(forcats)
 library(readr)
 theme_set(theme_bw() + theme(axis.title = element_text()))
-```
-
-## Libraries
-
-```{r eval = FALSE}
-library(InfectionTrees)
-library(tidyr)
-library(dplyr)
-library(kableExtra)
-library(ggplot2)
-library(forcats)
-library(readr)
-```
 
 
-## Vignette goals
-
-1. Briefly recap the data used in the analysis
-
-2. Fit a series of nested models to the data using our base model
-
-3. Repeat the model fitting with the Multiple Outside Transmission model
-
-4. Examine standard errors
-
-## The Data
 
 
-The data can be accessed using `data(tb_clean)`.  The clusters are uniquely ID'd with the variable `group`
-
-The data consists of 159 clusters where each cluster contains between 1 and 25 individuals.  These individuals have covariates corresponding to their smear status (+/-/NA), HIV status (+/-/unknown), date of sputum collection, and race (Asian/Black/White).  Please see `?tb_clean` for more information.
-
-There are only individuals who have smear status NA, and in this analysis we impute those to be smear -.  We transform date of sputum collection into a variable we call relative time, which is the time in years between the reference sputum collection date and the first observed sputum within a cluster.  Therefore, all relative time values of singleton clusters will have the value 0.
-
-We consider HIV status and race to be categorical variables and use "HIV+" and "White" as the reference groups, respectively.
-
-
-We use the below code to format `tb_clean` to use in our model fitting.
-
-```{r}
+## --------------------------------------------------------------------------------------------------------
 clusters <- tb_clean %>%
         dplyr::mutate(smear = ifelse(spsmear == "Positive",
                                      1, 0),
@@ -92,33 +40,10 @@ clusters <- tb_clean %>%
            race_asian_white,
            race_black_white,
            cluster_size)
-```
-
-## Model fitting {.tabset}
-
-We analyze the series of nested models:
-
-Model 1: $logit(p_i) = \beta_0$
-
-Model 2: $logit(p_i) = \beta_0 + \beta_{1}x_{i,{smear pos}}$
-
-Model 3: $logit(p_i) = \beta_0 + \beta_{1}x_{i,smear pos} +  \beta_{2}x_{i,{HIV neg}}+  \beta_{3}x_{i,{HIV unk}}$
-
-Model 4: $logit(p_i) = \beta_0 + \beta_{1}x_{i,{smear pos}} +  \beta_{2}x_{i,{HIV neg}} +  \beta_{3}x_{i,{HIV unk}} + \beta_{4}x_{i,{rel. time}}$
-
-Model 5: $logit(p_i) = \beta_0 + \beta_{1}x_{i,{smear pos}} +  \beta_{2}x_{i,{HIV neg}} +  \beta_{3}x_{i,{HIV unk}} + \beta_{4}x_{i,{rel. time}} + \beta_{5}x_{i,{race Asian}} + \beta_{6}x_{i,{race Black}}$
-
-### The base model
-
-We first fit our base model described in [the model overview](model-overview.html), where we assume that the infections within a cluster can be traced back to a root individual within the cluster.
 
 
-We use the below code to fit each of the models where we use $K=1000$ MC samples for each cluster in the data.  We then report the log likelihood and AIC for each of the models.
-
-**Note** that for the full results, we use $K=10000$, which takes about ~3 hour to run on a PC.
-
-```{r results = 'hide'}
-K <- 1000
+## ----results = 'hide'------------------------------------------------------------------------------------
+K <- 10000
 my_seed <- 6172020
 set.seed(my_seed)
 
@@ -150,15 +75,15 @@ beta_list <- vector(mode = "list", length = length(covariate_list))
 beta_list[[1]] <- beta_mat1
 for(ii in 2:length(covariate_list)){
   mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
-                ncol = 4) 
+                ncol = 4)
   rownames(mat) <- c("Intercept", covariate_list[[ii]])
   colnames(mat) <- c("Est.", "lower", "upper", "SE")
   beta_list[[ii]] <- mat
 }
 
-```
 
-```{r results = 'hide'}
+
+## ----results = 'hide'------------------------------------------------------------------------------------
 t_init <- proc.time()[3]
 
 ## Sample MC trees all at once
@@ -170,10 +95,10 @@ t_init <- proc.time()[3]
                                  multiple_outside_transmissions = FALSE,
                                  covariate_names = covariate_list[[length(covariate_list)]])
     print(proc.time()[3] - t0)
-    
-    
+
+
 ## Fit each of the models
-    
+
 for(jj in 1:length(covariate_list)){
         covariate_names <- covariate_list[[jj]]
         print("Model:")
@@ -184,7 +109,7 @@ for(jj in 1:length(covariate_list)){
             init_params <- rep(0, length(covariate_names) + 1)
         }
         ## Optimize
-        
+
         print("Optimizing")
         bds <- rep(-5, length(init_params))
         if(length(covariate_names) > 5){
@@ -194,7 +119,7 @@ for(jj in 1:length(covariate_list)){
         upper_bds <- -bds
         cov_mat <- covariate_df_to_mat(mc_trees,
                                        cov_names = covariate_names)
- 
+
     t1 <- proc.time()[3]
     best_params <- optim(par = init_params,
                          fn = general_loglike,
@@ -216,27 +141,27 @@ for(jj in 1:length(covariate_list)){
 
     beta_list[[jj]][,1] <- best_params$par
     beta_list[[jj]][, 4] <- sqrt(diag(solve(best_params$hessian))) ## SE from Fisher info
-    
 
-    
+
+
     print("best params:")
     print(beta_list[[jj]])
     loglike_df$loglike[jj] <- -best_params$val
-    
+
     print(paste("Total time:", round( (proc.time()[3] - t_init)  / 3600, 3),
                 "hrs"))
 
-    
-}    
-    
-```
 
-```{r}    
-    
+}
+
+
+
+## --------------------------------------------------------------------------------------------------------
+
 loglike_df <- loglike_df %>%
   mutate(aic = -loglike + 2 * n_params,
          model = 1:5) %>%
-  select(model, everything()) 
+  select(model, everything())
 
 
 loglike_df %>% kable(digits = 2,
@@ -244,31 +169,22 @@ loglike_df %>% kable(digits = 2,
   kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
                 full_width = FALSE, position = "center")
 
-```
 
 
-
-Note that log likelihood increases as the model number increases, which should be the case since the models are nested.  The best model according to AIC is model 4 which corresponds to the variables **`r covariate_list[[4]]`**.
-
-The estimated paramters for this model are
-
-```{r}
+## --------------------------------------------------------------------------------------------------------
 beta_list[[4]] %>%
   kable(digits = 2) %>%
   kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
                 full_width = FALSE, position = "center")
-```
-
-where `lower` is the lower boundary for 95\% likelihood profiling CI and `upper` is the upper boundary.  The variable `SE` is the estimated standard error using the Hessian from the optimization process as an estimate for the Fisher Information.  Using these boundaries, we see that **HIV- compared to HIV+** and **relative time** are both significant at the $\alpha = .05$ level because 0 is not included in the likelihood profiling CI.
 
 
-### Multiple outside transmissions model
 
-Fitting the [multiple outside transmissions (MOT) model](multiple-outside-transmissions-model.html) is as easy as fitting with the base model, we only need to change one argument in two different functions.  We fit the above 5 models.  Here we use $K=1000$ MC samples but for our full results, we us $10000$.
+saveRDS(beta_list, loglike_df,
+        "base-results.RDS")
 
 
-```{r results = 'hide'}
-K <- 1000
+## ----results = 'hide'------------------------------------------------------------------------------------
+K <- 10000
 my_seed <- 24
 set.seed(my_seed)
 
@@ -300,15 +216,15 @@ beta_list <- vector(mode = "list", length = length(covariate_list))
 beta_list[[1]] <- beta_mat1
 for(ii in 2:length(covariate_list)){
   mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
-                ncol = 4) 
+                ncol = 4)
   rownames(mat) <- c("Intercept", covariate_list[[ii]])
   colnames(mat) <- c("Est.", "lower", "upper", "SE")
   beta_list[[ii]] <- mat
 }
 
-```
 
-```{r results = 'hide'}
+
+## ----results = 'hide'------------------------------------------------------------------------------------
 t_init <- proc.time()[3]
 
 ## Sample MC trees all at once
@@ -320,10 +236,10 @@ t_init <- proc.time()[3]
                                  multiple_outside_transmissions = TRUE,
                                  covariate_names = covariate_list[[length(covariate_list)]])
     print(proc.time()[3] - t0)
-    
-    
+
+
 ## Fit each of the models
-    
+
 for(jj in 1:length(covariate_list)){
         covariate_names <- covariate_list[[jj]]
         print("Model:")
@@ -334,7 +250,7 @@ for(jj in 1:length(covariate_list)){
             init_params <- rep(0, length(covariate_names) + 1)
         }
         ## Optimize
-        
+
         print("Optimizing")
         bds <- rep(-5, length(init_params))
         if(length(covariate_names) > 5){
@@ -344,7 +260,7 @@ for(jj in 1:length(covariate_list)){
         upper_bds <- -bds
         cov_mat <- covariate_df_to_mat(mc_trees,
                                        cov_names = covariate_names)
- 
+
     t1 <- proc.time()[3]
     best_params <- optim(par = init_params,
                          fn = general_loglike,
@@ -366,27 +282,27 @@ for(jj in 1:length(covariate_list)){
 
 
     beta_list[[jj]][, 4] <- sqrt(diag(solve(best_params$hessian))) ## SE from Fisher info
-    
 
-    
+
+
     print("best params:")
     print(beta_list[[jj]])
     loglike_df$loglike[jj] <- -best_params$val
-    
+
     print(paste("Total time:", round( (proc.time()[3] - t_init)  / 3600, 3),
                 "hrs"))
 
-    
-}    
-    
-```
 
-```{r}    
-    
+}
+
+
+
+## --------------------------------------------------------------------------------------------------------
+
 loglike_df <- loglike_df %>%
   mutate(aic = -loglike + 2 * n_params,
          model = 1:5) %>%
-  select(model, everything()) 
+  select(model, everything())
 
 
 loglike_df %>% kable(digits = 2,
@@ -394,37 +310,14 @@ loglike_df %>% kable(digits = 2,
   kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
                 full_width = FALSE, position = "center")
 
-```
 
 
-
-Note that log likelihood increases as the model number increases, which should be the case since the models are nested.  The best model according to AIC is model 4 which corresponds to the variables **`r covariate_list[[4]]`**.
-
-The estimated parameters for this model are
-
-```{r}
+## --------------------------------------------------------------------------------------------------------
 beta_list[[4]] %>%
   kable(digits = 2) %>%
   kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
                 full_width = FALSE, position = "center")
-```
-
-where `lower` is the lower boundary for 95\% likelihood profiling CI and `upper` is the upper boundary.  The variable `SE` is the estimated standard error using the Hessian from the optimization process as an estimate for the Fisher Information.  Using these boundaries, we see that **HIV- compared to HIV+**, **HIV unknown compared to HIV+**, and **relative time** are all significant at the $\alpha = .05$ level because 0 is not included in the likelihood profiling CI.  Here we see **smear** is significant, but this is lost when we use $K= 10000$ MC samples instead of $K=1000$ MC samples.
 
 
-
-## Analysis of standard error and CI
-
-
-We see that the standard errors  are large compared to the likelihood profiling CI widths.  If we multiplied the standard errors by $2 \times 1.96$, the width of a 95\% CI for a normal distributed variable, then this width is much larger than the likelihood profiling estimate.
-
-To see which estimate is closer to the truth, we can bootstrap our data to get a second standard error and third CI estimate.  We provide the function `bootstrap_clusters()` to resample clusters from our data.  The analysis can be repeated on these bootstrap data sets.  Below, we see that our new sampled data set contains the same amount of clusters as the original data but now has a different number of  individuals compared to the original 389.
-
-```{r}
-
-bootstrap_data <- bootstrap_clusters(clusters)
-
-dim(bootstrap_data)
-
-```
-
+saveRDS(beta_list, loglike_df,
+        "mot-results.RDS")
