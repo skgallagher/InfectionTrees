@@ -37,7 +37,7 @@ params_df <- data.frame(beta0 = c(-2.5, -2.5,
                                   .5, .5,
                                   -.5, -1,
                                   0, 0,
-                                  .5, 3,
+                                  .5, 2.5,
                                   1),
                         gamma = c(.5, .7,
                                   .1, .1,
@@ -72,6 +72,7 @@ for(par_index in 1:nrow(params_df)){
     best_params_mat <- matrix(0, nrow = n_sims, ncol = length(inf_params))
     cluster_sizes_list <- vector(mode = "list", length = n_sims)
     t_init <- proc.time()[3]
+    coverage_mat <- matrix(0, nrow = n_sims, ncol = 2)
     for(sim in 1:n_sims){
 
         print("simulation number")
@@ -97,7 +98,7 @@ for(par_index in 1:nrow(params_df)){
             summarize(cluster_size = n(),
                       .groups = "drop")
         cluster_sizes_list[[sim]] <- cluster_size_df$cluster_size
-                                  
+
 
         print("sampling MC trees")
         ## sample MC trees
@@ -108,9 +109,9 @@ for(par_index in 1:nrow(params_df)){
                                      multiple_outside_transmissions = TRUE)
         print(proc.time()[3] - t0)
 
-        
+
         ## Optimize
-        
+
         print("Optimizing")
         init_params <- rep(0, length(covariate_names) + 1)
         bds <- rep(-5, length(covariate_names) + 1)
@@ -136,6 +137,14 @@ for(par_index in 1:nrow(params_df)){
                              upper = upper_bds,
                              hessian = TRUE
                              )
+        ## Get a 95% CI using the fisher info
+        se <- sqrt(diag(solve(best_params$hessian)))
+        lower <- best_params$par - 1.96 * se
+        upper <- best_params$par + 1.96 * se
+        coverage_mat[sim, 1:2] <- ifelse(lower  < c(beta_0, beta_1) &
+                                            upper  > c(beta_0, beta_1),
+                                        1, 0)
+
         t2 <- proc.time()[3] - t1
         print(paste("Optimization time:", round( t2 / 60, 3),
                     "min"))
@@ -147,10 +156,12 @@ for(par_index in 1:nrow(params_df)){
 
     }
 
+    coverage <- colMeans(coverage_mat)
+
     means <- colMeans(best_params_mat)
     medians <- apply(best_params_mat, 2, median)
     sd <- apply(best_params_mat, 2, sd)
-    
+
     cluster_sizes_vec <- do.call("c",
                                  cluster_sizes_list)
     cluster_med <- median(cluster_sizes_vec)
@@ -169,7 +180,8 @@ for(par_index in 1:nrow(params_df)){
                      par_set = params_df[par_index,],
                      cluster_sizes = c("med" = cluster_med,
                                        "max" = cluster_max,
-                                       "q90" = cluster_90))
+                                       "q90" = cluster_90),
+                     coverage = coverage)
 
     simulation_output[[par_index]] <- data_out
 

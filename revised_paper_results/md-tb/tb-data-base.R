@@ -179,7 +179,8 @@ beta_list[[4]] %>%
 
 
 
-saveRDS(beta_list, loglike_df,
+saveRDS(list(beta_list = beta_list,
+             loglike_df = loglike_df),
         "base-results.RDS")
 
 
@@ -319,5 +320,6 @@ beta_list[[4]] %>%
                 full_width = FALSE, position = "center")
 
 
-saveRDS(beta_list, loglike_df,
+saveRDS(list(beta_list = beta_list,
+             loglike_df = loglike_df),
         "mot-results.RDS")
