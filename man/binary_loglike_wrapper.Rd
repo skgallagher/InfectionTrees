@@ -8,6 +8,7 @@ binary_loglike_wrapper(
   x,
   max_loglike,
   best_pars,
+  obs_data_summary,
   mc_samples_summary,
   alpha = 0.05,
   beta_index = 1,
@@ -20,6 +21,8 @@ binary_loglike_wrapper(
 \item{max_loglike}{maximum loglike value from output}
 
 \item{best_pars}{vector of best parameters}
+
+\item{obs_data_summary}{actual data summary with cluster_size, x_pos, and x_neg and frequency of each}
 
 \item{mc_samples_summary}{output of \code{sample_mc_binary_cov}}
 

@@ -5,6 +5,7 @@
 ## Now with the outsiders
 ## Simulate outsider outbreaks
 ## See if we can estimate the parameters
+## ## Updated June 21, 2021 forJCGS revisions
 
 
 
@@ -17,9 +18,9 @@ library(InfectionTrees)
 library(tidyverse)
 
 ## simulation parameters
-K <- 100 # number of clusters to simulate
-n_sims <- 2 # total times to simulate per set of parameters
-B <- 100 # number of MC draws per cluster
+K <- 1000 # number of clusters to simulate
+n_sims <- 100 # total times to simulate per set of parameters
+B <- 5000 # number of MC draws per cluster
 
 ## EACH OUTER LOOP TAKES >30 HOURS.
 
@@ -37,7 +38,7 @@ params_df <- data.frame(beta0 = c(-2.5, -2.5,
                                   .5, .5,
                                   -.5, -1,
                                   0, 0,
-                                  .5, 2.5,
+                                  .5, 2.25,
                                   1),
                         gamma = c(.5, .7,
                                   .1, .1,
@@ -73,6 +74,7 @@ for(par_index in 1:nrow(params_df)){
     cluster_sizes_list <- vector(mode = "list", length = n_sims)
     t_init <- proc.time()[3]
     coverage_mat <- matrix(0, nrow = n_sims, ncol = 2)
+    n_singular <- 0
     for(sim in 1:n_sims){
 
         print("simulation number")
@@ -84,12 +86,17 @@ for(par_index in 1:nrow(params_df)){
                           inf_params = inf_params,
                           sample_covariates_df = covariates_df,
                           covariate_names = covariate_names,
-                          max_size = 70)
+                          max_size = 60)
 
 
         outsider_obs <- df %>%
             filter(gen != 1) %>%
             mutate(cluster_size = cluster_size - 1)
+
+        if(nrow(outsider_obs) == 0){
+            print("Have not sampled any trees with at least 2 people. Moving to next instance")
+            next
+        }
 
         ## Number of 'observed' clusters
         length(unique(outsider_obs$cluster_id))
@@ -137,13 +144,25 @@ for(par_index in 1:nrow(params_df)){
                              upper = upper_bds,
                              hessian = TRUE
                              )
+        #######################################
         ## Get a 95% CI using the fisher info
-        se <- sqrt(diag(solve(best_params$hessian)))
+        ## ## New for JCGS
+        se <- tryCatch({
+            sqrt(diag(solve(best_params$hessian)))
+            },
+            error = function(e){
+                print("ERROR trying to estimate FI")
+                return(c(NA, NA))
+            })
+        n_singular <- ifelse(any(is.na(se)), n_singular + 1, n_singular)
+        print("SE")
+        print(se)
         lower <- best_params$par - 1.96 * se
         upper <- best_params$par + 1.96 * se
-        coverage_mat[sim, 1:2] <- ifelse(lower  < c(beta_0, beta_1) &
-                                            upper  > c(beta_0, beta_1),
+        coverage_mat[sim, 1:2] <- ifelse(lower  < c(beta0, beta1) &
+                                            upper  > c(beta0, beta1),
                                         1, 0)
+        #################################
 
         t2 <- proc.time()[3] - t1
         print(paste("Optimization time:", round( t2 / 60, 3),
@@ -158,15 +177,15 @@ for(par_index in 1:nrow(params_df)){
 
     coverage <- colMeans(coverage_mat)
 
-    means <- colMeans(best_params_mat)
-    medians <- apply(best_params_mat, 2, median)
-    sd <- apply(best_params_mat, 2, sd)
+    means <- colMeans(best_params_mat, na.rm = TRUE)
+    medians <- apply(best_params_mat, 2, median, na.rm = TRUE)
+    sd <- apply(best_params_mat, 2, sd, na.rm = TRUE)
 
     cluster_sizes_vec <- do.call("c",
                                  cluster_sizes_list)
-    cluster_med <- median(cluster_sizes_vec)
-    cluster_max <- max(cluster_sizes_vec)
-    cluster_90 <- quantile(cluster_sizes_vec, probs = .90)
+    cluster_med <- median(cluster_sizes_vec, na.rm = TRUE)
+    cluster_max <- max(cluster_sizes_vec, na.rm = TRUE)
+    cluster_90 <- quantile(cluster_sizes_vec, probs = .90, na.rm = TRUE)
     names(cluster_90) <- NULL
 
 

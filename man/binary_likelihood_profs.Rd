@@ -7,6 +7,7 @@
 binary_likelihood_profs(
   best_pars,
   max_loglike,
+  obs_data_summary,
   mc_samples_summary,
   alpha = 0.05,
   multiple_outside_transmissions = FALSE
@@ -16,6 +17,8 @@ binary_likelihood_profs(
 \item{best_pars}{vector of MLE}
 
 \item{max_loglike}{loglike value from MLE}
+
+\item{obs_data_summary}{actual data summary with cluster_size, x_pos, and x_neg and frequency of each}
 
 \item{mc_samples_summary}{tree summaries, output from \code{sample_mc_binary_cov}}
 

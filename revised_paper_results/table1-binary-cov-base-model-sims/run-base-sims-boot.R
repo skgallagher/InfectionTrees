@@ -7,7 +7,7 @@
 ## This is for the base model with a binary covariate
 ## We are using alpha values of .5, .7, .1
 ## beta0 values of -2.5, -1.5, and -2.75
-## and beta1 values of -.5, 0, -.25, 2.5
+## and beta1 values of -.5, 0, -.25, 2.25
 ## There are 15 total sets (so not all combinations are used)
 ## This version includes a bootstrap resample woo
 
@@ -20,7 +20,7 @@ set.seed(6172021)
 M <- 100 # number of simulations for each parameter configuration
 B <- 1000 # number of MC samples
 K <- 5000 # number of clusters in a data set
-n_boot <- 10
+n_boot <- 30
 
 
 par_df1 <- data.frame(
@@ -45,7 +45,7 @@ par_df3 <-  data.frame(
                      M = M,
                      B = B,
                      beta_0 = c(-2.75, -2.75, -2.75),
-                     beta_1 = c(2.5, 0, -.25),
+                     beta_1 = c(2.25, 0, -.25),
                      gamma = .1)
 ###########################################################################
 
@@ -83,7 +83,7 @@ for(zz in 1:nrow(par_df)){
   ## For a given set of parameters
   best_params_mat <- matrix(0, nrow = M, ncol = 2)
   coverage_mat <- matrix(0, nrow = M, ncol = 4)
-  colnames(coverage_mat) <- c("lp_beta0", "lp_beta1",
+  colnames(coverage_mat) <- c("boot_beta0", "boot_beta1",
                               "fi_beta0", "fi_beta1")
   cluster_sizes <- numeric(K * M) # store all the cluster sizes from a simulated set of
   ## observed data
@@ -101,7 +101,7 @@ for(zz in 1:nrow(par_df)){
                                       inf_params = c(beta_0, beta_1),
                                       sample_covariates_df = sample_covariates_df,
                                       covariate_names = "x",
-                                      max_size = 55)
+                                      max_size = 60)
     ## Summarize the data set
     binary_cluster_summaries <- summarize_binary_clusters(data)
     cluster_sizes[(mm-1) *K +  (1:K)] <- rep(binary_cluster_summaries$cluster_size,

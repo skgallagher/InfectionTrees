@@ -46,7 +46,7 @@ par_df3 <-  data.frame(
                      M = M,
                      B = B,
                      beta_0 = c(-2.75, -2.75, -2.75),
-                     beta_1 = c(3, 0, -.25),
+                     beta_1 = c(2.25, 0, -.25),
                      gamma = .1)
 ###########################################################################
 
@@ -55,7 +55,7 @@ par_df <- dplyr::bind_rows(par_df1, par_df2, par_df3)
 
 
 sizes <- as.data.frame(do.call('rbind', lapply(out_list, "[[", 5)))
-cov <- as.data.frame(do.call('rbind', lapply(out_list, "[[", 4)))[,3:4]
+cov <- as.data.frame(do.call('rbind', lapply(out_list, "[[", 4))[, 1:2])
 mean_pars <- as.data.frame(do.call('rbind', lapply(
                                    lapply(out_list, "[[", 1),
                                    colMeans)))
@@ -133,7 +133,7 @@ pretty_df <- summary_df %>%
 pretty_df %>%
     knitr::kable("latex", digits = 2, booktabs = TRUE, align = "c",
                  linesep = "",
-                 col.names = c("Cluster sizes (Max, 90Q, 50Q)",
+                 col.names = c("$|\\mathcal{C}|$ (Max, 90Q, 50Q)",
                                "P(+)",
                                "$(\\beta_0$, $\\beta_1)$",
                                "(Mean $\\hat{\\beta}_0$, (SE), Mean $\\hat{\\beta}_1$ (SE))",
@@ -141,33 +141,13 @@ pretty_df %>%
                                "Coverage [$\\beta_0$, $\\beta_1$]"
                                ), escape = FALSE,
                  caption = paste0("Results of simulations where we generate from Model in Eq. \\eqref{eq:sim-mod}.",
-                 " For each row in the table, we generate 100 sets of outbreak data each with 1000 transmission trees. ",
+                 " For each row in the table, we generate 100 sets of outbreak data each with 1000 transmission trees for a given $P(+)$, $\\beta_0$ and $\\beta_1$. ",
                  "to estimate the MLE of $\\bm{\\beta}$.",
-                 "The mean and standard error (SE) along with the median and inner quartile range (IQR)",
+                 "The mean and bootstrap standard error (SE) along with the median and inner quartile range (IQR) ",
                  "are reported over the 100 sets of outbreak data. ",
                  "Additionally we report the coverage where a 95\\% CI was derived ",
-                 "using the observed Fisher Information."
+                 "using a bootstrap estimate of the SE."
                  ),
                  label = "sim-results") %>%
     kableExtra::kable_styling(latex_options = c("scale_down",
                                                 "striped"))
-
-## Revisions for JCGS
-## Condensing some of the output
-summary_df2 <- summary_df %>%
-    arrange(max_clusts) %>%
-    mutate(size_stats = sprintf(
-                                       "(%d, %d, %d)", max_clusts,
-                                       cluster_size_90,
-                                       cluster_size_50
-                                       ))
-
-summary_df %>% dplyr::select(beta_0, beta_1, p_pos,
-                             contains("beta0")) %>%
-    knitr::kable("markdown", digits = 2)
-
-summary_df %>% dplyr::select(beta_0, beta_1, p_pos,
-                             contains("beta1")) %>%
-    knitr::kable("markdown", digits = 2)
-
-

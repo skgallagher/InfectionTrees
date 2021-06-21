@@ -6,23 +6,31 @@
 \usage{
 bp_loglike_binary_cov(
   inf_params,
+  obs_data_summary,
   mc_samples_summary,
   return_neg = FALSE,
-  multiple_outside_transmissions = FALSE,
   messages = FALSE
 )
 }
 \arguments{
 \item{inf_params}{vector of length 2, the beta0 and beta1 coefficients}
 
+\item{obs_data_summary}{\describe{
+\item{n}{number in cluster}
+\item{n_pos}{number of positive smears in cluster}
+\item{freq}{number of times this frequency occurs}
+}}
+
 \item{mc_samples_summary}{a data frame of sampled transmission trees
-with the following columns, where the last one is only needed for the multiple
-outsider model.}
+with the following columns,
+\describe{
+\item{x_pos_trans}{number of transmission from a smear positive person}
+\item{x_pos}{number of positive smears}
+\item{cluster_size}{cluster size}
+\item{mc_freq}{number of samples from}
+}}
 
 \item{return_neg}{logical indicating whether to return the negative loglike.  Default is FALSE}
-
-\item{multiple_outside_transmissions}{logical indicating whether to use the outsider model li
-kelihood or not}
 
 \item{messages}{logical indicating whether we should print messages.  Default is FALSE.}
 }
