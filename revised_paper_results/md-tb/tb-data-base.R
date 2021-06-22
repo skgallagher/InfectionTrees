@@ -15,18 +15,18 @@ theme_set(theme_bw() + theme(axis.title = element_text()))
 
 ## --------------------------------------------------------------------------------------------------------
 clusters <- tb_clean %>%
-        dplyr::mutate(smear = ifelse(spsmear == "Positive",
-                                     1, 0),
-                      cluster_id = group,
-                      hiv_f = ifelse(hivstatus == "Negative", "neg",
-                                     ifelse(hivstatus == "Positive", "pos",
-                                            "unk"))) %>%
-        dplyr::mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
-               hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
-        dplyr::group_by(cluster_id) %>%
-        dplyr::mutate(rel_time = as.numeric(rel_time / 365)) %>%
-        dplyr::mutate(cluster_size = dplyr::n()) %>%
-        dplyr::ungroup() %>%
+    dplyr::mutate(smear = ifelse(spsmear == "Positive",
+                                 1, 0),
+                  cluster_id = group,
+                  hiv_f = ifelse(hivstatus == "Negative", "neg",
+                          ifelse(hivstatus == "Positive", "pos",
+                                 "unk"))) %>%
+    dplyr::mutate(hiv_neg_pos = ifelse(hiv_f == "neg", 1, 0),
+                  hiv_unk_pos = ifelse(hiv_f == "unk", 1, 0)) %>%
+    dplyr::group_by(cluster_id) %>%
+    dplyr::mutate(rel_time = as.numeric(rel_time / 365)) %>%
+    dplyr::mutate(cluster_size = dplyr::n()) %>%
+    dplyr::ungroup() %>%
     mutate(race_f = fct_collapse(race,
                                  white = "White",
                                  black = "Black or African American",
@@ -74,11 +74,11 @@ colnames(beta_mat1) <- c("Est.", "lower", "upper", "SE")
 beta_list <- vector(mode = "list", length = length(covariate_list))
 beta_list[[1]] <- beta_mat1
 for(ii in 2:length(covariate_list)){
-  mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
-                ncol = 4)
-  rownames(mat) <- c("Intercept", covariate_list[[ii]])
-  colnames(mat) <- c("Est.", "lower", "upper", "SE")
-  beta_list[[ii]] <- mat
+    mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
+                  ncol = 4)
+    rownames(mat) <- c("Intercept", covariate_list[[ii]])
+    colnames(mat) <- c("Est.", "lower", "upper", "SE")
+    beta_list[[ii]] <- mat
 }
 
 
@@ -88,37 +88,37 @@ t_init <- proc.time()[3]
 
 ## Sample MC trees all at once
 
-    t0 <- proc.time()[3]
-    ## Sample all MC clusters at once for each of the 5 models
-    mc_trees <-  sample_mc_trees(clusters,
-                                 B = K,
-                                 multiple_outside_transmissions = FALSE,
-                                 covariate_names = covariate_list[[length(covariate_list)]])
-    print(proc.time()[3] - t0)
+t0 <- proc.time()[3]
+## Sample all MC clusters at once for each of the 5 models
+mc_trees <-  sample_mc_trees(clusters,
+                             B = K,
+                             multiple_outside_transmissions = FALSE,
+                             covariate_names = covariate_list[[length(covariate_list)]])
+print(proc.time()[3] - t0)
 
 
 ## Fit each of the models
 
 for(jj in 1:length(covariate_list)){
-        covariate_names <- covariate_list[[jj]]
-        print("Model:")
-        print(covariate_names)
-        if(is.na(covariate_names[1])){
-            init_params <- 0
-        } else{
-            init_params <- rep(0, length(covariate_names) + 1)
-        }
-        ## Optimize
+    covariate_names <- covariate_list[[jj]]
+    print("Model:")
+    print(covariate_names)
+    if(is.na(covariate_names[1])){
+        init_params <- 0
+    } else{
+        init_params <- rep(0, length(covariate_names) + 1)
+    }
+    ## Optimize
 
-        print("Optimizing")
-        bds <- rep(-5, length(init_params))
-        if(length(covariate_names) > 5){
-            bds <- rep(-4, length(init_params))
-        }
-        lower_bds <- bds
-        upper_bds <- -bds
-        cov_mat <- covariate_df_to_mat(mc_trees,
-                                       cov_names = covariate_names)
+    print("Optimizing")
+    bds <- rep(-5, length(init_params))
+    if(length(covariate_names) > 5){
+        bds <- rep(-4, length(init_params))
+    }
+    lower_bds <- bds
+    upper_bds <- -bds
+    cov_mat <- covariate_df_to_mat(mc_trees,
+                                   cov_names = covariate_names)
 
     t1 <- proc.time()[3]
     best_params <- optim(par = init_params,
@@ -159,23 +159,23 @@ for(jj in 1:length(covariate_list)){
 ## --------------------------------------------------------------------------------------------------------
 
 loglike_df <- loglike_df %>%
-  mutate(aic = -loglike + 2 * n_params,
-         model = 1:5) %>%
-  select(model, everything())
+    mutate(aic = -loglike + 2 * n_params,
+           model = 1:5) %>%
+    select(model, everything())
 
 
 loglike_df %>% kable(digits = 2,
                      col.names = c("Model", "# params.", "Log like.", "AIC")) %>%
-  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
-                full_width = FALSE, position = "center")
+    kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                  full_width = FALSE, position = "center")
 
 
 
 ## --------------------------------------------------------------------------------------------------------
 beta_list[[4]] %>%
-  kable(digits = 2) %>%
-  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
-                full_width = FALSE, position = "center")
+    kable(digits = 2) %>%
+    kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                  full_width = FALSE, position = "center")
 
 
 
@@ -216,11 +216,11 @@ colnames(beta_mat1) <- c("Est.", "lower", "upper", "SE")
 beta_list <- vector(mode = "list", length = length(covariate_list))
 beta_list[[1]] <- beta_mat1
 for(ii in 2:length(covariate_list)){
-  mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
-                ncol = 4)
-  rownames(mat) <- c("Intercept", covariate_list[[ii]])
-  colnames(mat) <- c("Est.", "lower", "upper", "SE")
-  beta_list[[ii]] <- mat
+    mat <- matrix(0, nrow = length(covariate_list[[ii]]) + 1,
+                  ncol = 4)
+    rownames(mat) <- c("Intercept", covariate_list[[ii]])
+    colnames(mat) <- c("Est.", "lower", "upper", "SE")
+    beta_list[[ii]] <- mat
 }
 
 
@@ -230,37 +230,37 @@ t_init <- proc.time()[3]
 
 ## Sample MC trees all at once
 
-    t0 <- proc.time()[3]
-    ## Sample all MC clusters at once for each of the 5 models
-    mc_trees <-  sample_mc_trees(clusters,
-                                 B = K,
-                                 multiple_outside_transmissions = TRUE,
-                                 covariate_names = covariate_list[[length(covariate_list)]])
-    print(proc.time()[3] - t0)
+t0 <- proc.time()[3]
+## Sample all MC clusters at once for each of the 5 models
+mc_trees <-  sample_mc_trees(clusters,
+                             B = K,
+                             multiple_outside_transmissions = TRUE,
+                             covariate_names = covariate_list[[length(covariate_list)]])
+print(proc.time()[3] - t0)
 
 
 ## Fit each of the models
 
 for(jj in 1:length(covariate_list)){
-        covariate_names <- covariate_list[[jj]]
-        print("Model:")
-        print(covariate_names)
-        if(is.na(covariate_names[1])){
-            init_params <- 0
-        } else{
-            init_params <- rep(0, length(covariate_names) + 1)
-        }
-        ## Optimize
+    covariate_names <- covariate_list[[jj]]
+    print("Model:")
+    print(covariate_names)
+    if(is.na(covariate_names[1])){
+        init_params <- 0
+    } else{
+        init_params <- rep(0, length(covariate_names) + 1)
+    }
+    ## Optimize
 
-        print("Optimizing")
-        bds <- rep(-5, length(init_params))
-        if(length(covariate_names) > 5){
-            bds <- rep(-4, length(init_params))
-        }
-        lower_bds <- bds
-        upper_bds <- -bds
-        cov_mat <- covariate_df_to_mat(mc_trees,
-                                       cov_names = covariate_names)
+    print("Optimizing")
+    bds <- rep(-5, length(init_params))
+    if(length(covariate_names) > 5){
+        bds <- rep(-4, length(init_params))
+    }
+    lower_bds <- bds
+    upper_bds <- -bds
+    cov_mat <- covariate_df_to_mat(mc_trees,
+                                   cov_names = covariate_names)
 
     t1 <- proc.time()[3]
     best_params <- optim(par = init_params,
@@ -281,7 +281,7 @@ for(jj in 1:length(covariate_list)){
                 "min"))
 
 
-
+    beta_list[[jj]][,1] <- best_params$par
     beta_list[[jj]][, 4] <- sqrt(diag(solve(best_params$hessian))) ## SE from Fisher info
 
 
@@ -301,23 +301,23 @@ for(jj in 1:length(covariate_list)){
 ## --------------------------------------------------------------------------------------------------------
 
 loglike_df <- loglike_df %>%
-  mutate(aic = -loglike + 2 * n_params,
-         model = 1:5) %>%
-  select(model, everything())
+    mutate(aic = -loglike + 2 * n_params,
+           model = 1:5) %>%
+    select(model, everything())
 
 
 loglike_df %>% kable(digits = 2,
                      col.names = c("Model", "# params.", "Log like.", "AIC")) %>%
-  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
-                full_width = FALSE, position = "center")
+    kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                  full_width = FALSE, position = "center")
 
 
 
 ## --------------------------------------------------------------------------------------------------------
 beta_list[[4]] %>%
-  kable(digits = 2) %>%
-  kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
-                full_width = FALSE, position = "center")
+    kable(digits = 2) %>%
+    kable_styling(bootstrap_options = c("condensed", "hover", "striped", "responsive"),
+                  full_width = FALSE, position = "center")
 
 
 saveRDS(list(beta_list = beta_list,

@@ -35,9 +35,11 @@ kable(t(tab),
 ## Example cluster
 tb_clean %>% filter( group == 15) %>%
     select(group, county, rel_time, hivstatus, race, sex, spsmear) %>%
-    arrange(datecoll) %>%
+    arrange(rel_time) %>%
+    mutate(county = ifelse(county == "PRINCE GEORGES", "Prince Georges",
+                           "Montgomery")) %>%
     kable(format = "latex",
-          col.names = c("Cluster ID", "Co.", "Relative day",
+          col.names = c("Cluster ID", "County", "Relative day",
                         "HIV status", "Race", "Sex", "Smear"),
           booktabs = TRUE,
           caption = "Example of individuals and some of their features within a single cluster", label = "ex-clust") %>%
