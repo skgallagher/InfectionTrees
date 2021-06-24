@@ -1,6 +1,6 @@
 ## SKG
 ## June 22, 2021
-## JCGS revisiosn to reproduce code for most likely trees
+## JCGS revision to reproduce code for most likely trees
 
 
 #################################################
@@ -145,7 +145,7 @@ jsub$factor_gen <- factor(jsub$gen_size,
 
 
 fctr_sub2 <- df_sub %>% group_by(facet, gen_size, cluster_id) %>%
-    summarize(like = prob[1]) %>% 
+    summarize(like = prob[1]) %>%
               mutate(id = stringr::str_sub(cluster_id, start = -3))
 jsub$facet_lab <- factor(jsub$facet,
                          levels = unique(fctr_sub2$facet),
@@ -159,12 +159,12 @@ jsub$facet_lab <- factor(jsub$facet,
                                                  digits = 2)))
 
 my_orig_id <- 27
-                        
+
 ggplot(data = jsub,
        aes(x = x, y = y,
            group = cluster_id,
            col = factor(order),
-           ##  shape = factor(hiv_neg_pos)
+            shape = factor(hiv_neg_pos)
            )) +
     geom_curve(aes(xend = x_to, yend = y_to),
                size = 2, curvature = -0,
@@ -173,9 +173,9 @@ ggplot(data = jsub,
     geom_point(size = 5, stroke = 4) +
     facet_wrap(~facet_lab, ncol = 3) +
     scale_color_brewer(palette = "Set1", name = "Detection Order")  +
-    ##  scale_shape_manual(values = c(3, 16),
-    ##                 labels = c("Pos./Unk.", "Neg."),
-    ##                name = "HIV Status") +
+     scale_shape_manual(values = c(3, 16),
+                    labels = c("Pos./Unk.", "Neg."),
+                   name = "HIV Status") +
     xlim(.8, 7.2) +
     ylim(-1.2, 1.2) +
     theme_bw(base_size = 18) +
@@ -186,6 +186,8 @@ ggplot(data = jsub,
          y = latex2exp::TeX("Order of infection in gen. among 'siblings' $\\rightarrow$"),
          title = "Most likely sampled trees by number of generations",
          subtitle = paste0("Cluster ", my_orig_id)) +
-    theme(legend.position = "bottom")
-   
+    theme(legend.position = "bottom", legend.box = "horizontal") +
+    guides(color = guide_legend(nrow = 2, byrow = TRUE))
+
+
 ggsave("trees-7.pdf", height = 15, width = 13)

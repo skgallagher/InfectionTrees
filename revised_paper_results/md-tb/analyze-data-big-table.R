@@ -13,7 +13,7 @@ library(kableExtra)
 ## loglike table BASE MODEL
 files <- list.files()
 fn_rds <- grep("RDS", files, value = TRUE)
-fn <- fn_rds[1]
+fn <- grep("base", fn_rds, value = TRUE)
 
 data_list_base <- readRDS(fn)
 
@@ -31,8 +31,7 @@ loglike_df_base$type <- "Base"
 
 files_o <- list.files()
 fn_rds_o <- grep("RDS", files_o, value = TRUE)
-fn_rds2_o <- fn_rds_o[grep("mot", fn_rds_o)]
-fn_o <- fn_rds2_o[1] 
+fn_rds2_o <- grep("mot", fn_rds_o, value = TRUE)
 
 data_list_o <- readRDS(fn_o)
 
@@ -64,7 +63,7 @@ combined_loglike_df %>%
                   stripe_index = c(1, 3, 5, 7)) %>%
     row_spec(c(4), background = "yellow") %>%
     row_spec(c(9), background = "yellow") %>%
-    row_spec(c(5), extra_latex_after = "\\midrule") 
+    row_spec(c(5), extra_latex_after = "\\midrule")
 
 
 #########################################################
@@ -83,7 +82,10 @@ coeff_names <- c("Intercept", "Smear pos.",
 rownames(best_mod_base2) <- NULL
 best_mod_base <- data.frame(Type = "Base",
                             Coeff = coeff_names,
-                            best_mod_base2)
+                             best_mod_base2)
+## add boot strap SE
+base_boot <- readRDS("biowulf-results/bootstrap_sims_base_2021-06-23.RDS")
+best_mod_base$se_boot <- base_boot$se_vec
 
 ## OUTSIDER
 best_mod_o2 <- data_list_o$beta_list[[4]][,c(1,4)]
@@ -95,6 +97,7 @@ rownames(best_mod_o2) <- NULL
 best_mod_o <- data.frame(Type = "Multiple outside",
                             Coeff = coeff_names,
                          best_mod_o2)
+best_mod_o$se_boot <- NA
 
 
 ## NAIVE MODEL
@@ -108,6 +111,9 @@ best_mod_naive <- data.frame(Type = "Naive",
                             Coeff = coeff_names,
                             best_mod_naive2[, c(1, 4)]) %>%
     rename("Est." = Mean)
+## Se boot
+naive_boot <- readRDS("naive-tab-boot.RDS")
+best_mod_naive$se_boot <- naive_boot$se_boot
 
 ########
 ## Putting it all together
@@ -115,12 +121,11 @@ combined_best_mod <- rbind(best_mod_base,
                            best_mod_o,
                            best_mod_naive) %>%
     mutate(or = exp(`Est.`),
-           lower = exp(`Est.`- 1.96 * SE),
-           upper = exp(`Est.` + 1.96 * SE)) %>%
-    mutate(pretty_or = paste0(round(or, 2), " [",
-                              round(lower,2), ", ",
-                              round(upper, 2), "]"))
-           
+           lower = exp(`Est.`- 1.96 * se_boot),
+           upper = exp(`Est.` + 1.96 * se_boot)) %>%
+    mutate(pretty_or = sprintf("%.2f [%.2f, %.2f]", or, lower, upper)) %>%
+    mutate(combined_se = sprintf("(%.2f, %.2f)", SE, se_boot))
+
 
 
 
@@ -130,18 +135,22 @@ combined_best_mod <- rbind(best_mod_base,
 
 
 combined_best_mod %>%
-    select(-c(lower, upper, or)) %>%
+    select(c("Type", "Coeff", "Est.", "combined_se", "pretty_or")) %>%
     kable(format = "latex", booktabs = TRUE,
           col.names = c("Type", "Coeff.",
-                        "$\\hat{\\beta}$",  "$\\widehat{SE}(\\hat{\\beta})$",
-                        "Odds Ratio and 95\\% CI"),
-          caption = "Coefficient estimates for the best selected model.  We report the mean estimate and standard error of the $\\beta$ values in addition to the odds ratio and 95\\% CI.",
+                        "$\\hat{\\beta}$",  "$\\widehat{SE}_F(\\hat{\\beta}), \\widehat{SE}_B(\\hat{\\beta})$",
+                        "Odds Ratio [95\\% CI]"),
+          caption = paste("Coefficient estimates for the best selected model.",
+                          "We report the mean estimate and two estimates of the standard error of the $\\beta$ values",
+                          "in addition to the odds ratio and 95\\% CI.  $SE_F$ represents standard error",
+                          "derived from the Fisher information, and $SE_B$ represents the bootstrap standard error.",
+                          "The 95\\% CI is estimated using the bootstrap SE."),
           label = "best-model-ests",
           digits = 2,
           linesep = "",
           escape = FALSE,
           align = c("l", "l", "c", "c", "c")) %>%
     kable_styling(latex_options = "striped", position = "center",
-                  stripe_index = c(1,3, 7, 9, 11, 13)) %>%
-    row_spec(c(5, 10, 15), background = "yellow") %>%
-    row_spec(c(5, 10), extra_latex_after = "\\midrule") 
+                  stripe_index = c(1, 7, 9, 11)) %>%
+    row_spec(c(3:5, 10, 13:15), background = "yellow") %>%
+    row_spec(c(5, 10), extra_latex_after = "\\midrule")
