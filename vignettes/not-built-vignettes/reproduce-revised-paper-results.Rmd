@@ -1,0 +1,230 @@
+---
+title: "Reproduce paper results"
+output: 
+  html_document:
+    code_folding: hide
+vignette: >
+  %\VignetteIndexEntry{Model overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      cache = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+knitr::opts_knit$set(root.dir = "~/InfectionTrees")
+devtools::load_all()
+library(InfectionTrees)
+library(tidyr)
+library(dplyr)
+library(kableExtra)
+library(ggplot2)
+theme_set(theme_bw() + theme(axis.title = element_text()))
+```
+
+## Preliminaries
+
+1. Make sure `InfectionTrees` is installed (`devtools::install_github("skgallagher/InfectionTrees")`) and loaded along with the following libraries
+
+```{r eval = FALSE}
+library(InfectionTrees)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(tidyr)
+library(dplyr)
+```
+
+2. If there are any occurrences of `devtools::load_all()`, remove them and replace with `library(InfectionTrees)`.
+
+3.  Expected run time is an approximation for of estimated time to run the script.  They were originally run on a laptop with the following specs unless otherwise specified.
+
+```{r eval = FALSE}
+Distributor ID:	Ubuntu
+Description:	Ubuntu 20.04.2 LTS
+Release:	20.04
+Codename:	focal
+
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   39 bits physical, 48 bits virtual
+CPU(s):                          8
+On-line CPU(s) list:             0-7
+Thread(s) per core:              2
+Core(s) per socket:              4
+Socket(s):                       1
+NUMA node(s):                    1
+Vendor ID:                       GenuineIntel
+CPU family:                      6
+Model:                           142
+Model name:                      Intel(R) Core(TM) i7-10510U CPU @ 1.80GHz
+Stepping:                        12
+CPU MHz:                         1281.004
+CPU max MHz:                     4900.0000
+CPU min MHz:                     400.0000
+BogoMIPS:                        4599.93
+Virtualization:                  VT-x
+L1d cache:                       128 KiB
+L1i cache:                       128 KiB
+L2 cache:                        1 MiB
+L3 cache:                        8 MiB
+NUMA node0 CPU(s):               0-7
+Vulnerability Itlb multihit:     KVM: Mitigation: VMX disabled
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled v
+                                 ia prctl and seccomp
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user
+                                  pointer sanitization
+Vulnerability Spectre v2:        Mitigation; Enhanced IBRS, IBPB conditional, RS
+                                 B filling
+Vulnerability Srbds:             Mitigation; TSX disabled
+Vulnerability Tsx async abort:   Not affected
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtr
+                                 r pge mca cmov pat pse36 clflush dts acpi mmx f
+                                 xsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rd
+                                 tscp lm constant_tsc art arch_perfmon pebs bts 
+                                 rep_good nopl xtopology nonstop_tsc cpuid aperf
+                                 mperf pni pclmulqdq dtes64 monitor ds_cpl vmx e
+                                 st tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_
+                                 1 sse4_2 x2apic movbe popcnt tsc_deadline_timer
+                                  aes xsave avx f16c rdrand lahf_lm abm 3dnowpre
+                                 fetch cpuid_fault epb invpcid_single ssbd ibrs 
+                                 ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpr
+                                 iority ept vpid ept_ad fsgsbase tsc_adjust bmi1
+                                  avx2 smep bmi2 erms invpcid mpx rdseed adx sma
+                                 p clflushopt intel_pt xsaveopt xsavec xgetbv1 x
+                                 saves dtherm ida arat pln pts hwp hwp_notify hw
+                                 p_act_window hwp_epp md_clear flush_l1d arch_ca
+                                 pabilities
+
+```
+
+## File Structure
+
+All code for reproducing our revised paper results may be found [here](https://github.com/skgallagher/InfectionTrees/tree/master/revised_paper_results).
+
+Please clone the [entire repository](https://github.com/skgallagher/InfectionTrees/) into your local directory and set your working directory to `revised_paper_results/`
+
+The results include the following:
+
+1. Table 1 results. `table1-binary-cov-base-model-sims/`
+    a. Base model simulation results. `run-base-sims.R`
+    b. Base model simulation bootstrap results. `run-base-sims-boot.R`
+    c. Table output for base model simulation. `analyze-base-sims.R`
+2. Table 2 results. `table2-binary-cov-mot-model-sims/`
+    a. Multiple outside transmissions model simulation results. `outsider-sims.R`
+    c. Table output for base model simulation. `analyze-mot-sims.R`
+3. The TB data results. `md-tb/`
+    a. Tables 3 and 4. `tab3-4-data-eda.R`
+    b. Tables 5 and 6. 
+        i. Results from base and multiple outside transmissions model. `tb-data-base-and-mot.R`
+        ii. Bootstrap standard error for base and multiple outside transmissions model. `bootstrap-sims.R`
+        iii. Naive model results. `data-naive-model.R`
+        iv. Naive model bootstrap error. `data-naive-boot.R`
+        v. Table outputs for the three models combined. `analyze-data-big-table.R`
+    c. Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
+
+
+
+## Table 1 results. `table1-binary-cov-base-model-sims/`
+
+This table was produced by running the following three files in order.  
+
+###  Base model simulation results. `run-base-sims.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims.R"
+
+
+```
+
+
+Expected run-time: ~3-5 hours
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+###  Base model bootstrap simulation results. `run-base-sims-boot.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims-boot.R"
+
+
+```
+
+
+Expected run-time: ~12-18 hours
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+### Table output for base model simulation. `analyze-base-sims.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/analyze-base-sims.R"
+
+
+```
+
+
+Expected run-time: ~seconds, given the above completed results.
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+## Table 2 results. `table2-binary-cov-mot-model-sims/`
+
+This table was produced by running the following two files in order.  
+
+###  Multiple outside transmissions model simulation results. `outsider-sims.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims.R"
+
+
+```
+
+
+Expected run-time: ~30 hours
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+
+### Table output for multiple outside transmissions model simulation. `analyze-mot-sims.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/table2-binary-cov-mot-model-sims/analyze-mot-sims.R"
+
+
+```
+
+
+Expected run-time: ~seconds, given the above completed results.
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+##  The TB data results. `md-tb/`
+
+### Tables 3 and 4. `tab3-4-data-eda.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/tab3-4-data-eda.R"
+
+
+```
+
+
+Expected run-time: ~seconds
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```

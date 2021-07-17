@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">InfectionTrees</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,7 +66,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/skgallagher/InfectionTrees/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -80,7 +80,8 @@
 
       
 
-      </header><script src="getting-started_files/header-attrs-2.3/header-attrs.js"></script><script src="getting-started_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
+      </header><script src="getting-started_files/header-attrs-2.9/header-attrs.js"></script><script src="getting-started_files/kePrint-0.0.1/kePrint.js"></script><link href="getting-started_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started with <code>InfectionTrees</code>
@@ -99,13 +100,15 @@
 <h2 class="hasAnchor">
 <a href="#downloading-the-package" class="anchor"></a>Downloading the package</h2>
 <p>Currently, <code>InfectionTrees</code> is available at <a href="https://github.com/skgallagher/InfectionTrees">https://github.com/skgallagher/InfectionTrees</a>, and can be installed in <code>R</code> via the following command,</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"skgallagher/InfectionTrees"</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">InfectionTrees</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">knitr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">data.table</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"skgallagher/InfectionTrees"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/skgallagher/InfectionTrees">InfectionTrees</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="about" class="section level2">
 <h2 class="hasAnchor">
@@ -139,25 +142,26 @@
 <p>We can simulate from a branching process to form a data set of transmission trees or clusters (if we remove infector information from the transmission trees). We simulate <span class="math inline">\(K\)</span> branching processes where the primary infector in each tree is the root of each transmission tree and the probability of infection of another individual is where <span class="math inline">\(\bf{X}\)</span> is a covariate matrix and <span class="math inline">\(\beta\)</span> is a vector of coefficients, <span class="math display">\[
 p_i = logit^{-1} (\bf{X}_i\bf{\beta}).
 \]</span> Then the number of <em>new</em> infectious individuals infected by individual <span class="math inline">\(i\)</span> is <span class="math display">\[
-N_i \sim Geometric(p_i)
+N_i \sim geometric(p_i)
 \]</span></p>
 <p>It is possible to produce transmission trees that do not naturally terminate, so a maximal number of infections is used as an argument. The output is a data frame with <span class="math inline">\(M\)</span> transmission trees which contains the cluster ID, the person ID within a cluster, the generation of the person (i.e. the length of the path from the primary infector to the person + 1), the infector ID (i.e. who infected this person), the number of infections caused directly by this person if any, the total cluster size, the covariates, and an indicator telling us whether the cluster was artificially terminated or not (i.e. <code>censored = TRUE</code>).</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">2020</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">)</span>
 <span class="co">## Generate possible covariates </span>
-<span class="no">sample_covariates_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>))
+<span class="va">sample_covariates_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">beta0</span> <span class="kw">&lt;-</span> -<span class="fl">2</span>
-<span class="no">beta1</span> <span class="kw">&lt;-</span> <span class="fl">1.5</span>
-<span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">100</span>
-<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
-                                  <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta0</span>, <span class="no">beta1</span>),
-                                  <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
-                                  <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
-                                  <span class="kw">max_size</span> <span class="kw">=</span> <span class="fl">50</span>)
+<span class="va">beta0</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span>
+<span class="va">beta1</span> <span class="op">&lt;-</span> <span class="fl">1.5</span>
+<span class="va">M</span> <span class="op">&lt;-</span> <span class="fl">100</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulate_bp.html">simulate_bp</a></span><span class="op">(</span>K <span class="op">=</span> <span class="va">M</span>,
+                                  inf_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">beta0</span>, <span class="va">beta1</span><span class="op">)</span>,
+                                  sample_covariates_df <span class="op">=</span> <span class="va">sample_covariates_df</span>,
+                                  covariate_names <span class="op">=</span> <span class="st">"x"</span>,
+                                  max_size <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
-<span class="no">data</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">.</span>, <span class="fl">10</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>))</pre></body></html></div>
+<span class="va">data</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">.</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -467,16 +471,17 @@ L(\beta; T) = \prod_{i=1}^n (1-p_i)p_i^{N_i}
 <p>The estimates for the parameters are then found by maximizing the likelihood over the approximate likelihood over all clusters <span class="math inline">\(C_1, \dots, C_M\)</span> <span class="math display">\[
 \left (\hat{\beta} \right)^{(MC)} = \arg \max_{\beta} \prod_{m=1}^M \hat{\mathcal{L}}_K(\beta; C_m).
 \]</span></p>
-<div id="how-to-get-monte-carlo-mc-sampled-transmission-trees" class="section level3">
+<div id="how-to-get-sampled-transmission-trees" class="section level3">
 <h3 class="hasAnchor">
-<a href="#how-to-get-monte-carlo-mc-sampled-transmission-trees" class="anchor"></a>How to get Monte Carlo (MC) sampled transmission trees</h3>
-<p>If we want to sample <span class="math inline">\(B\)</span> MC transmission trees for each cluster in our data, we use the function <code>sample_mc_trees</code>. Here, <code>B</code> is the number of MC samples. Typically this number is <span class="math inline">\(&gt;5000\)</span>, but we use 10 below for demonstrative purposes.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/sample_mc_trees.html">sample_mc_trees</a></span>(<span class="kw">observed_data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">B</span> <span class="kw">=</span> <span class="fl">10</span>,
-                            <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>)
+<a href="#how-to-get-sampled-transmission-trees" class="anchor"></a>How to get sampled transmission trees</h3>
+<p>If we want to sample <span class="math inline">\(B\)</span> transmission trees for each cluster in our data, we use the function <code>sample_mc_trees</code>. Here, <code>B</code> is the number of MC samples. Typically this number is <span class="math inline">\(\ge5000\)</span>, but we use 10 below for demonstrative purposes.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mc_trees</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sample_mc_trees.html">sample_mc_trees</a></span><span class="op">(</span>observed_data <span class="op">=</span> <span class="va">data</span>, B <span class="op">=</span> <span class="fl">10</span>,
+                            covariate_names <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span>
 
-<span class="no">mc_trees</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">.</span>, <span class="fl">4</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>))</pre></body></html></div>
+<span class="va">mc_trees</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">.</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -626,20 +631,20 @@ NA
 </tr>
 </tbody>
 </table>
-<p>The MC samples are linked to the original cluster by the variable <code>orig_id</code>.</p>
+<p>The samples are linked to the original cluster by the variable <code>orig_id</code>.</p>
 </div>
 </div>
 <div id="compute-the-log-likelihood" class="section level2">
 <h2 class="hasAnchor">
 <a href="#compute-the-log-likelihood" class="anchor"></a>Compute the log likelihood</h2>
 <p>Once the MC trees are sampled, it is possible to compute the log likelihood using the function <code><a href="../reference/general_loglike.html">general_loglike()</a></code></p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r">loglike &lt;- general_loglike(inf_params = c(-2, 1),
-                           mc_trees = mc_trees,
-                           return_neg = FALSE,
-                           cov_names = "x")
-                           
-print(loglike)
-[1] -107.5961</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>loglike <span class="ot">&lt;-</span> <span class="fu">general_loglike</span>(<span class="at">inf_params =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">1</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">mc_trees =</span> mc_trees,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">return_neg =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cov_names =</span> <span class="st">"x"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                           </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(loglike)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="sc">-</span><span class="fl">107.5961</span></span></code></pre></div>
 </div>
   </div>
 
@@ -658,7 +663,7 @@ print(loglike)
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

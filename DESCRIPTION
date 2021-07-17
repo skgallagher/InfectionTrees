@@ -1,6 +1,6 @@
 Package: InfectionTrees
 Title: Sample, Analyze, and Plot Infection Trees
-Version: 0.9.0
+Version: 0.9.1
 Authors@R: 
     c(person(given = "Shannon",
            family = "Gallagher",

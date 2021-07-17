@@ -83,7 +83,7 @@ p_i = logit^{-1} (\bf{X}_i\bf{\beta}).
 $$
 Then the number of *new* infectious individuals infected by individual $i$ is
 $$
-N_i \sim Geometric(p_i)
+N_i \sim geometric(p_i)
 $$
 
 It is possible to produce transmission trees that do not naturally terminate, so a maximal number of infections is used as an argument.  The output is a data frame with $M$ transmission trees which contains the cluster ID, the person ID within a cluster, the generation of the person (i.e. the length of the path from the primary infector to the person + 1), the infector ID (i.e. who infected this person), the number of infections caused directly by this person if any, the total cluster size, the covariates, and an indicator telling us whether the cluster was artificially terminated or not (i.e. `censored = TRUE`).
@@ -137,9 +137,9 @@ $$
 $$
 
 
-### How to get Monte Carlo (MC) sampled transmission trees
+### How to get sampled transmission trees
 
-If we want to sample $B$ MC transmission trees for each cluster in our data, we use the function `sample_mc_trees`.  Here, `B` is the number of MC samples.  Typically this number is $>5000$, but we use 10 below for demonstrative purposes.
+If we want to sample $B$ transmission trees for each cluster in our data, we use the function `sample_mc_trees`.  Here, `B` is the number of MC samples.  Typically this number is $\ge5000$, but we use 10 below for demonstrative purposes.
 
 
 ```{r}
@@ -150,7 +150,7 @@ mc_trees %>% head(., 4) %>%
   kable(type = "html") %>%
    kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
-The MC samples are linked to the original cluster by the variable `orig_id`.
+The samples are linked to the original cluster by the variable `orig_id`.
 
 ## Compute the log likelihood
 

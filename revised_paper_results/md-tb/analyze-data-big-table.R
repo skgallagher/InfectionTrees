@@ -33,7 +33,7 @@ files_o <- list.files()
 fn_rds_o <- grep("RDS", files_o, value = TRUE)
 fn_rds2_o <- grep("mot", fn_rds_o, value = TRUE)
 
-data_list_o <- readRDS(fn_o)
+data_list_o <- readRDS(fn_rds2_o)
 
 
 loglike_df_o <- data_list_o$loglike_df
@@ -97,7 +97,9 @@ rownames(best_mod_o2) <- NULL
 best_mod_o <- data.frame(Type = "Multiple outside",
                             Coeff = coeff_names,
                          best_mod_o2)
-best_mod_o$se_boot <- NA
+## add boot strap SE
+mot_boot <- readRDS("biowulf-results/bootstrap_sims_mot_2021-06-24.RDS")
+best_mod_o$se_boot <- mot_boot$se_vec
 
 
 ## NAIVE MODEL
@@ -151,6 +153,6 @@ combined_best_mod %>%
           escape = FALSE,
           align = c("l", "l", "c", "c", "c")) %>%
     kable_styling(latex_options = "striped", position = "center",
-                  stripe_index = c(1, 7, 9, 11)) %>%
-    row_spec(c(3:5, 10, 13:15), background = "yellow") %>%
+                  stripe_index = c(1, 7,  11)) %>%
+    row_spec(c(3:5, 9,10, 13:15), background = "yellow") %>%
     row_spec(c(5, 10), extra_latex_after = "\\midrule")
