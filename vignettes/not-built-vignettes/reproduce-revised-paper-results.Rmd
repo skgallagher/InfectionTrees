@@ -3,8 +3,9 @@ title: "Reproduce paper results"
 output: 
   html_document:
     code_folding: hide
+    number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Model overview}
+  %\VignetteIndexEntry{Reproduce paper results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,7 +25,7 @@ library(ggplot2)
 theme_set(theme_bw() + theme(axis.title = element_text()))
 ```
 
-## Preliminaries
+# Preliminaries
 
 1. Make sure `InfectionTrees` is installed (`devtools::install_github("skgallagher/InfectionTrees")`) and loaded along with the following libraries
 
@@ -104,7 +105,7 @@ Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtr
 
 ```
 
-## File Structure
+# File Structure
 
 All code for reproducing our revised paper results may be found [here](https://github.com/skgallagher/InfectionTrees/tree/master/revised_paper_results).
 
@@ -128,14 +129,14 @@ The results include the following:
         iv. Naive model bootstrap error. `data-naive-boot.R`
         v. Table outputs for the three models combined. `analyze-data-big-table.R`
     c. Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
+4. Algorithm to compute whether we have enough samples `enough-MC-trees/sampling-enough-mc-trees.R`
 
 
-
-## Table 1 results. `table1-binary-cov-base-model-sims/`
+# Table 1 results. `table1-binary-cov-base-model-sims/`
 
 This table was produced by running the following three files in order.  
 
-###  Base model simulation results. `run-base-sims.R`
+##  Base model simulation results. `run-base-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims.R"
@@ -150,7 +151,7 @@ Expected run-time: ~3-5 hours
 ```
 
 
-###  Base model bootstrap simulation results. `run-base-sims-boot.R`
+##  Base model bootstrap simulation results. `run-base-sims-boot.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims-boot.R"
@@ -164,7 +165,7 @@ Expected run-time: ~12-18 hours
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-### Table output for base model simulation. `analyze-base-sims.R`
+## Table output for base model simulation. `analyze-base-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/analyze-base-sims.R"
@@ -179,11 +180,11 @@ Expected run-time: ~seconds, given the above completed results.
 ```
 
 
-## Table 2 results. `table2-binary-cov-mot-model-sims/`
+# Table 2 results. `table2-binary-cov-mot-model-sims/`
 
 This table was produced by running the following two files in order.  
 
-###  Multiple outside transmissions model simulation results. `outsider-sims.R`
+##  Multiple outside transmissions model simulation results. `outsider-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims.R"
@@ -199,7 +200,7 @@ Expected run-time: ~30 hours
 
 
 
-### Table output for multiple outside transmissions model simulation. `analyze-mot-sims.R`
+## Table output for multiple outside transmissions model simulation. `analyze-mot-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table2-binary-cov-mot-model-sims/analyze-mot-sims.R"
@@ -213,9 +214,9 @@ Expected run-time: ~seconds, given the above completed results.
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-##  The TB data results. `md-tb/`
+#  The TB data results. `md-tb/`
 
-### Tables 3 and 4. `tab3-4-data-eda.R`
+## Tables 3 and 4. `tab3-4-data-eda.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/tab3-4-data-eda.R"
@@ -223,8 +224,105 @@ tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/tab3-4-data-eda.R"
 
 ```
 
+Expected run-time: ~seconds
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+## Tables 5 and 6. 
+
+To get these results, we need to run the three models (base, multiple outside transmissions, and naive) and then combine them together.
+
+### Results from base and multiple outside transmissions model. `tb-data-base-and-mot.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/tb-data-base-and-mot.R"
+
+
+```
+
+Expected run-time: ~30 hours
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+### Bootstrap standard error for base and multiple outside transmissions model. `bootstrap-sims.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/bootstrap-sims.R"
+
+
+```
+
+Expected run-time: 5 days for the longest loop.  Each loop was run in parallel on the NIAID supercomputer, Biowulf.
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+### Naive model results. `data-naive-model.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/data-naive-model.R"
+
+
+```
 
 Expected run-time: ~seconds
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+### Naive model bootstrap error. `data-naive-boot.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/data-naive-boot.R"
+
+
+```
+
+Expected run-time: ~15 minutes
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+### Table outputs for the three models combined. `analyze-data-big-table.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/analyze-data-big-table.R"
+
+
+```
+
+Expected run-time: ~seconds, given outputs from above
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+
+## Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/fig4-most-likely-trees.R"
+
+
+```
+
+Expected run-time: ~seconds, given outputs from above
+
+```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
+```
+
+# Algorithm to compute whether we have enough samples `enough-MC-trees/sampling-enough-mc-trees.R`
+
+```{r echo = FALSE}
+tb1_fn <- "~/InfectionTrees/revised_paper_results/enough-MC-trees/simulations-enough-mc-trees.R"
+
+
+```
+
+Expected run-time: ~2 days
 
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
