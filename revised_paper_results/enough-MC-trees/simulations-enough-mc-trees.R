@@ -14,8 +14,8 @@ set.seed(2020)
 ## Generate possible covariates
 sample_covariates_df <- data.frame(x = c(1,0))
 
-beta0 <- -2
-beta1 <- 1.5
+beta0 <- -2.5
+beta1 <- .5
 M <- 1000
 data <- simulate_bp(K = M,
                                   inf_params = c(beta0, beta1),
@@ -40,7 +40,7 @@ data <- simulate_bp(K = M,
 ## Summarize data set into a table
 binary_cluster_summaries <- summarize_binary_clusters(data)
 
-B <- 5
+B <- 5  ## Should change to 30+
 K <- 5000
 
 beta_mat <- matrix(0, nrow = B, ncol = 2)
@@ -55,7 +55,8 @@ for(bb in 1:B){
 
   ## Sample MC trees
   mc_trees <- sample_mc_binary_cov(K,
-                                 observed_cluster_summaries = binary_cluster_summaries)
+                                 observed_cluster_summaries = binary_cluster_summaries) %>%
+    dplyr::select(-freq)
 
   ## Fit model
   inf_params_0 <- c(0,0)
@@ -71,7 +72,7 @@ for(bb in 1:B){
 
 
   beta_mat[bb,] <- best_params$par
-  var_mat[bb,] <- diag(solve(best_params$hessian))
+  var_mat[bb,] <- diag(solve(best_params$hessian))  ## Var from obs. fisher info
 
 
 }
@@ -79,15 +80,18 @@ for(bb in 1:B){
 
 
 ## --------------------------------------------------------------------------------------------------------------
-se_mc <- apply(beta_mat, 2, sd)
+
 wald_scores_fisher <- beta_mat / sqrt(var_mat)
 wald_se_fisher <- apply(wald_scores_fisher, 2, sd)
+se_mc <- apply(beta_mat, 2, sd)
+wald_scores_mc <- t(t(beta_mat) / se_mc)
+wald_se_mc <- apply(wald_scores_mc, 2, sd)
 
 
 
 
-wald_se_mat <- rbind(wald_se_fisher, se_emp)
-rownames(wald_se_mat) <- c("Fisher", "Emp.")
+wald_se_mat <- rbind(wald_se_fisher, wald_se_mc)
+rownames(wald_se_mat) <- c("Fisher", "MC")
 
 kable(wald_se_mat, digits = 2) %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
