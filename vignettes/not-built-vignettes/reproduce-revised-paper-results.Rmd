@@ -131,12 +131,13 @@ The results include the following:
     c. Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
 4. Algorithm to compute whether we have enough samples `enough-MC-trees/sampling-enough-mc-trees.R`
 
+# Code for results and expected run time
 
-# Table 1 results. `table1-binary-cov-base-model-sims/`
+## Table 1 results. `table1-binary-cov-base-model-sims/`
 
 This table was produced by running the following three files in order.  
 
-##  Base model simulation results. `run-base-sims.R`
+###  Base model simulation results. `run-base-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/table1-binary-cov-base-model-sims/run-base-sims.R"
@@ -229,11 +230,11 @@ Expected run-time: ~seconds
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-## Tables 5 and 6. 
+### Tables 5 and 6. 
 
 To get these results, we need to run the three models (base, multiple outside transmissions, and naive) and then combine them together.
 
-### Results from base and multiple outside transmissions model. `tb-data-base-and-mot.R`
+#### Results from base and multiple outside transmissions model. `tb-data-base-and-mot.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/tb-data-base-and-mot.R"
@@ -246,7 +247,7 @@ Expected run-time: ~30 hours
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-### Bootstrap standard error for base and multiple outside transmissions model. `bootstrap-sims.R`
+#### Bootstrap standard error for base and multiple outside transmissions model. `bootstrap-sims.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/bootstrap-sims.R"
@@ -260,7 +261,7 @@ Expected run-time: 5 days for the longest loop.  Each loop was run in parallel o
 ```
 
 
-### Naive model results. `data-naive-model.R`
+#### Naive model results. `data-naive-model.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/data-naive-model.R"
@@ -274,7 +275,7 @@ Expected run-time: ~seconds
 ```
 
 
-### Naive model bootstrap error. `data-naive-boot.R`
+#### Naive model bootstrap error. `data-naive-boot.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/data-naive-boot.R"
@@ -287,7 +288,7 @@ Expected run-time: ~15 minutes
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-### Table outputs for the three models combined. `analyze-data-big-table.R`
+#### Table outputs for the three models combined. `analyze-data-big-table.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/analyze-data-big-table.R"
@@ -301,7 +302,7 @@ Expected run-time: ~seconds, given outputs from above
 ```
 
 
-## Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
+### Figure 4, most likely trees for the base model. `fig4-most-likely-trees.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/md-tb/fig4-most-likely-trees.R"
@@ -314,7 +315,7 @@ Expected run-time: ~seconds, given outputs from above
 ```{r, code = readLines(tb1_fn), eval = FALSE, results = 'hide'}
 ```
 
-# Algorithm to compute whether we have enough samples `enough-MC-trees/sampling-enough-mc-trees.R`
+## Algorithm to compute whether we have enough samples `enough-MC-trees/sampling-enough-mc-trees.R`
 
 ```{r echo = FALSE}
 tb1_fn <- "~/InfectionTrees/revised_paper_results/enough-MC-trees/simulations-enough-mc-trees.R"

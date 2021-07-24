@@ -250,7 +250,7 @@ loglike_df %>% kable(digits = 2,
 
 Note that log likelihood increases as the model number increases, which should be the case since the models are nested.  The best model according to AIC is model 4 which corresponds to the variables **`r covariate_list[[4]]`**.
 
-The estimated paramters for this model are
+The estimated parameters for this model are
 
 ```{r}
 beta_list[[4]] %>%

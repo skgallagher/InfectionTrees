@@ -9,7 +9,7 @@ Analyzing and plotting the spread of infectious diseases in moderately sized clu
 
 # Reproduce revised paper results
 
-[Click here to view code to reproduce paper results]()
+[Click here to view code to reproduce paper results](https://skgallagher.github.io/InfectionTrees/articles/not-built-vignettes/reproduce-revised-paper-results.html)
 
 
 ## Download the package

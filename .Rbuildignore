@@ -11,3 +11,4 @@
 ^\.github$
 vignettes/not-built-vignettes
 vignettes/.RData
+^revised_paper_results/

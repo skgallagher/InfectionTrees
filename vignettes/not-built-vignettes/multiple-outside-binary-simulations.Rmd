@@ -126,20 +126,3 @@ best_params <- optim(inf_params_0, fn = general_loglike,
 round(best_params$par, 2)
 ```
 
-
-We can use likelihood profiling to get individual $(1-\alpha$)\% CIs for our estimates.
-
-```{r}
-lp_ests <- likelihood_profs(best_pars = best_params$par,
-                                    max_loglike = -best_params$value,
-                                    mc_trees = mc_trees,
-                                    alpha = .05,
-                                    covariate_names = "x",
-                                    multiple_outside_transmissions = TRUE)
-
-lp_ests %>% as.data.frame() %>%
-      kable(type = "html", digits = 2) %>%
-   kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
-                 position = "center", full_width = FALSE)
-
-```

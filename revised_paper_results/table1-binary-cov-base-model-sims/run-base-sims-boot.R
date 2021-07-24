@@ -11,7 +11,13 @@
 ## There are 15 total sets (so not all combinations are used)
 ## This version includes a bootstrap resample woo
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(dplyr)
 
 set.seed(6172021)

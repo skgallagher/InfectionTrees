@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">InfectionTrees</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,7 +66,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/skgallagher/InfectionTrees/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -80,13 +80,13 @@
 
       
 
-      </header><script src="tb-data-base_files/header-attrs-2.3/header-attrs.js"></script><script src="tb-data-base_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
+      </header><script src="tb-data-base_files/header-attrs-2.9/header-attrs.js"></script><script src="tb-data-base_files/kePrint-0.0.1/kePrint.js"></script><link href="tb-data-base_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>TB Data Results: base model</h1>
             
-
-            <h4 class="date">2020-10-07</h4>
+            <h4 class="date">2021-07-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/skgallagher/InfectionTrees/blob/master/vignettes/not-built-vignettes/tb-data-base.Rmd"><code>vignettes/not-built-vignettes/tb-data-base.Rmd</code></a></small>
       <div class="hidden name"><code>tb-data-base.Rmd</code></div>
@@ -98,13 +98,14 @@
 <div id="libraries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#libraries" class="anchor"></a>Libraries</h2>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">InfectionTrees</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">kableExtra</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">forcats</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">readr</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/skgallagher/InfectionTrees">InfectionTrees</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://forcats.tidyverse.org">forcats</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="vignette-goals" class="section level2">
 <h2 class="hasAnchor">
@@ -119,37 +120,38 @@
 <div id="the-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-data" class="anchor"></a>The Data</h2>
-
 <p>The data can be accessed using <code><a href="https://rdrr.io/r/utils/data.html">data(tb_clean)</a></code>. The clusters are uniquely ID’d with the variable <code>group</code></p>
 <p>The data consists of 159 clusters where each cluster contains between 1 and 25 individuals. These individuals have covariates corresponding to their smear status (+/-/NA), HIV status (+/-/unknown), date of sputum collection, and race (Asian/Black/White). Please see <code><a href="../../reference/tb_clean.html">?tb_clean</a></code> for more information.</p>
 <p>There are only individuals who have smear status NA, and in this analysis we impute those to be smear -. We transform date of sputum collection into a variable we call relative time, which is the time in years between the reference sputum collection date and the first observed sputum within a cluster. Therefore, all relative time values of singleton clusters will have the value 0.</p>
 <p>We consider HIV status and race to be categorical variables and use “HIV+” and “White” as the reference groups, respectively.</p>
 <p>We use the below code to format <code>tb_clean</code> to use in our model fitting.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">clusters</span> <span class="kw">&lt;-</span> <span class="no">tb_clean</span> <span class="kw">%&gt;%</span>
-
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">smear</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">spsmear</span> <span class="kw">==</span> <span class="st">"Positive"</span>,
-                                     <span class="fl">1</span>, <span class="fl">0</span>),
-                      <span class="kw">cluster_id</span> <span class="kw">=</span> <span class="no">group</span>,
-                      <span class="kw">hiv_f</span> <span class="kw">=</span> <span class="no">hivstatus</span>) <span class="kw">%&gt;%</span>
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">hiv_neg_pos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">hiv_f</span> <span class="kw">==</span> <span class="st">"neg"</span>, <span class="fl">1</span>, <span class="fl">0</span>),
-               <span class="kw">hiv_unk_pos</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">hiv_f</span> <span class="kw">==</span> <span class="st">"unk"</span>, <span class="fl">1</span>, <span class="fl">0</span>)) <span class="kw">%&gt;%</span>
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">cluster_id</span>) <span class="kw">%&gt;%</span>
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">rel_time</span> <span class="kw">=</span> <span class="no">rel_time</span> / <span class="fl">365</span>) <span class="kw">%&gt;%</span>
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span>()) <span class="kw">%&gt;%</span>
-        <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>() <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">race_f</span> <span class="kw">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span>(<span class="no">race</span>,
-                                 <span class="kw">white</span> <span class="kw">=</span> <span class="st">"White"</span>,
-                                 <span class="kw">black</span> <span class="kw">=</span> <span class="st">"Black or African American"</span>,
-                                 <span class="kw">asian</span> <span class="kw">=</span> <span class="st">"Asian"</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">race_asian_white</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">race_f</span> <span class="kw">==</span> <span class="st">"asian"</span>, <span class="fl">1</span>, <span class="fl">0</span>),
-           <span class="kw">race_black_white</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">race_f</span> <span class="kw">==</span> <span class="st">"black"</span>, <span class="fl">1</span>, <span class="fl">0</span>)) <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">cluster_id</span>, <span class="no">smear</span>,
-           <span class="no">hiv_neg_pos</span>,
-           <span class="no">hiv_unk_pos</span>,
-           <span class="no">rel_time</span>,
-           <span class="no">race_asian_white</span>,
-           <span class="no">race_black_white</span>,
-           <span class="no">cluster_size</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="va">tb_clean</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>smear <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">spsmear</span> <span class="op">==</span> <span class="st">"Positive"</span>,
+                                     <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,
+                      cluster_id <span class="op">=</span> <span class="va">group</span>,
+                      hiv_f <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">hivstatus</span> <span class="op">==</span> <span class="st">"Negative"</span>, <span class="st">"neg"</span>,
+                                     <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">hivstatus</span> <span class="op">==</span> <span class="st">"Positive"</span>, <span class="st">"pos"</span>,
+                                            <span class="st">"unk"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>hiv_neg_pos <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">hiv_f</span> <span class="op">==</span> <span class="st">"neg"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,
+               hiv_unk_pos <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">hiv_f</span> <span class="op">==</span> <span class="st">"unk"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cluster_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>rel_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">rel_time</span> <span class="op">/</span> <span class="fl">365</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cluster_size <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>race_f <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_collapse.html">fct_collapse</a></span><span class="op">(</span><span class="va">race</span>,
+                                 white <span class="op">=</span> <span class="st">"White"</span>,
+                                 black <span class="op">=</span> <span class="st">"Black or African American"</span>,
+                                 asian <span class="op">=</span> <span class="st">"Asian"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>race_asian_white <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">race_f</span> <span class="op">==</span> <span class="st">"asian"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,
+           race_black_white <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/fifelse.html">ifelse</a></span><span class="op">(</span><span class="va">race_f</span> <span class="op">==</span> <span class="st">"black"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">cluster_id</span>, <span class="va">smear</span>,
+           <span class="va">hiv_neg_pos</span>,
+           <span class="va">hiv_unk_pos</span>,
+           <span class="va">rel_time</span>,
+           <span class="va">race_asian_white</span>,
+           <span class="va">race_black_white</span>,
+           <span class="va">cluster_size</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="model-fitting" class="section level2 tabset">
 <h2 class="hasAnchor">
@@ -166,129 +168,124 @@
 <p>We first fit our base model described in <a href="model-overview.html">the model overview</a>, where we assume that the infections within a cluster can be traced back to a root individual within the cluster.</p>
 <p>We use the below code to fit each of the models where we use <span class="math inline">\(K=1000\)</span> MC samples for each cluster in the data. We then report the log likelihood and AIC for each of the models.</p>
 <p><strong>Note</strong> that for the full results, we use <span class="math inline">\(K=10000\)</span>, which takes about ~3 hour to run on a PC.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">K</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">my_seed</span> <span class="kw">&lt;-</span> <span class="fl">42</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="no">my_seed</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">K</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<span class="va">my_seed</span> <span class="op">&lt;-</span> <span class="fl">6172020</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">my_seed</span><span class="op">)</span>
 
 <span class="co">## MODELS</span>
 <span class="co">## models</span>
-<span class="no">covariate_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span>(<span class="kw">mode</span> <span class="kw">=</span> <span class="st">"list"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fl">5</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="st">"smear"</span>
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
-                         <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">4</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
+<span class="va">covariate_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"smear"</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
+                         <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
                          <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>,
-                         <span class="st">"rel_time"</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">5</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
+                         <span class="st">"rel_time"</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
                          <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>,
                          <span class="st">"rel_time"</span>,
                          <span class="st">"race_asian_white"</span>,
-                         <span class="st">"race_black_white"</span>)
+                         <span class="st">"race_black_white"</span><span class="op">)</span>
 
 <span class="co">## Set up outputs</span>
-<span class="no">loglike_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>),
-                         <span class="kw">n_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span>),
-                         <span class="kw">loglike</span> <span class="kw">=</span> <span class="fl">0</span>,
-                         <span class="kw">aic</span> <span class="kw">=</span> <span class="fl">0</span>)
-<span class="no">beta_mat1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">4</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">beta_mat1</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Intercept"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">beta_mat1</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span>)
-<span class="no">beta_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span>(<span class="kw">mode</span> <span class="kw">=</span> <span class="st">"list"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>))
-<span class="no">beta_list</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="no">beta_mat1</span>
-<span class="kw">for</span>(<span class="no">ii</span> <span class="kw">in</span> <span class="fl">2</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)){
-  <span class="no">mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span><span class="kw">[[</span><span class="no">ii</span>]]) + <span class="fl">1</span>,
-                <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">4</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">mat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Intercept"</span>, <span class="no">covariate_list</span><span class="kw">[[</span><span class="no">ii</span>]])
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">mat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span>)
-  <span class="no">beta_list</span><span class="kw">[[</span><span class="no">ii</span>]] <span class="kw">&lt;-</span> <span class="no">mat</span>
-}</pre></body></html></div>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">t_init</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
+<span class="va">loglike_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span>,
+                         n_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>,
+                         loglike <span class="op">=</span> <span class="fl">0</span>,
+                         aic <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">beta_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">beta_mat1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intercept"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">beta_mat1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span><span class="op">)</span>
+<span class="va">beta_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span>
+<span class="va">beta_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">beta_mat1</span>
+<span class="kw">for</span><span class="op">(</span><span class="va">ii</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,
+                ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intercept"</span>, <span class="va">covariate_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span><span class="op">)</span>
+  <span class="va">beta_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mat</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">t_init</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
 
 <span class="co">## Sample MC trees all at once</span>
 
-    <span class="no">t0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
+    <span class="va">t0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
     <span class="co">## Sample all MC clusters at once for each of the 5 models</span>
-    <span class="no">mc_trees</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="../../reference/sample_mc_trees.html">sample_mc_trees</a></span>(<span class="no">clusters</span>,
-                                 <span class="kw">B</span> <span class="kw">=</span> <span class="no">K</span>,
-                                 <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                                 <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="no">covariate_list</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)]])
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t0</span>)
-
-
+    <span class="va">mc_trees</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../../reference/sample_mc_trees.html">sample_mc_trees</a></span><span class="op">(</span><span class="va">clusters</span>,
+                                 B <span class="op">=</span> <span class="va">K</span>,
+                                 multiple_outside_transmissions <span class="op">=</span> <span class="cn">FALSE</span>,
+                                 covariate_names <span class="op">=</span> <span class="va">covariate_list</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t0</span><span class="op">)</span>
+    
+    
 <span class="co">## Fit each of the models</span>
-
-<span class="kw">for</span>(<span class="no">jj</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)){
-        <span class="no">covariate_names</span> <span class="kw">&lt;-</span> <span class="no">covariate_list</span><span class="kw">[[</span><span class="no">jj</span>]]
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Model:"</span>)
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">covariate_names</span>)
-        <span class="kw">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">covariate_names</span>[<span class="fl">1</span>])){
-            <span class="no">init_params</span> <span class="kw">&lt;-</span> <span class="fl">0</span>
-        } <span class="kw">else</span>{
-            <span class="no">init_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_names</span>) + <span class="fl">1</span>)
-        }
+    
+<span class="kw">for</span><span class="op">(</span><span class="va">jj</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+        <span class="va">covariate_names</span> <span class="op">&lt;-</span> <span class="va">covariate_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Model:"</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span>
+        <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+            <span class="va">init_params</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+        <span class="op">}</span> <span class="kw">else</span><span class="op">{</span>
+            <span class="va">init_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>
+        <span class="op">}</span>
         <span class="co">## Optimize</span>
+        
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Optimizing"</span><span class="op">)</span>
+        <span class="va">bds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">init_params</span><span class="op">)</span><span class="op">)</span>
+        <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">{</span>
+            <span class="va">bds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">init_params</span><span class="op">)</span><span class="op">)</span>
+        <span class="op">}</span>
+        <span class="va">lower_bds</span> <span class="op">&lt;-</span> <span class="va">bds</span>
+        <span class="va">upper_bds</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">bds</span>
+        <span class="va">cov_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/covariate_df_to_mat.html">covariate_df_to_mat</a></span><span class="op">(</span><span class="va">mc_trees</span>,
+                                       cov_names <span class="op">=</span> <span class="va">covariate_names</span><span class="op">)</span>
+ 
+    <span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
+    <span class="va">best_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span>par <span class="op">=</span> <span class="va">init_params</span>,
+                         fn <span class="op">=</span> <span class="va">general_loglike</span>,
+                         mc_trees <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="va">mc_trees</span><span class="op">)</span>,
+                         return_neg <span class="op">=</span> <span class="cn">TRUE</span>,
+                         cov_mat <span class="op">=</span> <span class="va">cov_mat</span>,
+                         cov_names <span class="op">=</span> <span class="va">covariate_names</span>,
+                         use_outsider_prob <span class="op">=</span> <span class="cn">FALSE</span>,
+                         multiple_outside_transmissions <span class="op">=</span> <span class="cn">FALSE</span>,
+                         method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
+                         lower <span class="op">=</span> <span class="va">lower_bds</span>,
+                         upper <span class="op">=</span> <span class="va">upper_bds</span>,
+                         hessian <span class="op">=</span> <span class="cn">TRUE</span>
+                         <span class="op">)</span>
+    <span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t1</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Optimization time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="va">t2</span> <span class="op">/</span> <span class="fl">60</span>, <span class="fl">3</span><span class="op">)</span>,
+                <span class="st">"min"</span><span class="op">)</span><span class="op">)</span>
 
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Optimizing"</span>)
-        <span class="no">bds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(-<span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">init_params</span>))
-        <span class="kw">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_names</span>) <span class="kw">&gt;</span> <span class="fl">5</span>){
-            <span class="no">bds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(-<span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">init_params</span>))
-        }
-        <span class="no">lower_bds</span> <span class="kw">&lt;-</span> <span class="no">bds</span>
-        <span class="no">upper_bds</span> <span class="kw">&lt;-</span> -<span class="no">bds</span>
-        <span class="no">cov_mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/covariate_df_to_mat.html">covariate_df_to_mat</a></span>(<span class="no">mc_trees</span>,
-                                       <span class="kw">cov_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>)
+    <span class="va">beta_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">best_params</span><span class="op">$</span><span class="va">par</span>
+    <span class="va">beta_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">best_params</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co">## SE from Fisher info</span>
+    
 
-    <span class="no">t1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
-    <span class="no">best_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="kw">par</span> <span class="kw">=</span> <span class="no">init_params</span>,
-                         <span class="kw">fn</span> <span class="kw">=</span> <span class="no">general_loglike</span>,
-                         <span class="kw">mc_trees</span> <span class="kw">=</span> <span class="kw pkg">data.table</span><span class="kw ns">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span>(<span class="no">mc_trees</span>),
-                         <span class="kw">return_neg</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                         <span class="kw">cov_mat</span> <span class="kw">=</span> <span class="no">cov_mat</span>,
-                         <span class="kw">cov_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>,
-                         <span class="kw">use_outsider_prob</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                         <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                         <span class="kw">method</span> <span class="kw">=</span> <span class="st">"L-BFGS-B"</span>,
-                         <span class="kw">lower</span> <span class="kw">=</span> <span class="no">lower_bds</span>,
-                         <span class="kw">upper</span> <span class="kw">=</span> <span class="no">upper_bds</span>,
-                         <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>
-                         )
-    <span class="no">t2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t1</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Optimization time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>( <span class="no">t2</span> / <span class="fl">60</span>, <span class="fl">3</span>),
-                <span class="st">"min"</span>))
+    
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"best params:"</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">beta_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">loglike_df</span><span class="op">$</span><span class="va">loglike</span><span class="op">[</span><span class="va">jj</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">best_params</span><span class="op">$</span><span class="va">val</span>
+    
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Total time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t_init</span><span class="op">)</span>  <span class="op">/</span> <span class="fl">3600</span>, <span class="fl">3</span><span class="op">)</span>,
+                <span class="st">"hrs"</span><span class="op">)</span><span class="op">)</span>
 
-    <span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]][, <span class="fl">4</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">best_params</span>$<span class="no">hessian</span>))) <span class="co">## SE from Fisher info</span>
-
-    <span class="co">## Likelihood Profile ests</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Likelihood profiling"</span>)
-    <span class="no">lp_ests</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/likelihood_profs.html">likelihood_profs</a></span>(<span class="kw">best_pars</span> <span class="kw">=</span> <span class="no">best_params</span>$<span class="no">par</span>,
-                                    <span class="kw">max_loglike</span> <span class="kw">=</span> -<span class="no">best_params</span>$<span class="no">value</span>,
-                                    <span class="kw">mc_trees</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
-                                    <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>,
-                                    <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.05</span>,
-                                    <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-
-    <span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]][,-<span class="fl">4</span>] <span class="kw">&lt;-</span> <span class="no">lp_ests</span>
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"best params:"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]])
-    <span class="no">loglike_df</span>$<span class="no">loglike</span>[<span class="no">jj</span>] <span class="kw">&lt;-</span> -<span class="no">best_params</span>$<span class="no">val</span>
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Total time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>( (<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t_init</span>)  / <span class="fl">3600</span>, <span class="fl">3</span>),
-                <span class="st">"hrs"</span>))
-
-
-}</pre></body></html></div>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">loglike_df</span> <span class="kw">&lt;-</span> <span class="no">loglike_df</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">aic</span> <span class="kw">=</span> -<span class="no">loglike</span> + <span class="fl">2</span> * <span class="no">n_params</span>,
-         <span class="kw">model</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">model</span>, <span class="fu"><a href="https://tidyr.tidyverse.org/reference/reexports.html">everything</a></span>())
+    
+<span class="op">}</span>    </code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loglike_df</span> <span class="op">&lt;-</span> <span class="va">loglike_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>aic <span class="op">=</span> <span class="op">-</span><span class="va">loglike</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">n_params</span>,
+         model <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
 
 
-<span class="no">loglike_df</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>,
-                     <span class="kw">col.names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Model"</span>, <span class="st">"# params."</span>, <span class="st">"Log like."</span>, <span class="st">"AIC"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span>),
-                <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
+<span class="va">loglike_df</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span>,
+                     col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Model"</span>, <span class="st">"# params."</span>, <span class="st">"Log like."</span>, <span class="st">"AIC"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span><span class="op">)</span>,
+                full_width <span class="op">=</span> <span class="cn">FALSE</span>, position <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></code></pre></div>
 <table class="table table table-condensed table-hover table-striped table-responsive">
 <thead><tr>
 <th style="text-align:right;">
@@ -327,10 +324,10 @@ AIC
 2
 </td>
 <td style="text-align:right;">
--409.25
+-409.26
 </td>
 <td style="text-align:right;">
-413.25
+413.26
 </td>
 </tr>
 <tr>
@@ -355,10 +352,10 @@ AIC
 5
 </td>
 <td style="text-align:right;">
--396.24
+-396.28
 </td>
 <td style="text-align:right;">
-406.24
+406.28
 </td>
 </tr>
 <tr>
@@ -369,20 +366,21 @@ AIC
 7
 </td>
 <td style="text-align:right;">
--395.85
+-395.93
 </td>
 <td style="text-align:right;">
-409.85
+409.93
 </td>
 </tr>
 </tbody>
 </table>
 <p>Note that log likelihood increases as the model number increases, which should be the case since the models are nested. The best model according to AIC is model 4 which corresponds to the variables <strong>smear, hiv_neg_pos, hiv_unk_pos, rel_time</strong>.</p>
-<p>The estimated paramters for this model are</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">beta_list</span><span class="kw">[[</span><span class="fl">4</span>]] <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span>),
-                <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
+<p>The estimated parameters for this model are</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">beta_list</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span><span class="op">)</span>,
+                full_width <span class="op">=</span> <span class="cn">FALSE</span>, position <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></code></pre></div>
 <table class="table table table-condensed table-hover table-striped table-responsive">
 <thead><tr>
 <th style="text-align:left;">
@@ -406,16 +404,16 @@ SE
 Intercept
 </td>
 <td style="text-align:right;">
--0.73
+-0.76
 </td>
 <td style="text-align:right;">
--0.90
+0
 </td>
 <td style="text-align:right;">
--0.56
+0
 </td>
 <td style="text-align:right;">
-0.38
+0.37
 </td>
 </tr>
 <tr>
@@ -423,13 +421,13 @@ Intercept
 smear
 </td>
 <td style="text-align:right;">
--0.09
+-0.10
 </td>
 <td style="text-align:right;">
--0.35
+0
 </td>
 <td style="text-align:right;">
-0.15
+0
 </td>
 <td style="text-align:right;">
 0.31
@@ -440,16 +438,16 @@ smear
 hiv_neg_pos
 </td>
 <td style="text-align:right;">
--0.36
+-0.32
 </td>
 <td style="text-align:right;">
--0.60
+0
 </td>
 <td style="text-align:right;">
--0.14
+0
 </td>
 <td style="text-align:right;">
-0.36
+0.34
 </td>
 </tr>
 <tr>
@@ -457,16 +455,16 @@ hiv_neg_pos
 hiv_unk_pos
 </td>
 <td style="text-align:right;">
--0.57
+-0.52
 </td>
 <td style="text-align:right;">
--1.41
+0
 </td>
 <td style="text-align:right;">
-0.06
+0
 </td>
 <td style="text-align:right;">
-0.49
+0.48
 </td>
 </tr>
 <tr>
@@ -477,10 +475,10 @@ rel_time
 0.35
 </td>
 <td style="text-align:right;">
-0.27
+0
 </td>
 <td style="text-align:right;">
-0.42
+0
 </td>
 <td style="text-align:right;">
 0.07
@@ -494,129 +492,123 @@ rel_time
 <h3 class="hasAnchor">
 <a href="#multiple-outside-transmissions-model" class="anchor"></a>Multiple outside transmissions model</h3>
 <p>Fitting the <a href="multiple-outside-transmissions-model.html">multiple outside transmissions (MOT) model</a> is as easy as fitting with the base model, we only need to change one argument in two different functions. We fit the above 5 models. Here we use <span class="math inline">\(K=1000\)</span> MC samples but for our full results, we us <span class="math inline">\(10000\)</span>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">K</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">my_seed</span> <span class="kw">&lt;-</span> <span class="fl">24</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="no">my_seed</span>)
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">K</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<span class="va">my_seed</span> <span class="op">&lt;-</span> <span class="fl">24</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="va">my_seed</span><span class="op">)</span>
 
 <span class="co">## MODELS</span>
 <span class="co">## models</span>
-<span class="no">covariate_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span>(<span class="kw">mode</span> <span class="kw">=</span> <span class="st">"list"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fl">5</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="fl">NA</span>
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">2</span>]] <span class="kw">&lt;-</span> <span class="st">"smear"</span>
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">3</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
-                         <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">4</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
+<span class="va">covariate_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"smear"</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
+                         <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
                          <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>,
-                         <span class="st">"rel_time"</span>)
-<span class="no">covariate_list</span><span class="kw">[[</span><span class="fl">5</span>]] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"smear"</span>,
+                         <span class="st">"rel_time"</span><span class="op">)</span>
+<span class="va">covariate_list</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"smear"</span>,
                          <span class="st">"hiv_neg_pos"</span>, <span class="st">"hiv_unk_pos"</span>,
                          <span class="st">"rel_time"</span>,
                          <span class="st">"race_asian_white"</span>,
-                         <span class="st">"race_black_white"</span>)
+                         <span class="st">"race_black_white"</span><span class="op">)</span>
 
 <span class="co">## Set up outputs</span>
-<span class="no">loglike_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">model</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>),
-                         <span class="kw">n_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span>),
-                         <span class="kw">loglike</span> <span class="kw">=</span> <span class="fl">0</span>,
-                         <span class="kw">aic</span> <span class="kw">=</span> <span class="fl">0</span>)
-<span class="no">beta_mat1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">4</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">beta_mat1</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Intercept"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">beta_mat1</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span>)
-<span class="no">beta_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span>(<span class="kw">mode</span> <span class="kw">=</span> <span class="st">"list"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>))
-<span class="no">beta_list</span><span class="kw">[[</span><span class="fl">1</span>]] <span class="kw">&lt;-</span> <span class="no">beta_mat1</span>
-<span class="kw">for</span>(<span class="no">ii</span> <span class="kw">in</span> <span class="fl">2</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)){
-  <span class="no">mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span><span class="kw">[[</span><span class="no">ii</span>]]) + <span class="fl">1</span>,
-                <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">4</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="no">mat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Intercept"</span>, <span class="no">covariate_list</span><span class="kw">[[</span><span class="no">ii</span>]])
-  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(<span class="no">mat</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span>)
-  <span class="no">beta_list</span><span class="kw">[[</span><span class="no">ii</span>]] <span class="kw">&lt;-</span> <span class="no">mat</span>
-}</pre></body></html></div>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">t_init</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
+<span class="va">loglike_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>model <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span>,
+                         n_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">7</span><span class="op">)</span>,
+                         loglike <span class="op">=</span> <span class="fl">0</span>,
+                         aic <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">beta_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">beta_mat1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intercept"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">beta_mat1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span><span class="op">)</span>
+<span class="va">beta_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"list"</span>, length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span>
+<span class="va">beta_list</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">beta_mat1</span>
+<span class="kw">for</span><span class="op">(</span><span class="va">ii</span> <span class="kw">in</span> <span class="fl">2</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+  <span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,
+                ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> 
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Intercept"</span>, <span class="va">covariate_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Est."</span>, <span class="st">"lower"</span>, <span class="st">"upper"</span>, <span class="st">"SE"</span><span class="op">)</span>
+  <span class="va">beta_list</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mat</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">t_init</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
 
 <span class="co">## Sample MC trees all at once</span>
 
-    <span class="no">t0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
+    <span class="va">t0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
     <span class="co">## Sample all MC clusters at once for each of the 5 models</span>
-    <span class="no">mc_trees</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="../../reference/sample_mc_trees.html">sample_mc_trees</a></span>(<span class="no">clusters</span>,
-                                 <span class="kw">B</span> <span class="kw">=</span> <span class="no">K</span>,
-                                 <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                 <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="no">covariate_list</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)]])
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t0</span>)
-
-
+    <span class="va">mc_trees</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../../reference/sample_mc_trees.html">sample_mc_trees</a></span><span class="op">(</span><span class="va">clusters</span>,
+                                 B <span class="op">=</span> <span class="va">K</span>,
+                                 multiple_outside_transmissions <span class="op">=</span> <span class="cn">TRUE</span>,
+                                 covariate_names <span class="op">=</span> <span class="va">covariate_list</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t0</span><span class="op">)</span>
+    
+    
 <span class="co">## Fit each of the models</span>
-
-<span class="kw">for</span>(<span class="no">jj</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_list</span>)){
-        <span class="no">covariate_names</span> <span class="kw">&lt;-</span> <span class="no">covariate_list</span><span class="kw">[[</span><span class="no">jj</span>]]
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Model:"</span>)
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">covariate_names</span>)
-        <span class="kw">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">covariate_names</span>[<span class="fl">1</span>])){
-            <span class="no">init_params</span> <span class="kw">&lt;-</span> <span class="fl">0</span>
-        } <span class="kw">else</span>{
-            <span class="no">init_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_names</span>) + <span class="fl">1</span>)
-        }
+    
+<span class="kw">for</span><span class="op">(</span><span class="va">jj</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_list</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+        <span class="va">covariate_names</span> <span class="op">&lt;-</span> <span class="va">covariate_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Model:"</span><span class="op">)</span>
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span>
+        <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
+            <span class="va">init_params</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+        <span class="op">}</span> <span class="kw">else</span><span class="op">{</span>
+            <span class="va">init_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span>
+        <span class="op">}</span>
         <span class="co">## Optimize</span>
+        
+        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"Optimizing"</span><span class="op">)</span>
+        <span class="va">bds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">init_params</span><span class="op">)</span><span class="op">)</span>
+        <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">covariate_names</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">{</span>
+            <span class="va">bds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">init_params</span><span class="op">)</span><span class="op">)</span>
+        <span class="op">}</span>
+        <span class="va">lower_bds</span> <span class="op">&lt;-</span> <span class="va">bds</span>
+        <span class="va">upper_bds</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">bds</span>
+        <span class="va">cov_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/covariate_df_to_mat.html">covariate_df_to_mat</a></span><span class="op">(</span><span class="va">mc_trees</span>,
+                                       cov_names <span class="op">=</span> <span class="va">covariate_names</span><span class="op">)</span>
+ 
+    <span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>
+    <span class="va">best_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span>par <span class="op">=</span> <span class="va">init_params</span>,
+                         fn <span class="op">=</span> <span class="va">general_loglike</span>,
+                         mc_trees <span class="op">=</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span><span class="op">(</span><span class="va">mc_trees</span><span class="op">)</span>,
+                         return_neg <span class="op">=</span> <span class="cn">TRUE</span>,
+                         cov_mat <span class="op">=</span> <span class="va">cov_mat</span>,
+                         cov_names <span class="op">=</span> <span class="va">covariate_names</span>,
+                         use_outsider_prob <span class="op">=</span> <span class="cn">FALSE</span>,
+                         multiple_outside_transmissions <span class="op">=</span> <span class="cn">TRUE</span>,
+                         method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
+                         lower <span class="op">=</span> <span class="va">lower_bds</span>,
+                         upper <span class="op">=</span> <span class="va">upper_bds</span>,
+                         hessian <span class="op">=</span> <span class="cn">TRUE</span>
+                         <span class="op">)</span>
+    <span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t1</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Optimization time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="va">t2</span> <span class="op">/</span> <span class="fl">60</span>, <span class="fl">3</span><span class="op">)</span>,
+                <span class="st">"min"</span><span class="op">)</span><span class="op">)</span>
 
-        <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Optimizing"</span>)
-        <span class="no">bds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(-<span class="fl">5</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">init_params</span>))
-        <span class="kw">if</span>(<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">covariate_names</span>) <span class="kw">&gt;</span> <span class="fl">5</span>){
-            <span class="no">bds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(-<span class="fl">4</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">init_params</span>))
-        }
-        <span class="no">lower_bds</span> <span class="kw">&lt;-</span> <span class="no">bds</span>
-        <span class="no">upper_bds</span> <span class="kw">&lt;-</span> -<span class="no">bds</span>
-        <span class="no">cov_mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/covariate_df_to_mat.html">covariate_df_to_mat</a></span>(<span class="no">mc_trees</span>,
-                                       <span class="kw">cov_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>)
+    <span class="va">beta_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span><span class="op">(</span><span class="va">best_params</span><span class="op">$</span><span class="va">hessian</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co">## SE from Fisher info</span>
+    
 
-    <span class="no">t1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
-    <span class="no">best_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="kw">par</span> <span class="kw">=</span> <span class="no">init_params</span>,
-                         <span class="kw">fn</span> <span class="kw">=</span> <span class="no">general_loglike</span>,
-                         <span class="kw">mc_trees</span> <span class="kw">=</span> <span class="kw pkg">data.table</span><span class="kw ns">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html">as.data.table</a></span>(<span class="no">mc_trees</span>),
-                         <span class="kw">return_neg</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                         <span class="kw">cov_mat</span> <span class="kw">=</span> <span class="no">cov_mat</span>,
-                         <span class="kw">cov_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>,
-                         <span class="kw">use_outsider_prob</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                         <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                         <span class="kw">method</span> <span class="kw">=</span> <span class="st">"L-BFGS-B"</span>,
-                         <span class="kw">lower</span> <span class="kw">=</span> <span class="no">lower_bds</span>,
-                         <span class="kw">upper</span> <span class="kw">=</span> <span class="no">upper_bds</span>,
-                         <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>
-                         )
-    <span class="no">t2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t1</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Optimization time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>( <span class="no">t2</span> / <span class="fl">60</span>, <span class="fl">3</span>),
-                <span class="st">"min"</span>))
+    
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="st">"best params:"</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">beta_list</span><span class="op">[[</span><span class="va">jj</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+    <span class="va">loglike_df</span><span class="op">$</span><span class="va">loglike</span><span class="op">[</span><span class="va">jj</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">best_params</span><span class="op">$</span><span class="va">val</span>
+    
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Total time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">t_init</span><span class="op">)</span>  <span class="op">/</span> <span class="fl">3600</span>, <span class="fl">3</span><span class="op">)</span>,
+                <span class="st">"hrs"</span><span class="op">)</span><span class="op">)</span>
 
-    <span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]][, <span class="fl">4</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/solve.html">solve</a></span>(<span class="no">best_params</span>$<span class="no">hessian</span>))) <span class="co">## SE from Fisher info</span>
-
-    <span class="co">## Likelihood Profile ests</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Likelihood profiling"</span>)
-    <span class="no">lp_ests</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/likelihood_profs.html">likelihood_profs</a></span>(<span class="kw">best_pars</span> <span class="kw">=</span> <span class="no">best_params</span>$<span class="no">par</span>,
-                                    <span class="kw">max_loglike</span> <span class="kw">=</span> -<span class="no">best_params</span>$<span class="no">value</span>,
-                                    <span class="kw">mc_trees</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
-                                    <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="no">covariate_names</span>,
-                                    <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.05</span>,
-                                    <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-
-    <span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]][,-<span class="fl">4</span>] <span class="kw">&lt;-</span> <span class="no">lp_ests</span>
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"best params:"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">beta_list</span><span class="kw">[[</span><span class="no">jj</span>]])
-    <span class="no">loglike_df</span>$<span class="no">loglike</span>[<span class="no">jj</span>] <span class="kw">&lt;-</span> -<span class="no">best_params</span>$<span class="no">val</span>
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Total time:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>( (<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t_init</span>)  / <span class="fl">3600</span>, <span class="fl">3</span>),
-                <span class="st">"hrs"</span>))
-
-
-}</pre></body></html></div>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">loglike_df</span> <span class="kw">&lt;-</span> <span class="no">loglike_df</span> <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">aic</span> <span class="kw">=</span> -<span class="no">loglike</span> + <span class="fl">2</span> * <span class="no">n_params</span>,
-         <span class="kw">model</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">5</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">model</span>, <span class="fu"><a href="https://tidyr.tidyverse.org/reference/reexports.html">everything</a></span>())
+    
+<span class="op">}</span>    </code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">loglike_df</span> <span class="op">&lt;-</span> <span class="va">loglike_df</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>aic <span class="op">=</span> <span class="op">-</span><span class="va">loglike</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">n_params</span>,
+         model <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
 
 
-<span class="no">loglike_df</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>,
-                     <span class="kw">col.names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Model"</span>, <span class="st">"# params."</span>, <span class="st">"Log like."</span>, <span class="st">"AIC"</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span>),
-                <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
+<span class="va">loglike_df</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span>,
+                     col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Model"</span>, <span class="st">"# params."</span>, <span class="st">"Log like."</span>, <span class="st">"AIC"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span><span class="op">)</span>,
+                full_width <span class="op">=</span> <span class="cn">FALSE</span>, position <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></code></pre></div>
 <table class="table table table-condensed table-hover table-striped table-responsive">
 <thead><tr>
 <th style="text-align:right;">
@@ -706,11 +698,12 @@ AIC
 </tbody>
 </table>
 <p>Note that log likelihood increases as the model number increases, which should be the case since the models are nested. The best model according to AIC is model 4 which corresponds to the variables <strong>smear, hiv_neg_pos, hiv_unk_pos, rel_time</strong>.</p>
-<p>The estimated paramters for this model are</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">beta_list</span><span class="kw">[[</span><span class="fl">4</span>]] <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/reexports.html">kable</a></span>(<span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>) <span class="kw">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span>),
-                <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
+<p>The estimated parameters for this model are</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">beta_list</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"condensed"</span>, <span class="st">"hover"</span>, <span class="st">"striped"</span>, <span class="st">"responsive"</span><span class="op">)</span>,
+                full_width <span class="op">=</span> <span class="cn">FALSE</span>, position <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></code></pre></div>
 <table class="table table table-condensed table-hover table-striped table-responsive">
 <thead><tr>
 <th style="text-align:left;">
@@ -734,13 +727,13 @@ SE
 Intercept
 </td>
 <td style="text-align:right;">
--1.78
+0
 </td>
 <td style="text-align:right;">
--1.96
+0
 </td>
 <td style="text-align:right;">
--1.59
+0
 </td>
 <td style="text-align:right;">
 0.48
@@ -751,13 +744,13 @@ Intercept
 smear
 </td>
 <td style="text-align:right;">
-0.60
+0
 </td>
 <td style="text-align:right;">
-0.36
+0
 </td>
 <td style="text-align:right;">
-0.83
+0
 </td>
 <td style="text-align:right;">
 0.41
@@ -768,13 +761,13 @@ smear
 hiv_neg_pos
 </td>
 <td style="text-align:right;">
--0.60
+0
 </td>
 <td style="text-align:right;">
--0.85
+0
 </td>
 <td style="text-align:right;">
--0.37
+0
 </td>
 <td style="text-align:right;">
 0.33
@@ -785,13 +778,13 @@ hiv_neg_pos
 hiv_unk_pos
 </td>
 <td style="text-align:right;">
--1.21
+0
 </td>
 <td style="text-align:right;">
--3.36
+0
 </td>
 <td style="text-align:right;">
--0.22
+0
 </td>
 <td style="text-align:right;">
 0.76
@@ -802,13 +795,13 @@ hiv_unk_pos
 rel_time
 </td>
 <td style="text-align:right;">
-0.52
+0
 </td>
 <td style="text-align:right;">
-0.46
+0
 </td>
 <td style="text-align:right;">
-0.59
+0
 </td>
 <td style="text-align:right;">
 0.08
@@ -824,9 +817,10 @@ rel_time
 <a href="#analysis-of-standard-error-and-ci" class="anchor"></a>Analysis of standard error and CI</h2>
 <p>We see that the standard errors are large compared to the likelihood profiling CI widths. If we multiplied the standard errors by <span class="math inline">\(2 \times 1.96\)</span>, the width of a 95% CI for a normal distributed variable, then this width is much larger than the likelihood profiling estimate.</p>
 <p>To see which estimate is closer to the truth, we can bootstrap our data to get a second standard error and third CI estimate. We provide the function <code><a href="../../reference/bootstrap_clusters.html">bootstrap_clusters()</a></code> to resample clusters from our data. The analysis can be repeated on these bootstrap data sets. Below, we see that our new sampled data set contains the same amount of clusters as the original data but now has a different number of individuals compared to the original 389.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">bootstrap_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/bootstrap_clusters.html">bootstrap_clusters</a></span>(<span class="no">clusters</span>)
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bootstrap_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/bootstrap_clusters.html">bootstrap_clusters</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span>(<span class="no">bootstrap_data</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">bootstrap_data</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 371   9</code></pre>
 </div>
   </div>
@@ -846,7 +840,7 @@ rel_time
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

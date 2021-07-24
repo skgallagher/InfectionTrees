@@ -2,7 +2,13 @@
 ## Testing out model where transmission tree is determined by infection order
 
 ## Load libraries and data
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(tidyverse)
 data(tb_clean)
 ## library(optimParallel)

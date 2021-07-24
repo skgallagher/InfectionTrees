@@ -112,7 +112,12 @@ We can then estimate the MLE from the MC sampled trees with our specialized like
 inf_params_0 <- c(0,0)
 
 best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
-                      mc_samples_summary = mc_trees,
+                      mc_samples_summary = mc_trees %>%
+                       dplyr::select(-freq),
+                     obs_data_summary = mc_trees %>%
+                       group_by(cluster_size, x_pos,
+                                x_neg) %>%
+                       summarize(freq = sum(freq)),
                                   return_neg = TRUE,
                      method = "L-BFGS-B",
                      lower = c(-5, -5),
@@ -128,7 +133,11 @@ We can use likelihood profiling to get individual $(1-\alpha$)\% CIs for our est
 ```{r}
 lp_ests <- binary_likelihood_profs(best_pars = best_params$par,
                                     max_loglike = -best_params$value,
-                                    mc_samples_summary = mc_trees,
+                                    mc_samples_summary = mc_trees %>% select(-freq),
+                                     obs_data_summary = mc_trees %>%
+                       group_by(cluster_size, x_pos,
+                                x_neg) %>%
+                       summarize(freq = sum(freq)),
                                     alpha = .05,
                                     multiple_outside_transmissions = FALSE)
 
@@ -141,154 +150,3 @@ lp_ests %>% as.data.frame() %>%
 
 
 The CIs for these estimate do not include $\beta_0 = -2$ nor $\beta_1 = 1$, but this is not unexpected as we are looking at the MLE of a single data set.
-
-## Simulation code for branching process with a binary covariate
-
-To test whether our method works in general we simulate $M$ iid data sets from a single specified branching process with parameters $(\gamma, \beta_0, \beta_1)$.  To find the MLE, we sample $B$ MC transmissions trees for each row in the observed data and estimate $\hat{\beta}_0^{(m)}$ and $\hat{\beta}_1^{(m)}$ for $m=1 ,\dots, M$.  We then report the mean, median, 2.5 quantile, and 97.5% quantiles of the estimated  $\hat{\beta}$ values.  
-
-We then repeat this entire process for different configurations of $(\gamma, \beta_0, \beta_1)$.
-
-
-**WARNING** The below code will take many hours to run on a single laptop.
-
-```{r eval = FALSE}
-## Simulations to try
-M <- 100 # number of simulations for each parameter configuration
-B <- 5000 # number of MC samples
-K <- 1000 # number of clusters in a data set
-
-
-par_df1 <- data.frame(
-                     M = M,
-                     B = B,
-                     beta_0 = c(-2.5, -2.5, -2.5,
-                         -1.5, -1.5, -1.5),
-                     beta_1 = c(.5, 0, -.5,
-                                1, 0, -1),
-                     gamma = .5)
-
-par_df2 <- data.frame(
-                     M = M,
-                     B = B,
-                     beta_0 = c(-2.5, -2.5, -2.5,
-                         -1.5, -1.5, -1.5),
-                     beta_1 = c(.5, 0, -.5,
-                                .5, 0, -.5),
-                     gamma = .7)
-
-par_df3 <-  data.frame(
-                     M = M,
-                     B = B,
-                     beta_0 = c(-2.75, -2.75, -2.75),
-                     beta_1 = c(3, 0, -.25),
-                     gamma = .1)
-###########################################################################
-
-## data frame of simulation parameter configurations
-par_df <- dplyr::bind_rows(par_df1, par_df2, par_df3)
-
-out_list <- vector(mode = "list", length = nrow(par_df))
-
-#########################################################################
-## Run the simulations
-total_time <- proc.time()[3]
-for(zz in 1:nrow(par_df)){
-  t_params <- proc.time()[3]
-  beta_0 <- par_df$beta_0[zz]
-  beta_1 <- par_df$beta_1[zz]
-  gamma <- par_df$gamma[zz]
-  sprintf("Parameter set %d", zz)
-  sprintf("beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f",
-          beta_0, beta_1, gamma)
-  
-  
-  ## For a given set of parameters
-  best_params_mat <- matrix(0, nrow = M, ncol = 2)
-  max_cluster_sizes <- matrix(M)
-  for(mm in 1:M){
-    t_sims <- proc.time()[3]
-    sprintf("Simulation %d", mm)
-    ## Simulate a branching process data set
-    ## Distribution of xs
-    sample_covariates_df <- data.frame(x = c(rep(0, gamma * 10),
-                                             rep(1, (1-gamma) * 10)))
-    
-    M <- 1000
-    data <- simulate_bp(K = K ,
-                                      inf_params = c(beta_0, beta_1),
-                                      sample_covariates_df = sample_covariates_df,
-                                      covariate_names = "x",
-                                      max_size = 50)
-    ## Summarize the data set
-    binary_cluster_summaries <- summarize_binary_clusters(data)
-    max_cluster_sizes[mm] <- max(binary_cluster_summaries$cluster_size)
-    sprintf("max cluster size is %d", max_cluster_sizes[mm])
-    
-    
-    ####################################3
-    ## SAMPLE MC TREES
-    #######################################
-    mc_trees <- sample_mc_binary_cov(B = B,
-                                 observed_cluster_summaries = binary_cluster_summaries)
-    #######################################
-    ## OPTIMIZE
-    ######################################
-    inf_params_0 <- c(0,0)
-  
-    best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
-                        mc_samples_summary = mc_trees,
-                                    return_neg = TRUE,
-                       method = "L-BFGS-B",
-                       lower = c(-5, -5),
-                       upper = c(5, 5),
-                       hessian = TRUE)
-    best_params_mat[mm,] <- best_params$par
-    print("best params")
-    print(best_params$par)
-    
-
-    print("Data simulation time (hrs)")
-    print((proc.time()[3] - t_sims) / 3600, digits = 2)
-    
-    print("Cumulative time (hrs)")
-    print((proc.time()[3] - total_time) / 3600, digits = 2)
-    
-  }
-  
-  print("Params simulation time (hrs)")
-  print((proc.time()[3] - t_params) / 3600, digits = 2)
-  
-  
-  sprintf("beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f",
-          beta_0, beta_1, gamma)
-  print("Mean estimates")
-  colMeans(best_params_mat)
-   print("Median estimates")
-  apply(best_params_mat, 2, median)
-  print("2.5Q")
-  apply(best_params_mat, 2, quantile, probs = 2.5)
-   print("2.5Q")
-  apply(best_params_mat, 2, quantile, probs = 97.5)
-  
-  sims_list <- list(best_params_mat = best_params_mat,
-                      set = zz,
-                      max_cluster_sizes = max_cluster_sizes)
-    
-  out_list[[zz]] <- sims_list
-
-
-
-   
-                          
-}
-
-
-current_time <- Sys.time()
-current_time <- gsub(" ", "_", current_time)
-current_time <- gsub(":", ".", current_time)
-fn <- paste0("simulation_results_", current_time, ".RDS")
-
-
-saveRDS(out_list, fn)
-
-```

@@ -14,7 +14,7 @@
 #' \item{spsmear}{Smear status of individual (positive/negative/unknown)}
 #' \item{hivstatus}{HIV status of individual (positive/negative/unknown)}
 #' \item{homeless}{Homelessness status of individual (yes/no)}
-#' \item{group}{Cluster group}
+#' \item{group}{Cluster ID}
 #' \item{rel_time}{detection time relative to first individual in cluster}
 #' }
 #' @examples
@@ -23,5 +23,5 @@
 #'
 #' @references
 #' \insertAllCited{}
-## "tb_clean"
+"tb_clean"
 
