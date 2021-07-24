@@ -75,7 +75,7 @@ mean_pars <- as.data.frame(do.call('rbind', lapply(
 med_pars <- as.data.frame(do.call('rbind', lapply(
     lapply(out_list, "[[", 1),
     function(mat){
-        apply(mat, 2, mean)
+        apply(mat, 2, median)
     }))) %>%
     rename(med_beta0 = V1,
            med_beta1 = V2)

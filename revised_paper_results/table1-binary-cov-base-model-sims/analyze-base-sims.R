@@ -70,7 +70,7 @@ mean_pars <- as.data.frame(do.call('rbind', lapply(
 med_pars <- as.data.frame(do.call('rbind', lapply(
     lapply(out_list, "[[", 1),
     function(mat){
-        apply(mat, 2, mean)
+        apply(mat, 2, median)
     }))) %>%
     rename(med_beta0 = V1,
            med_beta1 = V2)
@@ -121,8 +121,8 @@ pretty_df <- summary_df %>%
                                " (", round(IQR_beta0, 2),
                                "), ", round(med_beta1, 2),
                                " (", round(IQR_beta1, 2), "))"),
-           cov = paste0("[", fi_beta0 * 100, ", ",
-                        fi_beta1 * 100, "]\\%")
+           cov = paste0("[", boot_beta0 * 100, ", ",
+                        boot_beta1 * 100, "]\\%")
            ) %>%
     select(sizes, prob_pos, betas,
            est_betas1,

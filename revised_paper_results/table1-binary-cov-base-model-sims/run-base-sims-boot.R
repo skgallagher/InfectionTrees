@@ -13,6 +13,7 @@
 
 rep_from_lib <- TRUE
 
+
 if(rep_from_lib){
     library(InfectionTrees)
 } else {
@@ -24,8 +25,8 @@ set.seed(6172021)
 
 ## Simulations to try
 M <- 100 # number of simulations for each parameter configuration
-B <- 1000 # number of MC samples
-K <- 5000 # number of clusters in a data set
+B <- 5000 # number of MC samples
+K <- 1000 # number of clusters in a data set
 n_boot <- 30
 
 
