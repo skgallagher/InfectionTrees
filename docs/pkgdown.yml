@@ -1,19 +1,20 @@
-pandoc: 2.10.1
-pkgdown: 1.5.1
+pandoc: 2.11.4
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   getting-started: getting-started.html
-  base-binary-simulations: not-built-vignettes/base-binary-simulations.html
-  base-general-simulations: not-built-vignettes/base-general-simulations.html
-  model-overview: not-built-vignettes/model-overview.html
-  multiple-outside-binary-simulations: not-built-vignettes/multiple-outside-binary-simulations.html
-  multiple-outside-transmissions-model: not-built-vignettes/multiple-outside-transmissions-model.html
-  sampling-enough-mc-trees: not-built-vignettes/sampling-enough-mc-trees.html
-  sampling-mc-trees: not-built-vignettes/sampling-mc-trees.html
-  simulations-enough-mc-trees: not-built-vignettes/simulations-enough-mc-trees.html
-  simulations-enough-mc-trees.html: not-built-vignettes/simulations-enough-mc-trees.html.html
-  tb-data-base-pos-imputation: not-built-vignettes/tb-data-base-pos-imputation.html
-  tb-data-base: not-built-vignettes/tb-data-base.html
-  tb-data-vis: not-built-vignettes/tb-data-vis.html
-  tb-eda: not-built-vignettes/tb-eda.html
-last_built: 2020-10-07T19:17Z
+  not-built-vignettes/base-binary-simulations: base-binary-simulations.html
+  not-built-vignettes/base-general-simulations: base-general-simulations.html
+  not-built-vignettes/model-overview: model-overview.html
+  not-built-vignettes/multiple-outside-binary-simulations: multiple-outside-binary-simulations.html
+  not-built-vignettes/multiple-outside-transmissions-model: multiple-outside-transmissions-model.html
+  not-built-vignettes/reproduce-revised-paper-results: reproduce-revised-paper-results.html
+  not-built-vignettes/sampling-enough-mc-trees: sampling-enough-mc-trees.html
+  not-built-vignettes/sampling-mc-trees: sampling-mc-trees.html
+  not-built-vignettes/simulations-enough-mc-trees: simulations-enough-mc-trees.html
+  not-built-vignettes/tb-data-base-pos-imputation: tb-data-base-pos-imputation.html
+  not-built-vignettes/tb-data-base: tb-data-base.html
+  not-built-vignettes/tb-data-vis: tb-data-vis.html
+  not-built-vignettes/tb-eda: tb-eda.html
+last_built: 2021-07-24T18:37Z
+

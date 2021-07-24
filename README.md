@@ -2,9 +2,10 @@
 [![Travis build status](https://travis-ci.com/skgallagher/InfectionTrees.svg?branch=master)](https://travis-ci.com/skgallagher/InfectionTrees)
 <!-- badges: end -->
 
-# InfectionTrees
-Analyzing and plotting the spread of infectious diseases in moderately sized clusters
 
+# InfectionTrees <img src="man/figures/logo.png" align="right" width = 120 />
+Analyzing and plotting the spread of infectious diseases in moderately sized clusters
+)
 [Click here to get started!](https://skgallagher.github.io/InfectionTrees/articles/getting-started.html)
 
 # Reproduce revised paper results
