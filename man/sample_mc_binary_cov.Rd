@@ -25,9 +25,8 @@ sample_mc_binary_cov(
 sample from the multiple outside transmissions model.  Default is FALSE.}
 }
 \value{
-a data frame of sampled transmission trees
-with the following columns (the last one is only needed for the multiple
-outsider model)
+a data frame with the following columns, the last one is only needed for the multiple
+outsider model
 \describe{
 \item{freq}{frequency of cluster with the following characteristics}
 \item{cluster_size}{size of the cluster}
@@ -38,8 +37,10 @@ outsider model)
 \item{x_neg_trans}{number of transmissions from a negative individual in the tree}
 \item{root_node_sign}{whether root node is pos or neg}
 }
-@export
 }
 \description{
 Sample binary covariate transmission trees
+}
+\details{
+A faster way to draw transmission trees when there is one binary covariate.
 }

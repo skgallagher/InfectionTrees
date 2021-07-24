@@ -15,9 +15,10 @@
 #' }
 #' @param multiple_outside_transmissions logical indicating whether to
 #' sample from the multiple outside transmissions model.  Default is FALSE.
-#' @return  a data frame of sampled transmission trees
-#'  with the following columns (the last one is only needed for the multiple
-#'  outsider model)
+#' @details A faster way to draw transmission trees when there is one binary covariate.
+#' @export
+#' @return a data frame with the following columns, the last one is only needed for the multiple
+#'  outsider model
 #'  \describe{
 #'  \item{freq}{frequency of cluster with the following characteristics}
 #'  \item{cluster_size}{size of the cluster}
@@ -28,7 +29,6 @@
 #'  \item{x_neg_trans}{number of transmissions from a negative individual in the tree}
 #'  \item{root_node_sign}{whether root node is pos or neg}
 #'  }
-#'  @export
 sample_mc_binary_cov <- function(B,
                                  observed_cluster_summaries,
                                  multiple_outside_transmissions = FALSE){
