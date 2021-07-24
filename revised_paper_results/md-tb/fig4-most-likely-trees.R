@@ -36,7 +36,13 @@ assign_coords_y <- function(index,
 ###########################################################
 
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(ggplot2)
 library(data.table)
 library(dplyr)

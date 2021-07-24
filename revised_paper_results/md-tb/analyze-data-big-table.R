@@ -3,7 +3,13 @@
 ## Combining the tables together from three model types
 ## Updated June 22, 2021
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(knitr)
 library(tidyverse)
 library(kableExtra)

@@ -3,7 +3,13 @@
 ## Comparing our like function to the cluster generated in
 ## Fig. 2
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 
 
 ## Calculate the true likelihood for BP in fig. 2

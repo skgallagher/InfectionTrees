@@ -5,7 +5,13 @@
 ## Looking at distribution of cluster sizes
 ## and a cross section of part of the data (cluster 15)
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(tidyverse)
 library(knitr)
 library(kableExtra)

@@ -3,7 +3,13 @@
 ## Updated June 23, 2021 to add a bootstrap SE
 
 ## Load libraries and data
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
 library(tidyverse)
 data(tb_clean)
 

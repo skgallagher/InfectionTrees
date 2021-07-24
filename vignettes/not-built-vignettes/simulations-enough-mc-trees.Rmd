@@ -68,14 +68,14 @@ data <- simulate_bp(K = M,
 
 ```
 
-We then fit our model to the generated data using $B=5$ sets of MC samples and record the estimates for each where we sample $K= 5000$ for each set.
+We then fit our model to the generated data using $B=5$ sets of MC samples and record the estimates for each where we sample $K= 2000$ for each set.
 
 ```{r}
 ## Summarize data set into a table
 binary_cluster_summaries <- summarize_binary_clusters(data)
 
 B <- 5
-K <- 5000
+K <- 2000
 
 beta_mat <- matrix(0, nrow = B, ncol = 2)
 var_mat <- matrix(0, nrow = B, ncol = 2)
@@ -95,7 +95,9 @@ for(bb in 1:B){
   inf_params_0 <- c(0,0)
 
   best_params <- optim(inf_params_0, fn = bp_loglike_binary_cov,
-                      mc_samples_summary = mc_trees,
+                      mc_samples_summary = mc_trees %>%
+                        dplyr::select(-freq),
+                      obs_data_summary = binary_cluster_summaries,
                                   return_neg = TRUE,
                      method = "L-BFGS-B",
                      lower = c(-5, -5),

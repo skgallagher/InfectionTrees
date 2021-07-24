@@ -45,6 +45,10 @@ articles:
   - 'not-built-vignettes/tb-eda'
   - 'not-built-vignettes/tb-data-base'
   - 'not-built-vignettes/tb-data-vis'
+- title: Reproducing results
+  desc: Run it yourself
+  contents:
+  - 'not-built-vignettes/reproduce-revised-paper-results'
 - title: Everything
   desc: All articles
   contents:

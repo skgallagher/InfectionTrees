@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">InfectionTrees</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -66,7 +66,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/skgallagher/InfectionTrees/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -80,7 +80,8 @@
 
       
 
-      </header><script src="base-binary-simulations_files/header-attrs-2.3/header-attrs.js"></script><script src="base-binary-simulations_files/kePrint-0.0.1/kePrint.js"></script><div class="row">
+      </header><script src="base-binary-simulations_files/header-attrs-2.9/header-attrs.js"></script><script src="base-binary-simulations_files/kePrint-0.0.1/kePrint.js"></script><link href="base-binary-simulations_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Binary covariate model simulations</h1>
@@ -109,28 +110,29 @@
 p_i = logit^{-1}\left (\beta_0 + \beta_1 X_i \right ),
 \]</span> where <span class="math inline">\(\gamma\)</span>, <span class="math inline">\(\beta_0\)</span>, and <span class="math inline">\(\beta_1\)</span> are fixed parameters. Here, we are assuming we are working with the base model where all transmissions within a cluster can be directly traced back to an observed individual within the cluster.</p>
 <p>Below is how we simulate a single data set from the branching process. We have summarized the clusters by size.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">2020</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2020</span><span class="op">)</span>
 <span class="co">## Generate possible covariates </span>
-<span class="no">sample_covariates_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0</span>))
+<span class="va">sample_covariates_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">beta0</span> <span class="kw">&lt;-</span> -<span class="fl">2</span>
-<span class="no">beta1</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
-<span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">M</span>,
-                                  <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta0</span>, <span class="no">beta1</span>),
-                                  <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
-                                  <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
-                                  <span class="kw">max_size</span> <span class="kw">=</span> <span class="fl">50</span>)
+<span class="va">beta0</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="fl">2</span>
+<span class="va">beta1</span> <span class="op">&lt;-</span> <span class="fl">1</span>
+<span class="va">M</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simulate_bp.html">simulate_bp</a></span><span class="op">(</span>K <span class="op">=</span> <span class="va">M</span>,
+                                  inf_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">beta0</span>, <span class="va">beta1</span><span class="op">)</span>,
+                                  sample_covariates_df <span class="op">=</span> <span class="va">sample_covariates_df</span>,
+                                  covariate_names <span class="op">=</span> <span class="st">"x"</span>,
+                                  max_size <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
- <span class="no">data</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">cluster_id</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">summarize</span>(<span class="kw">cluster_size</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span>
-  <span class="fu">ungroup</span>() <span class="kw">%&gt;%</span>
-   <span class="fu">group_by</span>(<span class="no">cluster_size</span>) <span class="kw">%&gt;%</span>
-   <span class="fu">summarize</span>(<span class="kw">freq</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span>
-   <span class="fu">ungroup</span>() <span class="kw">%&gt;%</span>
-  <span class="fu">kable</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
-   <span class="fu">kable_styling</span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>), <span class="kw">full_width</span> <span class="kw">=</span> <span class="no">F</span>,
-                 <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>)</pre></body></html></div>
+ <span class="va">data</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cluster_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>cluster_size <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cluster_size</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span>, full_width <span class="op">=</span> <span class="cn">F</span>,
+                 position <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -210,11 +212,12 @@ freq
 <p>The case where there is a single binary covariate is a special case for our model because the likelihood for a single transmission tree reduces to <span class="math display">\[
 L(T;C)  = (1-p_+)^{n_+}(1-p_-)^{n_-}p_+^{N_+}p_-^{N_-},
 \]</span> where <span class="math inline">\(p_+ = logit^{-1}(\beta_0 + \beta_1)\)</span>, <span class="math inline">\(p_- = logit^{-1}(\beta_0)\)</span>, <span class="math inline">\(n_+\)</span> is the number of positive <span class="math inline">\(X_i\)</span> individuals, <span class="math inline">\(n_-\)</span> is the number of negative <span class="math inline">\(X_i\)</span> individuals, <span class="math inline">\(N_+\)</span> is the number of transmissions from positive individuals and <span class="math inline">\(N_-\)</span> is the number of transmissions from negative individuals. The consequence of this is that the observed clusters may be stored as the following table with the cluster size, number of positive individuals (<span class="math inline">\(x_{pos})\)</span>, and number of negative individuals (<span class="math inline">\(x_{neg}\)</span>), along with their frequency instead of a 1304 row data frame, like the one we sampled.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/summarize_binary_clusters.html">summarize_binary_clusters</a></span>(<span class="no">data</span>)
-<span class="no">binary_cluster_summaries</span> <span class="kw">%&gt;%</span>
-   <span class="fu">kable</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
-   <span class="fu">kable_styling</span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),
-                 <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>, <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">binary_cluster_summaries</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/summarize_binary_clusters.html">summarize_binary_clusters</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
+<span class="va">binary_cluster_summaries</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span>,
+                 position <span class="op">=</span> <span class="st">"center"</span>, full_width <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -543,14 +546,15 @@ x_neg
 </table>
 <p>The consequence of this also extends to Monte Carlo sampling of trees. We do not have to store the individual trees, but only need a summary of them.</p>
 <p>We sample <span class="math inline">\(B= 1000\)</span> MC trees for each row in the summarized clusters data. The MC trees for the cluster with 9 positive and 4 negatives are summarized with the following:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">B</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-<span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/sample_mc_binary_cov.html">sample_mc_binary_cov</a></span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
-                                 <span class="kw">observed_cluster_summaries</span> <span class="kw">=</span> <span class="no">binary_cluster_summaries</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">1000</span>
+<span class="va">mc_trees</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/sample_mc_binary_cov.html">sample_mc_binary_cov</a></span><span class="op">(</span>B <span class="op">=</span> <span class="va">B</span>,
+                                 observed_cluster_summaries <span class="op">=</span> <span class="va">binary_cluster_summaries</span><span class="op">)</span>
 
-<span class="no">mc_trees</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">cluster_size</span> <span class="kw">==</span> <span class="fl">13</span>) <span class="kw">%&gt;%</span>
-     <span class="fu">kable</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>) <span class="kw">%&gt;%</span>
-   <span class="fu">kable_styling</span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),
-                 <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>, <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<span class="va">mc_trees</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cluster_size</span> <span class="op">==</span> <span class="fl">13</span><span class="op">)</span> <span class="op">%&gt;%</span>
+     <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span>,
+                 position <span class="op">=</span> <span class="st">"center"</span>, full_width <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -878,29 +882,40 @@ x_neg_trans
 </tbody>
 </table>
 <p>We can then estimate the MLE from the MC sampled trees with our specialized likelihood function <code><a href="../../reference/bp_loglike_binary_cov.html">bp_loglike_binary_cov()</a></code> which is the specialized counterpart to <code>bp_loglike_general()</code>.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">inf_params_0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">inf_params_0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>
 
-<span class="no">best_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="no">inf_params_0</span>, <span class="kw">fn</span> <span class="kw">=</span> <span class="no">bp_loglike_binary_cov</span>,
-                      <span class="kw">mc_samples_summary</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
-                                  <span class="kw">return_neg</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                     <span class="kw">method</span> <span class="kw">=</span> <span class="st">"L-BFGS-B"</span>,
-                     <span class="kw">lower</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">5</span>, -<span class="fl">5</span>),
-                     <span class="kw">upper</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">5</span>),
-                     <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="va">best_params</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span><span class="op">(</span><span class="va">inf_params_0</span>, fn <span class="op">=</span> <span class="va">bp_loglike_binary_cov</span>,
+                      mc_samples_summary <span class="op">=</span> <span class="va">mc_trees</span> <span class="op">%&gt;%</span>
+                       <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">freq</span><span class="op">)</span>,
+                     obs_data_summary <span class="op">=</span> <span class="va">mc_trees</span> <span class="op">%&gt;%</span>
+                       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cluster_size</span>, <span class="va">x_pos</span>,
+                                <span class="va">x_neg</span><span class="op">)</span> <span class="op">%&gt;%</span>
+                       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">freq</span><span class="op">)</span><span class="op">)</span>,
+                                  return_neg <span class="op">=</span> <span class="cn">TRUE</span>,
+                     method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
+                     lower <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span>,
+                     upper <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,
+                     hessian <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">best_params</span>$<span class="no">par</span>, <span class="fl">2</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">best_params</span><span class="op">$</span><span class="va">par</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] -1.27  0.78</code></pre>
 <p>We can use likelihood profiling to get individual <span class="math inline">\((1-\alpha\)</span>)% CIs for our estimates.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">lp_ests</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/binary_likelihood_profs.html">binary_likelihood_profs</a></span>(<span class="kw">best_pars</span> <span class="kw">=</span> <span class="no">best_params</span>$<span class="no">par</span>,
-                                    <span class="kw">max_loglike</span> <span class="kw">=</span> -<span class="no">best_params</span>$<span class="no">value</span>,
-                                    <span class="kw">mc_samples_summary</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
-                                    <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.05</span>,
-                                    <span class="kw">multiple_outside_transmissions</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lp_ests</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/binary_likelihood_profs.html">binary_likelihood_profs</a></span><span class="op">(</span>best_pars <span class="op">=</span> <span class="va">best_params</span><span class="op">$</span><span class="va">par</span>,
+                                    max_loglike <span class="op">=</span> <span class="op">-</span><span class="va">best_params</span><span class="op">$</span><span class="va">value</span>,
+                                    mc_samples_summary <span class="op">=</span> <span class="va">mc_trees</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">freq</span><span class="op">)</span>,
+                                     obs_data_summary <span class="op">=</span> <span class="va">mc_trees</span> <span class="op">%&gt;%</span>
+                       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">cluster_size</span>, <span class="va">x_pos</span>,
+                                <span class="va">x_neg</span><span class="op">)</span> <span class="op">%&gt;%</span>
+                       <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>freq <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">freq</span><span class="op">)</span><span class="op">)</span>,
+                                    alpha <span class="op">=</span> <span class="fl">.05</span>,
+                                    multiple_outside_transmissions <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="no">lp_ests</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>() <span class="kw">%&gt;%</span>
-      <span class="fu">kable</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"html"</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>) <span class="kw">%&gt;%</span>
-   <span class="fu">kable_styling</span>(<span class="kw">bootstrap_options</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),
-                 <span class="kw">position</span> <span class="kw">=</span> <span class="st">"center"</span>, <span class="kw">full_width</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<span class="va">lp_ests</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"html"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span>
+   <span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html">kable_styling</a></span><span class="op">(</span>bootstrap_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span><span class="op">)</span>,
+                 position <span class="op">=</span> <span class="st">"center"</span>, full_width <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table table table-striped table-hover table-condensed">
 <thead><tr>
 <th style="text-align:right;">
@@ -940,151 +955,6 @@ upper
 </table>
 <p>The CIs for these estimate do not include <span class="math inline">\(\beta_0 = -2\)</span> nor <span class="math inline">\(\beta_1 = 1\)</span>, but this is not unexpected as we are looking at the MLE of a single data set.</p>
 </div>
-<div id="simulation-code-for-branching-process-with-a-binary-covariate" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simulation-code-for-branching-process-with-a-binary-covariate" class="anchor"></a>Simulation code for branching process with a binary covariate</h2>
-<p>To test whether our method works in general we simulate <span class="math inline">\(M\)</span> iid data sets from a single specified branching process with parameters <span class="math inline">\((\gamma, \beta_0, \beta_1)\)</span>. To find the MLE, we sample <span class="math inline">\(B\)</span> MC transmissions trees for each row in the observed data and estimate <span class="math inline">\(\hat{\beta}_0^{(m)}\)</span> and <span class="math inline">\(\hat{\beta}_1^{(m)}\)</span> for <span class="math inline">\(m=1 ,\dots, M\)</span>. We then report the mean, median, 2.5 quantile, and 97.5% quantiles of the estimated <span class="math inline">\(\hat{\beta}\)</span> values.</p>
-<p>We then repeat this entire process for different configurations of <span class="math inline">\((\gamma, \beta_0, \beta_1)\)</span>.</p>
-<p><strong>WARNING</strong> The below code will take many hours to run on a single laptop.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## Simulations to try</span>
-<span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">100</span> <span class="co"># number of simulations for each parameter configuration</span>
-<span class="no">B</span> <span class="kw">&lt;-</span> <span class="fl">5000</span> <span class="co"># number of MC samples</span>
-<span class="no">K</span> <span class="kw">&lt;-</span> <span class="fl">1000</span> <span class="co"># number of clusters in a data set</span>
-
-
-<span class="no">par_df1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-                     <span class="kw">M</span> <span class="kw">=</span> <span class="no">M</span>,
-                     <span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
-                     <span class="kw">beta_0</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">2.5</span>, -<span class="fl">2.5</span>, -<span class="fl">2.5</span>,
-                         -<span class="fl">1.5</span>, -<span class="fl">1.5</span>, -<span class="fl">1.5</span>),
-                     <span class="kw">beta_1</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>, <span class="fl">0</span>, -<span class="fl">.5</span>,
-                                <span class="fl">1</span>, <span class="fl">0</span>, -<span class="fl">1</span>),
-                     <span class="kw">gamma</span> <span class="kw">=</span> <span class="fl">.5</span>)
-
-<span class="no">par_df2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-                     <span class="kw">M</span> <span class="kw">=</span> <span class="no">M</span>,
-                     <span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
-                     <span class="kw">beta_0</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">2.5</span>, -<span class="fl">2.5</span>, -<span class="fl">2.5</span>,
-                         -<span class="fl">1.5</span>, -<span class="fl">1.5</span>, -<span class="fl">1.5</span>),
-                     <span class="kw">beta_1</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.5</span>, <span class="fl">0</span>, -<span class="fl">.5</span>,
-                                <span class="fl">.5</span>, <span class="fl">0</span>, -<span class="fl">.5</span>),
-                     <span class="kw">gamma</span> <span class="kw">=</span> <span class="fl">.7</span>)
-
-<span class="no">par_df3</span> <span class="kw">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-                     <span class="kw">M</span> <span class="kw">=</span> <span class="no">M</span>,
-                     <span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
-                     <span class="kw">beta_0</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">2.75</span>, -<span class="fl">2.75</span>, -<span class="fl">2.75</span>),
-                     <span class="kw">beta_1</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>, <span class="fl">0</span>, -<span class="fl">.25</span>),
-                     <span class="kw">gamma</span> <span class="kw">=</span> <span class="fl">.1</span>)
-<span class="co">###########################################################################</span>
-
-<span class="co">## data frame of simulation parameter configurations</span>
-<span class="no">par_df</span> <span class="kw">&lt;-</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(<span class="no">par_df1</span>, <span class="no">par_df2</span>, <span class="no">par_df3</span>)
-
-<span class="no">out_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">vector</a></span>(<span class="kw">mode</span> <span class="kw">=</span> <span class="st">"list"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">par_df</span>))
-
-<span class="co">#########################################################################</span>
-<span class="co">## Run the simulations</span>
-<span class="no">total_time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
-<span class="kw">for</span>(<span class="no">zz</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">par_df</span>)){
-  <span class="no">t_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
-  <span class="no">beta_0</span> <span class="kw">&lt;-</span> <span class="no">par_df</span>$<span class="no">beta_0</span>[<span class="no">zz</span>]
-  <span class="no">beta_1</span> <span class="kw">&lt;-</span> <span class="no">par_df</span>$<span class="no">beta_1</span>[<span class="no">zz</span>]
-  <span class="no">gamma</span> <span class="kw">&lt;-</span> <span class="no">par_df</span>$<span class="no">gamma</span>[<span class="no">zz</span>]
-  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"Parameter set %d"</span>, <span class="no">zz</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f"</span>,
-          <span class="no">beta_0</span>, <span class="no">beta_1</span>, <span class="no">gamma</span>)
-
-
-  <span class="co">## For a given set of parameters</span>
-  <span class="no">best_params_mat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="fl">0</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="no">M</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)
-  <span class="no">max_cluster_sizes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="no">M</span>)
-  <span class="kw">for</span>(<span class="no">mm</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="no">M</span>){
-    <span class="no">t_sims</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>]
-    <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"Simulation %d"</span>, <span class="no">mm</span>)
-    <span class="co">## Simulate a branching process data set</span>
-    <span class="co">## Distribution of xs</span>
-    <span class="no">sample_covariates_df</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">0</span>, <span class="no">gamma</span> * <span class="fl">10</span>),
-                                             <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>, (<span class="fl">1</span>-<span class="no">gamma</span>) * <span class="fl">10</span>)))
-
-    <span class="no">M</span> <span class="kw">&lt;-</span> <span class="fl">1000</span>
-    <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simulate_bp.html">simulate_bp</a></span>(<span class="kw">K</span> <span class="kw">=</span> <span class="no">K</span> ,
-                                      <span class="kw">inf_params</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">beta_0</span>, <span class="no">beta_1</span>),
-                                      <span class="kw">sample_covariates_df</span> <span class="kw">=</span> <span class="no">sample_covariates_df</span>,
-                                      <span class="kw">covariate_names</span> <span class="kw">=</span> <span class="st">"x"</span>,
-                                      <span class="kw">max_size</span> <span class="kw">=</span> <span class="fl">50</span>)
-    <span class="co">## Summarize the data set</span>
-    <span class="no">binary_cluster_summaries</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/summarize_binary_clusters.html">summarize_binary_clusters</a></span>(<span class="no">data</span>)
-    <span class="no">max_cluster_sizes</span>[<span class="no">mm</span>] <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">binary_cluster_summaries</span>$<span class="no">cluster_size</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"max cluster size is %d"</span>, <span class="no">max_cluster_sizes</span>[<span class="no">mm</span>])
-
-
-    <span class="co">####################################3</span>
-    <span class="co">## SAMPLE MC TREES</span>
-    <span class="co">#######################################</span>
-    <span class="no">mc_trees</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/sample_mc_binary_cov.html">sample_mc_binary_cov</a></span>(<span class="kw">B</span> <span class="kw">=</span> <span class="no">B</span>,
-                                 <span class="kw">observed_cluster_summaries</span> <span class="kw">=</span> <span class="no">binary_cluster_summaries</span>)
-    <span class="co">#######################################</span>
-    <span class="co">## OPTIMIZE</span>
-    <span class="co">######################################</span>
-    <span class="no">inf_params_0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)
-
-    <span class="no">best_params</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/optim.html">optim</a></span>(<span class="no">inf_params_0</span>, <span class="kw">fn</span> <span class="kw">=</span> <span class="no">bp_loglike_binary_cov</span>,
-                        <span class="kw">mc_samples_summary</span> <span class="kw">=</span> <span class="no">mc_trees</span>,
-                                    <span class="kw">return_neg</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                       <span class="kw">method</span> <span class="kw">=</span> <span class="st">"L-BFGS-B"</span>,
-                       <span class="kw">lower</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">5</span>, -<span class="fl">5</span>),
-                       <span class="kw">upper</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>, <span class="fl">5</span>),
-                       <span class="kw">hessian</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
-    <span class="no">best_params_mat</span>[<span class="no">mm</span>,] <span class="kw">&lt;-</span> <span class="no">best_params</span>$<span class="no">par</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"best params"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">best_params</span>$<span class="no">par</span>)
-
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Data simulation time (hrs)"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>((<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t_sims</span>) / <span class="fl">3600</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>)
-
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Cumulative time (hrs)"</span>)
-    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>((<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">total_time</span>) / <span class="fl">3600</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>)
-
-  }
-
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Params simulation time (hrs)"</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>((<span class="fu"><a href="https://rdrr.io/r/base/proc.time.html">proc.time</a></span>()[<span class="fl">3</span>] - <span class="no">t_params</span>) / <span class="fl">3600</span>, <span class="kw">digits</span> <span class="kw">=</span> <span class="fl">2</span>)
-
-
-  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"beta_0 = %.2f, beta_1 = %.2f, gamma = %.2f"</span>,
-          <span class="no">beta_0</span>, <span class="no">beta_1</span>, <span class="no">gamma</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Mean estimates"</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span>(<span class="no">best_params_mat</span>)
-   <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"Median estimates"</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">best_params_mat</span>, <span class="fl">2</span>, <span class="no">median</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"2.5Q"</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">best_params_mat</span>, <span class="fl">2</span>, <span class="no">quantile</span>, <span class="kw">probs</span> <span class="kw">=</span> <span class="fl">2.5</span>)
-   <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="st">"2.5Q"</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">best_params_mat</span>, <span class="fl">2</span>, <span class="no">quantile</span>, <span class="kw">probs</span> <span class="kw">=</span> <span class="fl">97.5</span>)
-
-  <span class="no">sims_list</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">best_params_mat</span> <span class="kw">=</span> <span class="no">best_params_mat</span>,
-                      <span class="kw">set</span> <span class="kw">=</span> <span class="no">zz</span>,
-                      <span class="kw">max_cluster_sizes</span> <span class="kw">=</span> <span class="no">max_cluster_sizes</span>)
-
-  <span class="no">out_list</span><span class="kw">[[</span><span class="no">zz</span>]] <span class="kw">&lt;-</span> <span class="no">sims_list</span>
-
-
-
-
-
-}
-
-
-<span class="no">current_time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html">Sys.time</a></span>()
-<span class="no">current_time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">" "</span>, <span class="st">"_"</span>, <span class="no">current_time</span>)
-<span class="no">current_time</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">":"</span>, <span class="st">"."</span>, <span class="no">current_time</span>)
-<span class="no">fn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"simulation_results_"</span>, <span class="no">current_time</span>, <span class="st">".RDS"</span>)
-
-
-<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">out_list</span>, <span class="no">fn</span>)</pre></body></html></div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -1102,7 +972,7 @@ upper
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

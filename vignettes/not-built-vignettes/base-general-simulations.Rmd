@@ -120,6 +120,7 @@ round(best_params$par, 2)
 
 
 We can use likelihood profiling to get individual $(1-\alpha$)\% CIs for our estimates.
+**NOTE**: In practice, we have found that likelihood profiling has low coverage and instead prefer bootstrapping to get an estimate of the SE.
 
 ```{r}
 lp_ests <- likelihood_profs(best_pars = best_params$par,

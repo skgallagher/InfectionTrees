@@ -1,5 +1,6 @@
 test_that("bp_loglike_binary_cov", {
 
+  library(dplyr)
   inf_params <- c(-1, 1)
   mc_samples_summary <- data.frame(freq = c(10, 5, 6, 1, 1),
                                    mc_freq = c(10, 10, 10, 3, 7),
@@ -8,6 +9,10 @@ test_that("bp_loglike_binary_cov", {
                                    x_neg = c(0, 1, 0, 1, 1),
                                    x_pos_trans = c(0, 0, 1, 1, 0),
                                    x_neg_trans = c(0, 0, 0, 0, 1))
+  obs_data_summary <- mc_samples_summary %>%
+    group_by(cluster_size, x_pos, x_neg) %>%
+    summarize(freq = sum(freq), .groups = "drop")
+
   p_neg <- 1 / (1 + exp(1))
   p_pos <- .5
   prob_inf <- with(mc_samples_summary,
@@ -26,8 +31,9 @@ test_that("bp_loglike_binary_cov", {
                  prob_inf[3],
                  (3 * prob_inf[4] + 7 * prob_inf[5]) /10 )
   out <- bp_loglike_binary_cov(inf_params = inf_params,
-                               mc_samples_summary = mc_samples_summary,
-                               return_neg = FALSE,
-                               multiple_outside_transmission = FALSE)
+                               obs_data_summary = obs_data_summary,
+                               mc_samples_summary = mc_samples_summary %>%
+                                 dplyr::select(-freq),
+                               return_neg = FALSE)
   expect_equal(sum(c(10, 5, 6, 2) * log(avg_like)), out)
 })

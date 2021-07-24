@@ -49,7 +49,7 @@ library(data.table)
 
 ## About
 
-Below, is a true quickstart to simulate data, sample Monte Carlo trees based on that data, and finally compute the log likelihood.
+Below is a true quick start to simulate data, sample trees based on that data, and finally compute the log likelihood.
 
 The other vignettes cover:
 

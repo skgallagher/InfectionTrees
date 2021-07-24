@@ -1,6 +1,14 @@
 ## ----setup, include=FALSE--------------------------------------------------------------------------------------
 
-devtools::load_all()
+rep_from_lib <- TRUE
+
+if(rep_from_lib){
+    library(InfectionTrees)
+} else {
+    devtools::load_all()
+}
+
+
 library(InfectionTrees)
 library(tidyr)
 library(dplyr)
